@@ -58,6 +58,10 @@ const resources = {
         visa: {
           title: 'Visa Processing',
           description: 'Fast and reliable visa processing services for Saudi Arabia with expert guidance.'
+        },
+        transportation: {
+          title: 'Transportation',
+          description: 'Safe and comfortable transportation arrangements throughout your pilgrimage journey.'
         }
       },
       about: {
@@ -479,6 +483,10 @@ const resources = {
         price_per_person: 'Price per person',
         book_package: 'Book Package'
         },
+      gallery: {
+        title: 'Spiritual Gallery',
+        subtitle: 'Visual glimpses of your upcoming journey'
+      },
       visa: {
         hero: {
           title: 'Umrah Visa',
@@ -589,6 +597,10 @@ const resources = {
         visa: {
           title: 'Traitement des visas',
           description: 'Services de traitement des visas rapides et fiables pour l\'Arabie Saoudite avec guidance d\'experts.'
+        },
+        transportation: {
+          title: 'Transport',
+          description: 'Arrangements de transport sûrs et confortables tout au long de votre voyage de pèlerinage.'
         }
       },
       about: {
@@ -1010,6 +1022,10 @@ const resources = {
         price_per_person: 'Prix par personne',
         book_package: 'Réserver le Forfait'
         },
+      gallery: {
+        title: 'Galerie Spirituelle',
+        subtitle: 'Aperçus visuels de votre prochain voyage'
+      },
       visa: {
         hero: {
           title: 'Visa Omra',
@@ -1120,6 +1136,10 @@ const resources = {
         visa: {
           title: 'Elaborazione visti',
           description: 'Servizi di elaborazione visti rapidi e affidabili per l\'Arabia Saudita con guida esperta.'
+        },
+        transportation: {
+          title: 'Trasporti',
+          description: 'Arrangiamenti di trasporto sicuri e confortevoli durante tutto il vostro viaggio di pellegrinaggio.'
         }
       },
       about: {
@@ -1541,6 +1561,10 @@ const resources = {
         price_per_person: 'Prezzo per persona',
         book_package: 'Prenota Pacchetto'
         },
+      gallery: {
+        title: 'Galleria Spirituale',
+        subtitle: 'Spunti visivi del vostro prossimo viaggio'
+      },
       visa: {
         hero: {
           title: 'Visto Umra',
@@ -1651,6 +1675,10 @@ const resources = {
         visa: {
           title: 'معالجة التأشيرات',
           description: 'خدمات معالجة التأشيرات السريعة والموثوقة للمملكة العربية السعودية مع إرشاد خبير.'
+        },
+        transportation: {
+          title: 'النقل',
+          description: 'ترتيبات النقل الآمنة والمريحة طوال رحلة حجكم.'
         }
       },
       about: {
@@ -2072,6 +2100,10 @@ const resources = {
         price_per_person: 'السعر لكل شخص',
         book_package: 'احجز الباقة'
         },
+      gallery: {
+        title: 'المعرض الروحي',
+        subtitle: 'لمحات بصرية لرحلتكم القادمة'
+      },
       visa: {
         hero: {
           title: 'تأشيرة العمرة',

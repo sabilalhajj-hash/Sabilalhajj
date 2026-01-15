@@ -16,7 +16,7 @@ export default function Hero() {
     {
       title: t('hero.title1'),
       subtitle: t('hero.subtitle1'),
-      bgClass: "bg-gradient-to-r from-blue-600 to-green-600",
+      // bgClass: "bg-gradient-to-r from-blue-600 to-green-600",
       image: "/hajj1.jpg",
       ctaPrimary: t('hero.cta1_primary'),
       ctaSecondary: t('hero.cta1_secondary')
@@ -24,7 +24,7 @@ export default function Hero() {
     {
       title: t('hero.title2'),
       subtitle: t('hero.subtitle2'),
-      bgClass: "bg-gradient-to-r from-emerald-600 to-teal-600",
+      // bgClass: "bg-gradient-to-r from-emerald-600 to-teal-600",
       image: "/hajj2.jpg",
       ctaPrimary: t('hero.cta2_primary'),
       ctaSecondary: t('hero.cta2_secondary')
@@ -32,7 +32,7 @@ export default function Hero() {
     {
       title: t('hero.title3'),
       subtitle: t('hero.subtitle3'),
-      bgClass: "bg-gradient-to-r from-purple-600 to-indigo-600",
+      // bgClass: "bg-gradient-to-r from-purple-600 to-indigo-600",
       image: "/hajj3.jpg",
       ctaPrimary: t('hero.cta3_primary'),
       ctaSecondary: t('hero.cta3_secondary')
@@ -40,7 +40,7 @@ export default function Hero() {
     {
       title: t('hero.title4'),
       subtitle: t('hero.subtitle4'),
-      bgClass: "bg-gradient-to-r from-amber-600 to-orange-600",
+      // bgClass: "bg-gradient-to-r from-amber-600 to-orange-600",
       image: "/hajj4.jpg",
       ctaPrimary: t('hero.cta4_primary'),
       ctaSecondary: t('hero.cta4_secondary')
@@ -67,7 +67,7 @@ export default function Hero() {
       >
         {heroSlides.map((slide, index) => (
           <SwiperSlide key={index}>
-            <div className={`${slide.bgClass} text-white min-h-[70vh] flex items-center relative overflow-hidden`}>
+            <div className={` z-100 text-white min-h-[70vh] flex items-center relative overflow-hidden`}>
               {slide.image && (
                 <Image
                   src={slide.image}
@@ -78,7 +78,7 @@ export default function Hero() {
                 />
               )}
               {/* Dark overlay for better text readability */}
-              <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+              <div className="absolute inset-0 bg-black opacity-50 bg-opacity-50"></div>
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 w-full relative z-10">
                 <div className="text-center">
                   <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fade-in">

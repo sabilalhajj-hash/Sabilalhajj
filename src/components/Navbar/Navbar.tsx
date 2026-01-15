@@ -116,10 +116,10 @@ export default function Navbar() {
                 aria-expanded="false"
                 suppressHydrationWarning={true}
               >
-                <span className="text-lg">
+                <span className="text-lg" suppressHydrationWarning>
                   {languages.find(lang => lang.code === i18n.language)?.flag}
                 </span>
-                <span className="hidden lg:block">
+                <span className="hidden lg:block" suppressHydrationWarning>
                   {languages.find(lang => lang.code === i18n.language)?.name}
                 </span>
                 <svg
@@ -142,11 +142,12 @@ export default function Navbar() {
                       className={`flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100 transition-colors ${
                         i18n.language === language.code ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
                       }`}
+                      suppressHydrationWarning
                     >
-                      <span className="text-lg mr-3">{language.flag}</span>
-                      <span>{language.name}</span>
+                      <span className="text-lg mr-3" suppressHydrationWarning>{language.flag}</span>
+                      <span suppressHydrationWarning>{language.name}</span>
                       {i18n.language === language.code && (
-                        <svg className="ml-auto w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="ml-auto w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20" suppressHydrationWarning>
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                       )}

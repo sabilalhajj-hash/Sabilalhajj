@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { X, Maximize2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const galleryImages = [
   { id: 1, src: '/hajj1.jpg', alt: 'Al-Masjid An-Nabawi', className: 'md:col-span-2 md:row-span-2' },
@@ -13,13 +14,14 @@ const galleryImages = [
 ];
 
 export default function BentoGallery() {
+  const { t } = useTranslation();
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
 
   return (
     <section className="max-w-7xl mx-auto px-6 py-12">
       <div className="mb-10 text-center">
-        <h2 className="text-3xl font-black text-[#1B3C33] tracking-tight">Spiritual Gallery</h2>
-        <p className="text-slate-500 mt-2">Visual glimpses of your upcoming journey</p>
+        <h2 className="text-3xl font-black text-[#1B3C33] tracking-tight">{t('gallery.title')}</h2>
+        <p className="text-slate-500 mt-2">{t('gallery.subtitle')}</p>
       </div>
 
       {/* Grid Layout */}
