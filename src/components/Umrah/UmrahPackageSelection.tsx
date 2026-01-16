@@ -27,9 +27,26 @@ const UmrahPackageSelection = () => {
   const [selectedCountry, setSelectedCountry] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [showModal, setShowModal] = useState(true);
+  const [isClient, setIsClient] = useState(false);
 
   // Check if language is initialized (resolved)
   const isLanguageSetted = !!i18n.resolvedLanguage;
+
+  // Set client-side flag and load from localStorage
+  useEffect(() => {
+    setIsClient(true);
+    try {
+      const savedCountry = localStorage.getItem('selectedCountry');
+      if (savedCountry) {
+        setSelectedCountry(savedCountry);
+        setSearchValue(savedCountry);
+        setShowModal(false);
+      }
+    } catch (error) {
+      // Handle localStorage access errors (e.g., in private browsing mode)
+      console.warn('Unable to access localStorage:', error);
+    }
+  }, []);
 
   const countries = [
     "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", 
@@ -73,10 +90,29 @@ const UmrahPackageSelection = () => {
   const handleCountrySelect = (country: string) => {
     setSelectedCountry(country);
     setShowModal(false);
+    setSearchValue(country);
+    // Save selected country to localStorage
+    try {
+      localStorage.setItem('selectedCountry', country);
+    } catch (error) {
+      console.warn('Unable to save to localStorage:', error);
+    }
   };
 
-  // Prevent rendering if language isn't ready
-  if (!isLanguageSetted) return null;
+  const handleChangeCountry = () => {
+    setSelectedCountry('');
+    setSearchValue('');
+    setShowModal(true);
+    // Remove from localStorage
+    try {
+      localStorage.removeItem('selectedCountry');
+    } catch (error) {
+      console.warn('Unable to remove from localStorage:', error);
+    }
+  };
+
+  // Prevent rendering if language isn't ready or not on client side
+  if (!isLanguageSetted || !isClient) return null;
 
   return (
     <>
@@ -129,14 +165,24 @@ const UmrahPackageSelection = () => {
       {selectedCountry && (
         <section className="py-16 px-4 bg-white min-h-screen">
           <div className="max-w-6xl mx-auto">
-            {/* Navigation Button */}
-            <button
-              onClick={() => router.push("/umrah")}
-              className="flex items-center text-gray-600 border border-emerald-100 rounded-lg px-4 py-2 hover:bg-emerald-50 transition-colors mb-12"
-            >
-              <ArrowLeft size={16} className="mr-2" />
-              <span className="text-sm">{t('umrah.back_to_umrah')}</span>
-            </button>
+            {/* Navigation Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 mb-12">
+              <button
+                onClick={() => router.push("/umrah")}
+                className="flex items-center text-gray-600 border border-emerald-100 rounded-lg px-4 py-2 hover:bg-emerald-50 transition-colors"
+              >
+                <ArrowLeft size={16} className="mr-2" />
+                <span className="text-sm">{t('umrah.back_to_umrah')}</span>
+              </button>
+
+              <button
+                onClick={handleChangeCountry}
+                className="flex items-center text-gray-600 border border-blue-100 rounded-lg px-4 py-2 hover:bg-blue-50 transition-colors"
+              >
+                <Globe size={16} className="mr-2" />
+                <span className="text-sm">{t('umrah.change_country')}</span>
+              </button>
+            </div>
 
             {/* Section Header */}
             <div className="text-center mb-16">

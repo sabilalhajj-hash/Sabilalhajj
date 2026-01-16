@@ -3,6 +3,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import { useTranslation } from 'react-i18next';
+import { useMemo } from 'react';
 import Image from 'next/image';
 
 // Import Swiper styles
@@ -12,7 +13,8 @@ import 'swiper/css/navigation';
 
 export default function Hero() {
   const { t } = useTranslation();
-  const heroSlides = [
+
+  const heroSlides = useMemo(() => [
     {
       title: t('hero.title1'),
       subtitle: t('hero.subtitle1'),
@@ -45,7 +47,7 @@ export default function Hero() {
       ctaPrimary: t('hero.cta4_primary'),
       ctaSecondary: t('hero.cta4_secondary')
     }
-  ];
+  ], [t]);
 
   return (
     <div className="relative">
@@ -57,11 +59,11 @@ export default function Hero() {
           delay: 5000,
           disableOnInteraction: false,
         }}
-        pagination={{
-          clickable: true,
-          dynamicBullets: true,
-        }}
-        navigation={true}
+        // pagination={{
+        //   clickable: true,
+        //   dynamicBullets: true,
+        // }}
+        // navigation={true}
         loop={true}
         className="hero-swiper h-[70vh]"
       >
@@ -78,10 +80,10 @@ export default function Hero() {
                 />
               )}
               {/* Dark overlay for better text readability */}
-              <div className="absolute inset-0 bg-black opacity-50 bg-opacity-50"></div>
+              <div className="absolute inset-0 bg-black opacity-70 bg-opacity-50"></div>
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 w-full relative z-10">
                 <div className="text-center">
-                  <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fade-in">
+                  <h1 className="text-4xl md:text-6xl text-green-400 font-bold mb-6 animate-fade-in">
                     {slide.title}
                   </h1>
                   <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto animate-fade-in-delay">

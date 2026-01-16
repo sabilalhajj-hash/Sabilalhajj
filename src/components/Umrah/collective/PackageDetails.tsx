@@ -116,7 +116,7 @@ const MadinahItinerary = () => {
 
           <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 bg-white p-4 sm:p-6 rounded-xl shadow-sm">
             <div className="w-full lg:w-1/3">
-              <img src="/api/placeholder/400/300" alt="Hotel" className="rounded-lg object-cover w-full h-40 sm:h-48 lg:h-56" />
+              <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt="Hotel" className="rounded-lg object-cover w-full h-40 sm:h-48 lg:h-56" />
             </div>
             <div className="w-full lg:w-2/3">
               <div className="flex text-yellow-400 mb-2"><Star size={16} fill="currentColor"/><Star size={16} fill="currentColor"/><Star size={16} fill="currentColor"/></div>
@@ -164,7 +164,7 @@ const MadinahItinerary = () => {
 
           <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 bg-white p-4 sm:p-6 rounded-xl shadow-sm">
             <div className="w-full lg:w-1/3">
-              <img src="/api/placeholder/400/300" alt="Hotel" className="rounded-lg object-cover w-full h-40 sm:h-48 lg:h-56" />
+              <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt="Hotel" className="rounded-lg object-cover w-full h-40 sm:h-48 lg:h-56" />
             </div>
             <div className="w-full lg:w-2/3">
               <div className="flex text-yellow-400 mb-2">

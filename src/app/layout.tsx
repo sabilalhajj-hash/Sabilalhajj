@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar/Navbar";
 import Footer from "../components/Footer/Footer";
 import WhatsappButton from "./../components/WhatsappButton";
 import I18nProvider from "../components/Languages/I18nProvider";
+import DynamicHtml from "../components/DynamicHtml";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -32,10 +33,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <I18nProvider>
-          <Navbar />
-          {children}
-          <Footer />
-          <WhatsappButton />
+          <DynamicHtml>
+            <Navbar />
+            {children}
+            <Footer />
+            <WhatsappButton />
+          </DynamicHtml>
         </I18nProvider>
       </body>
     </html>

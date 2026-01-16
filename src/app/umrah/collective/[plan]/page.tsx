@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import {
   Plane, Hotel, FileText, UserCircle, MapPin, Search,
-  Star, Clock, CheckCircle,
+  Star, Clock, CheckCircle, User,
   Users, Share2, Eye, Bus, Info, Calendar, Plus, Minus,
   ArrowLeft, ShieldCheck, LayoutGrid,
   CreditCard, Building, AlertCircle,
@@ -19,122 +19,10 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import StickyCTA from '@/components/Umrah/StickyCTA';
 import SectionIndicator from '@/components/SectionIndicator';
+import ExcelExportButton from '@/components/ExcelExportButton';
 // import 'swiper/css/pagination';
 
-// --- Static Data ---
-const programs = [
-  {
-    id: 'ramadan-journey',
-    name: 'Program 1 — Ramadan Journey',
-    ApproximateDuration: '15 days',
-    departure: '5 March 2026',
-    return: '20th March 2026',
-    from: 'Casablanca, Morocco',
-    to: 'Medina, Saudi Arabia',
-    description: 'Experience the blessed month of Ramadan in the holy lands with guided Umrah rituals',
-    highlights: ['Direct flights from Casablanca', 'VIP airport transfers', '4-star hotel accommodations', 'Guided prayers and lectures', 'Traditional Iftar meals'],
-    price: '€2,450 per person',
-    includes: ['Airfare', 'Hotel accommodation', 'Visa processing', 'Transportation', 'Guided tours', 'Meals during Ramadan']
-  },
-  {
-    id: 'ramadan-last-ten',
-    name: 'Program 2 — Last Ten Days of Ramadan Program',
-    ApproximateDuration: '17 days',
-    departure: '15th June 2026',
-    return: '1st July 2026',
-    from: 'Casablanca, Morocco',
-    to: 'Medina, Saudi Arabia',
-    description: 'Join the most blessed nights of Ramadan with special prayers and spiritual activities',
-    highlights: ['Laylat al-Qadr focus', 'Special Taraweeh prayers', 'Spiritual lectures by scholars', 'Community Iftar gatherings', 'Zamzam water distribution'],
-    price: '€2,650 per person',
-    includes: ['Premium airfare', '5-star hotel accommodation', 'Express visa processing', 'Private transportation', 'Scholar-led guidance', 'Special Ramadan meals']
-  },
-  {
-    id: 'long-stay',
-    name: 'Program 3 — Long Stay Program',
-    ApproximateDuration: 'Up to 35 days',
-    departure: '1st July 2026',
-    return: '31st August 2026',
-    from: 'Casablanca, Morocco',
-    to: 'Medina, Saudi Arabia',
-    description: 'Extended stay program for deep spiritual immersion and comprehensive pilgrimage experience',
-    highlights: ['Flexible duration options', 'Cultural immersion activities', 'Arabic language classes', 'Community service opportunities', 'Extended ziyarah tours'],
-    price: '€3,200 per person',
-    includes: ['Flexible airfare', 'Premium accommodation', 'Long-stay visa support', 'Complete transportation', 'Educational programs', 'Cultural activities']
-  }
-];
-const roomTypes = [
-  {
-    id: 'twin',
-    name: 'Twin Room',
-    size: '2 Separate Beds (2 Twin Beds)',
-    price: '€1,200 per person',
-    description: 'Suitable for two people – greater comfort and privacy.',
-    features: ['Private bathroom', 'Air conditioning', 'Mini refrigerator', 'Complimentary WiFi', 'Room service', 'Daily housekeeping'],
-    capacity: '2 guests',
-    view: 'City or courtyard view',
-    amenities: ['Television', 'Safe box', 'Coffee/tea maker', 'Hair dryer', 'Prayer direction indicator']
-  },
-  {
-    id: 'triple',
-    name: 'Triple Room',
-    size: '3 Separate Beds (3 Twin Beds)',
-    price: '€1,800 per person',
-    description: 'Suitable for three people – ideal for family groups or friends traveling together.',
-    features: ['Spacious layout', 'Multiple bathrooms', 'Climate control', 'Complimentary WiFi', 'Room service', 'Enhanced cleaning'],
-    capacity: '3 guests',
-    view: 'City or Haram view',
-    amenities: ['Television', 'Safe box', 'Coffee/tea maker', 'Hair dryer', 'Prayer direction indicator', 'Extra bedding']
-  },
-  {
-    id: 'quad',
-    name: 'Quad Room',
-    size: '4 Separate Beds (4 Twin Beds)',
-    price: '€2,400 per person',
-    description: 'Suitable for four people – spacious and comfortable for larger groups.',
-    features: ['Extra spacious', 'Multiple bathrooms', 'Premium amenities', 'High-speed WiFi', '24/7 concierge', 'Priority cleaning'],
-    capacity: '4 guests',
-    view: 'Haram or Kaaba view',
-    amenities: ['Smart TV', 'Safe box', 'Coffee/tea maker', 'Hair dryer', 'Prayer direction indicator', 'Living area', 'Mini kitchen']
-  },
-  {
-    id: 'penta',
-    name: 'Penthouse Suite',
-    size: '5 Separate Beds (5 Twin Beds)',
-    price: '€3,000 per person',
-    description: 'Suitable for five people – luxurious and exclusive for larger groups.',
-    features: ['Penthouse level', 'Panoramic views', 'Butler service', 'Premium amenities', 'Private elevator', 'VIP treatment'],
-    capacity: '5 guests',
-    view: 'Panoramic Haram and Kaaba view',
-    amenities: ['Smart TV', 'Safe box', 'Coffee/tea maker', 'Hair dryer', 'Prayer direction indicator', 'Full kitchen', 'Dining area', 'Private terrace']
-  }
-];
-const visaTypes = [
-  {
-    id: 'umrah',
-    name: 'Umrah Visa',
-    detail: 'Dedicated for religious pilgrimage',
-    description: 'Official Saudi visa specifically for Umrah pilgrimage activities',
-    validity: '90 days from issuance',
-    stay_duration: 'Up to 90 days',
-    processing_time: '7-14 business days',
-    requirements: ['Valid passport (6+ months)', 'Recent passport photos', 'Umrah booking confirmation', 'Health insurance', 'Proof of financial means'],
-    benefits: ['Dedicated pilgrimage visa', 'Multiple entry allowed', 'Extends stay permissions', 'Official religious travel status', 'Priority processing for groups'],
-    price: '€85 per person'
-  },
-  {
-    id: 'tourist',
-    name: 'Tourist Visa',
-    detail: 'Multi-purpose travel visa',
-    description: 'Standard tourist visa allowing Umrah alongside tourism activities',
-    validity: '90 days from issuance',
-    stay_duration: 'Up to 90 days',
-    processing_time: '3-7 business days',
-    requirements: ['Valid passport (6+ months)', 'Recent passport photos', 'Hotel booking confirmation', 'Return flight tickets', 'Bank statements'],
-    benefits: ['Flexible travel options', 'Combines tourism and pilgrimage', 'Cost-effective for families', 'Easier processing', 'Extended validity period'],
-    price: '€65 per person'
-  }
-];
+
 
 const gallery = [
   { id: '1', image: '/hajj1.jpg', alt: 'Gallery For Hajj images1' },
@@ -148,9 +36,253 @@ export default function SabilHajjPlatform() {
   const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
   const [selectedVisa, setSelectedVisa] = useState<string | null>(null);
+  const [toggle, setToggle] = useState(false);
+
+  // Auto-hide toggle overlay after 4 seconds
+  useEffect(() => {
+    if (toggle) {
+      const timer = setTimeout(() => {
+        setToggle(false);
+      }, 4000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [toggle]);
+
+  // User data state
+  const [userData, setUserData] = useState({
+    name: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    city: '',
+    address: '',
+    zip: '',
+    gender: ''
+  });
+
+  // Validation state
+  const [validationErrors, setValidationErrors] = useState({
+    name: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    city: '',
+    address: '',
+    gender: '',
+    zip: ''
+  });
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
 
   const isConfigured = selectedProgram && selectedRoom && selectedVisa;
 
+  // Handle user data input changes
+  const handleUserDataChange = (field: string, value: string) => {
+    setUserData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+
+    // Clear validation errors when user starts typing
+    setValidationErrors(prev => ({
+      ...prev,
+      [field]: ''
+    }));
+  };
+
+  // Validation functions
+  const validateName = (name: string): string => {
+    if (!name.trim()) return 'First name is required';
+    if (name.trim().length < 2) return 'First name must be at least 2 characters';
+    if (!/^[a-zA-Z\s]+$/.test(name.trim())) return 'First name can only contain letters and spaces';
+    return '';
+  };
+
+  const validateLastName = (lastName: string): string => {
+    if (!lastName.trim()) return 'Last name is required';
+    if (lastName.trim().length < 2) return 'Last name must be at least 2 characters';
+    if (!/^[a-zA-Z\s]+$/.test(lastName.trim())) return 'Last name can only contain letters and spaces';
+    return '';
+  };
+
+  const validateEmail = (email: string): string => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) return 'Email is required';
+    if (!emailRegex.test(email)) return 'Please enter a valid email address';
+    return '';
+  };
+
+  const validatePhone = (phone: string): string => {
+    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+    if (!phone) return 'Phone number is required';
+    if (phone.length < 8) return 'Phone number must be at least 8 digits';
+    if (phone.length > 15) return 'Phone number must be less than 15 digits';
+    if (!phoneRegex.test(phone.replace(/\s+/g, ''))) return 'Please enter a valid phone number';
+    return '';
+  };
+
+  const validateCity = (city: string): string => {
+    if (!city.trim()) return 'City is required';
+    if (city.trim().length < 2) return 'City must be at least 2 characters';
+    return '';
+  };
+
+  const validateAddress = (address: string): string => {
+    if (!address.trim()) return 'Address is required';
+    if (address.trim().length < 5) return 'Address must be at least 5 characters';
+    return '';
+  };
+
+  const validateGender = (gender: string): string => {
+    if (!gender) return 'Please select a gender';
+    return '';
+  };
+
+  const validateZip = (zip: string): string => {
+    const zipRegex = /^[0-9]{4,10}$/;
+    if (!zip) return 'Zip code is required';
+    if (!zipRegex.test(zip.replace(/\s+/g, ''))) return 'Please enter a valid zip code (4-10 digits)';
+    return '';
+  };
+
+  // Validate all fields
+  const validateForm = () => {
+    const errors = {
+      name: validateName(userData.name),
+      lastName: validateLastName(userData.lastName),
+      email: validateEmail(userData.email),
+      phone: validatePhone(userData.phone),
+      city: validateCity(userData.city),
+      address: validateAddress(userData.address),
+      gender: validateGender(userData.gender),
+      zip: validateZip(userData.zip)
+    };
+
+    setValidationErrors(errors);
+    return !Object.values(errors).some(error => error !== '');
+  };
+
+  // Run validation on mount and when hasAttemptedSubmit changes
+  useEffect(() => {
+    if (hasAttemptedSubmit) {
+      validateForm();
+    }
+  }, [userData.name, userData.lastName, userData.email, userData.phone, userData.city, userData.address, userData.gender, userData.zip, hasAttemptedSubmit]);
+
+  // --- Translated Data ---
+  const programs = [
+    {
+      id: 'ramadan-journey',
+      name: t('booking.programs.ramadan_journey.name'),
+      ApproximateDuration: t('booking.programs.ramadan_journey.duration'),
+      departure: t('booking.programs.ramadan_journey.departure'),
+      return: t('booking.programs.ramadan_journey.return'),
+      from: t('booking.programs.ramadan_journey.from'),
+      to: t('booking.programs.ramadan_journey.to'),
+      description: t('booking.programs.ramadan_journey.description'),
+      highlights: JSON.parse(t('booking.programs.ramadan_journey.highlights')),
+      price: t('booking.programs.ramadan_journey.price'),
+      includes: JSON.parse(t('booking.programs.ramadan_journey.includes'))
+    },
+    {
+      id: 'ramadan-last-ten',
+      name: t('booking.programs.ramadan_last_ten.name'),
+      ApproximateDuration: t('booking.programs.ramadan_last_ten.duration'),
+      departure: t('booking.programs.ramadan_last_ten.departure'),
+      return: t('booking.programs.ramadan_last_ten.return'),
+      from: t('booking.programs.ramadan_last_ten.from'),
+      to: t('booking.programs.ramadan_last_ten.to'),
+      description: t('booking.programs.ramadan_last_ten.description'),
+      highlights: JSON.parse(t('booking.programs.ramadan_last_ten.highlights')),
+      price: t('booking.programs.ramadan_last_ten.price'),
+      includes: JSON.parse(t('booking.programs.ramadan_last_ten.includes'))
+    },
+    {
+      id: 'long-stay',
+      name: t('booking.programs.long_stay.name'),
+      ApproximateDuration: t('booking.programs.long_stay.duration'),
+      departure: t('booking.programs.long_stay.departure'),
+      return: t('booking.programs.long_stay.return'),
+      from: t('booking.programs.long_stay.from'),
+      to: t('booking.programs.long_stay.to'),
+      description: t('booking.programs.long_stay.description'),
+      highlights: JSON.parse(t('booking.programs.long_stay.highlights')),
+      price: t('booking.programs.long_stay.price'),
+      includes: JSON.parse(t('booking.programs.long_stay.includes'))
+    }
+  ];
+  const roomTypes = [
+    {
+      id: 'twin',
+      name: t('booking.rooms.twin.name'),
+      size: t('booking.rooms.twin.size'),
+      price: t('booking.rooms.twin.price'),
+      description: t('booking.rooms.twin.description'),
+      features: JSON.parse(t('booking.rooms.twin.features')),
+      capacity: t('booking.rooms.twin.capacity'),
+      view: t('booking.rooms.twin.view'),
+      amenities: JSON.parse(t('booking.rooms.twin.amenities'))
+    },
+    {
+      id: 'triple',
+      name: t('booking.rooms.triple.name'),
+      size: t('booking.rooms.triple.size'),
+      price: t('booking.rooms.triple.price'),
+      description: t('booking.rooms.triple.description'),
+      features: JSON.parse(t('booking.rooms.triple.features')),
+      capacity: t('booking.rooms.triple.capacity'),
+      view: t('booking.rooms.triple.view'),
+      amenities: JSON.parse(t('booking.rooms.triple.amenities'))
+    },
+    {
+      id: 'quad',
+      name: t('booking.rooms.quad.name'),
+      size: t('booking.rooms.quad.size'),
+      price: t('booking.rooms.quad.price'),
+      description: t('booking.rooms.quad.description'),
+      features: JSON.parse(t('booking.rooms.quad.features')),
+      capacity: t('booking.rooms.quad.capacity'),
+      view: t('booking.rooms.quad.view'),
+      amenities: JSON.parse(t('booking.rooms.quad.amenities'))
+    },
+    {
+      id: 'penta',
+      name: t('booking.rooms.penta.name'),
+      size: t('booking.rooms.penta.size'),
+      price: t('booking.rooms.penta.price'),
+      description: t('booking.rooms.penta.description'),
+      features: JSON.parse(t('booking.rooms.penta.features')),
+      capacity: t('booking.rooms.penta.capacity'),
+      view: t('booking.rooms.penta.view'),
+      amenities: JSON.parse(t('booking.rooms.penta.amenities'))
+    }
+  ];
+  const visaTypes = [
+    {
+      id: 'umrah',
+      name: t('booking.visas.umrah.name'),
+      detail: t('booking.visas.umrah.detail'),
+      description: t('booking.visas.umrah.description'),
+      validity: t('booking.visas.umrah.validity'),
+      stay_duration: t('booking.visas.umrah.stay_duration'),
+      processing_time: t('booking.visas.umrah.processing_time'),
+      requirements: JSON.parse(t('booking.visas.umrah.requirements')),
+      benefits: JSON.parse(t('booking.visas.umrah.benefits')),
+      price: t('booking.visas.umrah.price')
+    },
+    {
+      id: 'tourist',
+      name: t('booking.visas.tourist.name'),
+      detail: t('booking.visas.tourist.detail'),
+      description: t('booking.visas.tourist.description'),
+      validity: t('booking.visas.tourist.validity'),
+      stay_duration: t('booking.visas.tourist.stay_duration'),
+      processing_time: t('booking.visas.tourist.processing_time'),
+      requirements: JSON.parse(t('booking.visas.tourist.requirements')),
+      benefits: JSON.parse(t('booking.visas.tourist.benefits')),
+      price: t('booking.visas.tourist.price')
+    }
+  ];
 
   // Helper Components
   const ItineraryItemComponent = ({ title, subtitle, description, imageSrc, badge }: any) => (
@@ -219,7 +351,7 @@ export default function SabilHajjPlatform() {
 
             <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 bg-white p-4 sm:p-6 rounded-xl shadow-sm">
               <div className="w-full lg:w-1/3">
-                <img src="/api/placeholder/400/300" alt="Hotel" className="rounded-lg object-cover w-full h-40 sm:h-48 lg:h-56" />
+                <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt="Hotel" className="rounded-lg object-cover w-full h-40 sm:h-48 lg:h-56" />
               </div>
               <div className="w-full lg:w-2/3">
                 <div className="flex text-yellow-400 mb-2"><Star size={16} fill="currentColor"/><Star size={16} fill="currentColor"/><Star size={16} fill="currentColor"/></div>
@@ -309,7 +441,7 @@ export default function SabilHajjPlatform() {
 
             <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 bg-white p-4 sm:p-6 rounded-xl shadow-sm">
               <div className="w-full lg:w-1/3">
-                <img src="/api/placeholder/400/300" alt="Hotel" className="rounded-lg object-cover w-full h-40 sm:h-48 lg:h-56" />
+                <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt="Hotel" className="rounded-lg object-cover w-full h-40 sm:h-48 lg:h-56" />
               </div>
               <div className="w-full lg:w-2/3">
                 <div className="flex text-yellow-400 mb-2">
@@ -370,59 +502,370 @@ export default function SabilHajjPlatform() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] font-sans selection:bg-emerald-100 pb-20">
-      
+
+      {/* Program Selection Overlay - Shows First */}
+      {!selectedProgram && (
+        <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-8 md:p-12">
+              {/* Header */}
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 rounded-full px-4 py-2 mb-4">
+                  <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                  <span className="text-sm font-medium">{t('booking.choose_program')}</span>
+                </div>
+                <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
+                  {t('booking.select_spiritual_journey')}
+                </h1>
+                <p className="text-gray-600 max-w-2xl mx-auto">
+                  {t('booking.choose_program_description')}
+                </p>
+              </div>
+
+              {/* Program Selection Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {programs.map((program, index) => (
+                  <div
+                    key={program.id}
+                    onClick={() => setSelectedProgram(program.name)}
+                    className="group relative bg-gradient-to-br from-white to-emerald-50/30 border-2 border-emerald-100 rounded-2xl p-6 cursor-pointer hover:border-emerald-400 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                  >
+                    {/* Badge */}
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                      Program {index + 1}
+                    </div>
+
+                    {/* Content */}
+                    <div className="text-center space-y-4">
+                      {/* Icon */}
+                      <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto group-hover:bg-emerald-200 transition-colors">
+                        <span className="text-2xl">🕋</span>
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-emerald-700 transition-colors">
+                        {program.name}
+                      </h3>
+
+                      {/* Duration Badge */}
+                      <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-sm font-medium">
+                        <span>⏱️</span>
+                        {program.ApproximateDuration}
+                      </div>
+
+                      {/* Price */}
+                      <div className="text-2xl font-black text-emerald-600">
+                        {program.price}
+                      </div>
+
+                      {/* Highlights */}
+                      <div className="space-y-2">
+                        <div className="text-sm font-semibold text-gray-700">Highlights:</div>
+                        <ul className="text-sm text-gray-600 space-y-1">
+                          {program.highlights.slice(0, 2).map((highlight: string, i: number) => (
+                            <li key={i} className="flex items-center gap-2">
+                              <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
+                              {highlight}
+                            </li>
+                          ))}
+                          {program.highlights.length > 2 && (
+                            <li className="text-emerald-600 font-medium">
+                              +{program.highlights.length - 2} more...
+                            </li>
+                          )}
+                        </ul>
+                      </div>
+
+                      {/* CTA */}
+                      <div className="pt-4">
+                        <button className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 group-hover:shadow-lg">
+                          {t('booking.select_this_program')}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Footer Note */}
+              <div className="mt-8 text-center">
+                <p className="text-sm text-gray-500">
+                  All programs include comprehensive spiritual guidance, premium accommodations, and seamless logistics.
+                  <br />
+                  You can change your selection later if needed.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Room Selection Overlay */}
+      {selectedProgram && !selectedRoom && (
+        <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-8 md:p-12">
+              {/* Header */}
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 rounded-full px-4 py-2 mb-4">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                  <span className="text-sm font-medium">{t('booking.choose_accommodation')}</span>
+                </div>
+                <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
+                  {t('booking.select_room_type')}
+                </h1>
+                <p className="text-gray-600 max-w-2xl mx-auto">
+                  {t('booking.choose_room_description')}
+                </p>
+              </div>
+
+              {/* Room Selection Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {roomTypes.map((room, index) => (
+                  <div
+                    key={room.id}
+                    onClick={() => setSelectedRoom(room.name)}
+                    className="group relative bg-gradient-to-br from-white to-blue-50/30 border-2 border-blue-100 rounded-2xl p-6 cursor-pointer hover:border-blue-400 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                  >
+                    {/* Badge */}
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                      Option {index + 1}
+                    </div>
+
+                    {/* Content */}
+                    <div className="text-center space-y-4">
+                      {/* Icon */}
+                      <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto group-hover:bg-blue-200 transition-colors">
+                        <span className="text-2xl">🏨</span>
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors">
+                        {room.name}
+                      </h3>
+
+                      {/* Capacity Badge */}
+                      <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                        <span>👥</span>
+                        {room.capacity}
+                      </div>
+
+                      {/* Price */}
+                      <div className="text-2xl font-black text-blue-600">
+                        {room.price}
+                      </div>
+
+                      {/* View */}
+                      <div className="text-sm text-gray-600">
+                        <span className="font-semibold">View:</span> {room.view}
+                      </div>
+
+                      {/* Key Features */}
+                      <div className="space-y-2">
+                        <div className="text-sm font-semibold text-gray-700">Key Features:</div>
+                        <ul className="text-sm text-gray-600 space-y-1">
+                          {room.features.slice(0, 2).map((feature: string, i: number) => (
+                            <li key={i} className="flex items-center gap-2">
+                              <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                              {feature}
+                            </li>
+                          ))}
+                          {room.features.length > 2 && (
+                            <li className="text-blue-600 font-medium">
+                              +{room.features.length - 2} more...
+                            </li>
+                          )}
+                        </ul>
+                      </div>
+
+                      {/* CTA */}
+                      <div className="pt-4">
+                        <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 group-hover:shadow-lg">
+                          {t('booking.select_this_room')}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Back Button */}
+              <div className="mt-8 text-center">
+                <button
+                  onClick={() => setSelectedProgram(null)}
+                  className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  {t('booking.back_to_programs')}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Visa Selection Overlay */}
+      {selectedProgram && selectedRoom && !selectedVisa && (
+        <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-8 md:p-12">
+              {/* Header */}
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center gap-2 bg-purple-50 text-purple-700 rounded-full px-4 py-2 mb-4">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                  <span className="text-sm font-medium">{t('booking.choose_visa_type')}</span>
+                </div>
+                <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
+                  {t('booking.select_travel_visa')}
+                </h1>
+                <p className="text-gray-600 max-w-2xl mx-auto">
+                  {t('booking.choose_visa_description')}
+                </p>
+              </div>
+
+              {/* Visa Selection Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {visaTypes.map((visa, index) => (
+                  <div
+                    key={visa.id}
+                    onClick={() => setSelectedVisa(visa.name)}
+                    className="group relative bg-gradient-to-br from-white to-purple-50/30 border-2 border-purple-100 rounded-2xl p-6 cursor-pointer hover:border-purple-400 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                  >
+                    {/* Badge */}
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                      Visa {index + 1}
+                    </div>
+
+                    {/* Content */}
+                    <div className="text-center space-y-4">
+                      {/* Icon */}
+                      <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto group-hover:bg-purple-200 transition-colors">
+                        <span className="text-2xl">🛂</span>
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-purple-700 transition-colors">
+                        {visa.name}
+                      </h3>
+
+                      {/* Detail */}
+                      <div className="text-sm text-gray-600 font-medium">
+                        {visa.detail}
+                      </div>
+
+                      {/* Price */}
+                      <div className="text-2xl font-black text-purple-600">
+                        {visa.price}
+                      </div>
+
+                      {/* Validity */}
+                      <div className="text-sm text-gray-600">
+                        <span className="font-semibold">Validity:</span> {visa.validity}
+                      </div>
+
+                      {/* Key Benefits */}
+                      <div className="space-y-2">
+                        <div className="text-sm font-semibold text-gray-700">Key Benefits:</div>
+                        <ul className="text-sm text-gray-600 space-y-1">
+                          {visa.benefits.slice(0, 2).map((benefit: string, i: number) => (
+                            <li key={i} className="flex items-center gap-2">
+                              <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
+                              {benefit}
+                            </li>
+                          ))}
+                          {visa.benefits.length > 2 && (
+                            <li className="text-purple-600 font-medium">
+                              +{visa.benefits.length - 2} more...
+                            </li>
+                          )}
+                        </ul>
+                      </div>
+
+                      {/* CTA */}
+                      <div className="pt-4">
+                        <button className="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 group-hover:shadow-lg">
+                          {t('booking.select_this_visa')}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Back Button */}
+              <div className="mt-8 text-center">
+                <button
+                  onClick={() => setSelectedRoom(null)}
+                  className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  {t('booking.back_to_rooms')}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 2. HERO HEADER */}
       <section
         id="hero"
-        className="pt-20 pb-44 px-6 text-white text-center relative overflow-hidden"
-        style={{
-          backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/hajj1.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
+        className="  text-white text-center relative overflow-hidden w-full"
+        
       >
-        <div className="max-w-4xl mx-auto relative z-10">
-          <h1 className="text-4xl md:text-6xl font-black mb-6 tracking-tight">
-            Ramadan Umrah 2026 <span className="text-emerald-400 block md:inline">Full Month of Ramadan - Medina & Makkah</span>
-          </h1>
-        </div>
-        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/islamic-art.png')]" />
+        <Swiper
+        modules={[Navigation, Autoplay]}
+        spaceBetween={15}
+        slidesPerView={1}
+        navigation
+        autoplay={{ delay: 4000, disableOnInteraction: false }}
+        className=" overflow-hidden h-[400px] md:h-[500px] w-full"
+        >
+          {gallery.map((image, index) => (
+            <SwiperSlide key={index} className="relative">
+              <Image
+                src={image.image}
+                alt={image.alt}
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+              {/* Dark overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+
+              {/* Text overlay */}
+              <div className="absolute inset-0 flex flex-col justify-end md:p-8 text-white">
+                <div className="space-y-2">
+                  <h3 className="text-xl md:text-7xl font-bold">Ramadan Umrah 2026</h3>
+                  <p className="text-sm md:text-lg opacity-90">Full Month of Ramadan - Medina & Makkah</p>
+                  <p className="text-xs md:text-lg opacity-90">18 February 2026 - 4 March 2026</p>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
+
+
       </section>
 
 
       {/* 3. SWIPER IMAGE GALLERY */}
-      <section className="max-w-6xl mx-auto -mt-8 px-6 mb-12 relative z-20">
-        <Swiper
-          modules={[Navigation, Autoplay]}
-          spaceBetween={15}
-          slidesPerView={1}
-          navigation
-          autoplay={{ delay: 6000, disableOnInteraction: false }}
-
-
-          className="rounded-[2rem] overflow-hidden"
-        >
-            {gallery.map((image, index) => (
-              <SwiperSlide key={index}>
-                <div className="relative h-[500px] md:h-[600px] lg:h-[700px] rounded-[2rem] overflow-hidden shadow-xl border-4 border-white group">
-                  <Image src={image.image} alt={image.alt} fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
-
-                </div>
-              </SwiperSlide>
-            ))}
-        </Swiper>
-      </section>
+    
 
       {/* 4. PACKAGE CONFIGURATION */}
-      <section id="config" className="max-w-5xl my-5  mx-auto px-6 relative z-20">
-        <div className="bg-white rounded-[3rem] shadow-2xl  p-8 md:p-12 space-y-12 border-2 border-green-500">
+      <section id="config" className=" w-full my-5  mx-auto px-6 relative z-20">
+        <div className="bg-white rounded-[3rem] shadow-2xl w-full  p-8 md:p-12 space-y-12 ">
           <div className="text-center border-b border-slate-50 pb-8">
              <div className="inline-block px-4 py-1 bg-emerald-50 text-emerald-700 rounded-full text-[10px] font-black uppercase tracking-widest mb-4">{t('booking.package_details')}</div>
              <h2 className="text-3xl font-black text-slate-900 tracking-tight">{t('booking.ramadan_title')}</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Program Selector */}
             <div className={`p-8 rounded-[2rem] border-2 transition-all ${selectedProgram ? 'border-emerald-500 bg-emerald-50' : 'border-slate-100 bg-slate-50'}`}>
               <div className="flex justify-between items-center mb-6">
@@ -480,7 +923,7 @@ export default function SabilHajjPlatform() {
                           <div className="space-y-2">
                             <div className="font-semibold text-slate-900 text-sm">{t('booking.highlights')}</div>
                             <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                              {program.highlights.map((highlight, i) => (
+                              {program.highlights.map((highlight: string, i: number) => (
                                 <li key={i} className="flex items-center gap-2 text-slate-600 text-sm">
                                   <CheckCircle size={14} className="text-emerald-500 flex-shrink-0" />
                                   {highlight}
@@ -491,7 +934,7 @@ export default function SabilHajjPlatform() {
                           <div className="space-y-2 mt-4">
                             <div className="font-semibold text-slate-900 text-sm">{t('booking.includes')}</div>
                             <div className="flex flex-wrap gap-2">
-                              {program.includes.map((item, i) => (
+                              {program.includes.map((item: string, i: number) => (
                                 <span key={i} className="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-medium">
                                   {item}
                                 </span>
@@ -557,7 +1000,7 @@ export default function SabilHajjPlatform() {
                           <div className="space-y-2">
                             <div className="font-semibold text-slate-900 text-sm">{t('booking.features')}</div>
                             <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                              {room.features.map((feature, i) => (
+                              {room.features.map((feature: string, i: number) => (
                                 <li key={i} className="flex items-center gap-2 text-slate-600 text-sm">
                                   <CheckCircle size={14} className="text-emerald-500 flex-shrink-0" />
                                   {feature}
@@ -568,7 +1011,7 @@ export default function SabilHajjPlatform() {
                           <div className="space-y-2 mt-4">
                             <div className="font-semibold text-slate-900 text-sm">{t('booking.amenities')}</div>
                             <div className="flex flex-wrap gap-2">
-                              {room.amenities.map((amenity, i) => (
+                              {room.amenities.map((amenity: string, i: number) => (
                                 <span key={i} className="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-medium">
                                   {amenity}
                                 </span>
@@ -634,7 +1077,7 @@ export default function SabilHajjPlatform() {
                           <div className="space-y-2">
                             <div className="font-semibold text-slate-900 text-sm">{t('booking.requirements')}</div>
                             <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                              {visa.requirements.map((requirement, i) => (
+                              {visa.requirements.map((requirement: string, i: number) => (
                                 <li key={i} className="flex items-center gap-2 text-slate-600 text-sm">
                                   <CheckCircle size={14} className="text-emerald-500 flex-shrink-0" />
                                   {requirement}
@@ -645,7 +1088,7 @@ export default function SabilHajjPlatform() {
                           <div className="space-y-2 mt-4">
                             <div className="font-semibold text-slate-900 text-sm">{t('booking.benefits')}</div>
                             <div className="flex flex-wrap gap-2">
-                              {visa.benefits.map((benefit, i) => (
+                              {visa.benefits.map((benefit: string, i: number) => (
                                 <span key={i} className="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-medium">
                                   {benefit}
                                 </span>
@@ -661,19 +1104,205 @@ export default function SabilHajjPlatform() {
                 </div>
               )}
             </div>
+
           </div>
+             {/* User Data Form */}
+             <div className="p-8 rounded-[2rem]  border-2 border-emerald-500 transition-all">
+               <div className="mb-6">
+                 <span className="flex items-center gap-2 text-emerald-700 font-bold text-sm mb-4"><User size={18}/> {t('booking.user_data')}</span>
+
+                 {/* User Data Form - Horizontal Layout */}
+                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-black placeholder-gray-400 w-full">
+                   <div className="space-y-2">
+                     <label className="block text-sm font-medium text-emerald-800">
+                       {t('booking.first_name_label')} <span className="text-red-500">*</span>
+                     </label>
+                     <input
+                       type="text"
+                       placeholder={t('booking.first_name_label')}
+                       value={userData.name}
+                       onChange={(e) => handleUserDataChange('name', e.target.value)}
+                       onBlur={() => {
+                         const error = validateName(userData.name);
+                         setValidationErrors(prev => ({ ...prev, name: error }));
+                       }}
+                       className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-black placeholder-gray-400 ${
+                         validationErrors.name ? 'border-red-500 focus:ring-red-500' : 'border-slate-200'
+                       }`}
+                     />
+                     {validationErrors.name && (
+                       <p className="text-red-500 text-xs mt-1">{validationErrors.name}</p>
+                     )}
+                   </div>
+                   <div className="space-y-2">
+                     <label className="block text-sm font-medium text-emerald-800">
+                       Last Name <span className="text-red-500">*</span>
+                     </label>
+                     <input
+                       type="text"
+                       placeholder="Last Name"
+                       value={userData.lastName}
+                       onChange={(e) => handleUserDataChange('lastName', e.target.value)}
+                       onBlur={() => {
+                         const error = validateLastName(userData.lastName);
+                         setValidationErrors(prev => ({ ...prev, lastName: error }));
+                       }}
+                       className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-black placeholder-gray-400 ${
+                         validationErrors.lastName ? 'border-red-500 focus:ring-red-500' : 'border-slate-200'
+                       }`}
+                     />
+                     {validationErrors.lastName && (
+                       <p className="text-red-500 text-xs mt-1">{validationErrors.lastName}</p>
+                     )}
+                   </div>
+                   <div className="space-y-2">
+                     <label className="block text-sm font-medium text-emerald-800">
+                       {t('booking.email_label')} <span className="text-red-500">*</span>
+                     </label>
+                     <input
+                       type="email"
+                       placeholder={t('booking.email_label')}
+                       value={userData.email}
+                       onChange={(e) => handleUserDataChange('email', e.target.value)}
+                       onBlur={() => {
+                         const error = validateEmail(userData.email);
+                         setValidationErrors(prev => ({ ...prev, email: error }));
+                       }}
+                       className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-black placeholder-gray-400 ${
+                         validationErrors.email ? 'border-red-500 focus:ring-red-500' : 'border-slate-200'
+                       }`}
+                     />
+                     {validationErrors.email && (
+                       <p className="text-red-500 text-xs mt-1">{validationErrors.email}</p>
+                     )}
+                   </div>
+                   <div className="space-y-2">
+                     <label className="block text-sm font-medium text-emerald-800">
+                       {t('booking.phone_label')} <span className="text-red-500">*</span>
+                     </label>
+                     <input
+                       type="tel"
+                       placeholder={t('booking.phone_label')}
+                       value={userData.phone}
+                       onChange={(e) => handleUserDataChange('phone', e.target.value)}
+                       onBlur={() => {
+                         const error = validatePhone(userData.phone);
+                         setValidationErrors(prev => ({ ...prev, phone: error }));
+                       }}
+                       className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-black placeholder-gray-400 ${
+                         validationErrors.phone ? 'border-red-500 focus:ring-red-500' : 'border-slate-200'
+                       }`}
+                     />
+                     {validationErrors.phone && (
+                       <p className="text-red-500 text-xs mt-1">{validationErrors.phone}</p>
+                     )}
+                   </div>
+                   <div className="space-y-2">
+                     <label className="block text-sm font-medium text-emerald-800">
+                       City <span className="text-red-500">*</span>
+                     </label>
+                     <input
+                       type="text"
+                       placeholder="City"
+                       value={userData.city}
+                       onChange={(e) => handleUserDataChange('city', e.target.value)}
+                       onBlur={() => {
+                         const error = validateCity(userData.city);
+                         setValidationErrors(prev => ({ ...prev, city: error }));
+                       }}
+                       className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-black placeholder-gray-400 ${
+                         validationErrors.city ? 'border-red-500 focus:ring-red-500' : 'border-slate-200'
+                       }`}
+                     />
+                     {validationErrors.city && (
+                       <p className="text-red-500 text-xs mt-1">{validationErrors.city}</p>
+                     )}
+                   </div>
+                   <div className="space-y-2">
+                     <label className="block text-sm font-medium text-emerald-800">
+                       Address <span className="text-red-500">*</span>
+                     </label>
+                     <input
+                       type="text"
+                       placeholder="Address"
+                       value={userData.address}
+                       onChange={(e) => handleUserDataChange('address', e.target.value)}
+                       onBlur={() => {
+                         const error = validateAddress(userData.address);
+                         setValidationErrors(prev => ({ ...prev, address: error }));
+                       }}
+                       className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-black placeholder-gray-400 ${
+                         validationErrors.address ? 'border-red-500 focus:ring-red-500' : 'border-slate-200'
+                       }`}
+                     />
+                     {validationErrors.address && (
+                       <p className="text-red-500 text-xs mt-1">{validationErrors.address}</p>
+                     )}
+                   </div>
+                   <div className="space-y-2 md:col-span-2 lg:col-span-1">
+                     <label className="block text-sm font-medium text-emerald-800">
+                       {t('booking.gender_label')} <span className="text-red-500">*</span>
+                     </label>
+                     <select
+                       value={userData.gender}
+                       onChange={(e) => handleUserDataChange('gender', e.target.value)}
+                       onBlur={() => {
+                         const error = validateGender(userData.gender);
+                         setValidationErrors(prev => ({ ...prev, gender: error }));
+                       }}
+                       className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-black ${
+                         validationErrors.gender ? 'border-red-500 focus:ring-red-500' : 'border-slate-200'
+                       }`}
+                     >
+                       <option value="">{t('booking.select_gender')}</option>
+                       <option value="male">{t('booking.male')}</option>
+                       <option value="female">{t('booking.female')}</option>
+                     </select>
+                     {validationErrors.gender && (
+                       <p className="text-red-500 text-xs mt-1">{validationErrors.gender}</p>
+                     )}
+                   </div>
+                   <div className="space-y-2 md:col-span-2 lg:col-span-1">
+                     <label className="block text-sm font-medium text-emerald-800">
+                       Zip Code <span className="text-red-500">*</span>
+                     </label>
+                     <input
+                       type="text"
+                       placeholder="Zip Code"
+                       value={userData.zip}
+                       onChange={(e) => handleUserDataChange('zip', e.target.value)}
+                       onBlur={() => {
+                         const error = validateZip(userData.zip);
+                         setValidationErrors(prev => ({ ...prev, zip: error }));
+                       }}
+                       className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all placeholder-gray-400 ${
+                         validationErrors.zip ? 'border-red-500 focus:ring-red-500' : 'border-slate-200'
+                       }`}
+                     />
+                     {validationErrors.zip && (
+                       <p className="text-red-500 text-xs mt-1">{validationErrors.zip}</p>
+                     )}
+                   </div>
+                 </div>
+               </div>
+             </div>
 
           {/* Hidden Content: Revealed After Selection */}
           {isConfigured ? (
-            <div className="animate-in fade-in slide-in-from-bottom-6 duration-700 space-y-12">
+            <div className="animate-in fade-in flex flex-col items-center slide-in-from-bottom-6 duration-700 space-y-12">
               <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 py-8 border-y border-slate-50">
-                {[
-                  { icon: <Clock />, label: t('booking.nights_total') },
-                  { icon: <Hotel />, label: t('booking.nights_madinah') },
-                  { icon: <Hotel />, label: t('booking.nights_makkah') },
-                  { icon: <Plane />, label: t('booking.direct_flights') },
-                  { icon: <Bus />, label: t('booking.vip_transfers') }
-                ].map((item, i) => (
+                {(() => {
+                  const selectedProgramData = programs.find(p => p.name === selectedProgram);
+                  if (!selectedProgramData) return [];
+
+                  return [
+                    { icon: <Clock />, label: `${t('booking.duration')}: ${selectedProgramData.ApproximateDuration}` },
+                    { icon: <Plane />, label: `${t('booking.departure')}: ${selectedProgramData.departure}` },
+                    { icon: <Plane />, label: `${t('booking.return')}: ${selectedProgramData.return}` },
+                    { icon: <MapPin />, label: `${t('booking.from')}: ${selectedProgramData.from}` },
+                    { icon: <MapPin />, label: `${t('booking.to')}: ${selectedProgramData.to}` }
+                  ];
+                })().map((item, i) => (
                   <div key={i} className="flex items-center gap-3 text-slate-500 font-bold text-xs">
                     <span className="text-emerald-500">{item.icon}</span> {item.label}
                   </div>
@@ -695,28 +1324,114 @@ export default function SabilHajjPlatform() {
                 </div>
               </div>
 
-              <button
-                onClick={() => {
-                  const params = new URLSearchParams({
-                    program: selectedProgram || '',
-                    room: selectedRoom || '',
-                    visa: selectedVisa || ''
-                  });
-                  window.location.href = `/umrah/collective/${window.location.pathname.split('/').pop()}/booking?${params.toString()}`;
-                }}
-                className="w-full bg-[#1B3C33] text-white py-6 rounded-[2rem] font-black text-xl hover:bg-emerald-900 transition-all shadow-2xl shadow-emerald-900/20 flex items-center justify-center gap-3"
-              >
-                <CheckCircle size={24} /> {t('booking.confirm_book_now')}
-              </button>
+              <div className="space-y-4  items-center   md:w-[40%]">
+                <button
+                  onClick={() => {
+                    setHasAttemptedSubmit(true);
+                    // Validate form fields
+                    if (!validateForm()) {
+                      return;
+                    }
+
+                    const params = new URLSearchParams({
+                      program: selectedProgram || '',
+                      room: selectedRoom || '',
+                      visa: selectedVisa || ''
+                    });
+                    setToggle(true)
+                    // window.location.href = `/umrah/collective/${window.location.pathname.split('/').pop()}/booking?${params.toString()}`;
+                  }}
+                  className="w-full bg-[#1B3C33] text-white py-6 rounded-[2rem] font-black text-xl hover:bg-emerald-800 transition-all shadow-2xl shadow-emerald-900/20 flex items-center justify-center gap-3"
+                >
+                  <CheckCircle size={24} /> {t('booking.confirm_book_now')}
+                </button>
+
+                {/* Export Selected Options Button */}
+                <ExcelExportButton
+                  userData={userData}
+                  programs={selectedProgram ? [programs.find(p => p.name === selectedProgram)].filter(Boolean) : []}
+                  roomTypes={selectedRoom ? [roomTypes.find(r => r.name === selectedRoom)].filter(Boolean) : []}
+                  visaTypes={selectedVisa ? [visaTypes.find(v => v.name === selectedVisa)].filter(Boolean) : []}
+                  selectedOptions={{
+                    program: selectedProgram || undefined,
+                    room: selectedRoom || undefined,
+                    visa: selectedVisa || undefined
+                  }}
+                  buttonText="Export Selected Package Details"
+                  className="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-semibold"
+                />
+              </div>
             </div>
           ) : (
             <div className="text-center py-20 bg-slate-50 rounded-[2.5rem] border-2 border-dashed border-slate-200">
                <Info className="mx-auto text-slate-300 mb-4" size={40} />
-               <p className="text-slate-400 font-bold max-w-xs mx-auto">{t('booking.complete_selection_message')}</p>
+               <p className="text-slate-400 font-bold max-w-xs mx-auto mb-6">{t('booking.complete_selection_message')}</p>
+
+               {/* Export Options Button */}
+               <ExcelExportButton
+                 userData={userData}
+                 programs={selectedProgram ? [programs.find(p => p.name === selectedProgram)].filter(Boolean) : []}
+                 roomTypes={selectedRoom ? [roomTypes.find(r => r.name === selectedRoom)].filter(Boolean) : []}
+                 visaTypes={selectedVisa ? [visaTypes.find(v => v.name === selectedVisa)].filter(Boolean) : []}
+                 selectedOptions={{
+                   program: selectedProgram || undefined,
+                   room: selectedRoom || undefined,
+                   visa: selectedVisa || undefined
+                 }}
+                 buttonText="Export Package Options to Excel"
+                 className="bg-blue-600 hover:bg-blue-700"
+               />
             </div>
           )}
         </div>
       </section>
+
+      {toggle && (
+        <div className='fixed inset-0 flex items-center justify-center z-[1000] w-full h-full bg-black/70 backdrop-blur-sm'
+        >
+          <div className='bg-white rounded-3xl shadow-2xl p-8 md:p-12 max-w-md mx-4 text-center border border-emerald-100'>
+            {/* Islamic Symbol */}
+            <div className='mb-6'>
+              <div className='w-20 h-20  rounded-full flex items-center justify-center mx-auto mb-4'>
+                
+                <Image
+                  src="/logo-filtred.png"
+                  alt="Sabil Hajj Logo"
+                  width={180}
+                  height={180}
+                  className="object-cover rounded-full"
+                />
+              </div>
+            </div>
+
+            {/* Main Message */}
+            <h2 className='text-2xl font-bold text-emerald-900 mb-2'>
+              Booking Confirmed!
+            </h2>
+
+            <p className='text-emerald-700 text-sm mb-6 leading-relaxed'>
+              Your Umrah journey has been reserved. May Allah accept your pilgrimage and grant you peace.
+            </p>
+
+            {/* Loading Animation */}
+            <div className='flex justify-center mb-4'>
+              <div className='flex space-x-2'>
+                <div className='w-3 h-3 bg-emerald-500 rounded-full animate-bounce'></div>
+                <div className='w-3 h-3 bg-emerald-500 rounded-full animate-bounce' style={{animationDelay: '0.1s'}}></div>
+                <div className='w-3 h-3 bg-emerald-500 rounded-full animate-bounce' style={{animationDelay: '0.2s'}}></div>
+              </div>
+            </div>
+
+            {/* Arabic Prayer */}
+            <p className='text-emerald-600 text-md  font-medium'>
+              إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا
+            </p>
+            <p className='text-slate-500 text-xs mt-1'>
+              "Indeed, prayer has been decreed upon the believers a decree of specified times."
+            </p>
+          </div>
+        </div>
+      )}
 
 
       {/* 6. Medina Details */}

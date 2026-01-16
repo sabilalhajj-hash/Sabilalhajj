@@ -1,6 +1,7 @@
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import HttpBackend from 'i18next-http-backend';
+import { initReactI18next } from 'react-i18next';
 
 const resources = {
   en: {
@@ -242,6 +243,10 @@ const resources = {
         performer_info_title: 'Umrah Performer 1 Information - Adult',
         first_name_label: 'First Name',
         last_name_label: 'Last Name',
+        gender_label: 'Gender',
+        select_gender: 'Select Gender',
+        male: 'Male',
+        female: 'Female',
         nationality_label: 'Nationality',
         document_type_label: 'Select travel document type',
         select_document_option: 'Select travel document type',
@@ -286,6 +291,121 @@ const resources = {
         feature_4: 'High-level service & attention to detail',
         error: {
           submission_failed: 'Failed to submit booking. Please try again or contact support.'
+        },
+        choose_program: 'Choose Your Umrah Program',
+        select_spiritual_journey: 'Select Your Spiritual Journey',
+        choose_program_description: 'Choose from our carefully curated Umrah programs designed to meet your spiritual needs and schedule preferences.',
+        choose_accommodation: 'Choose Your Accommodation',
+        select_room_type: 'Select Your Room Type',
+        choose_room_description: 'Choose from our premium accommodation options designed for comfort and spiritual reflection.',
+        choose_visa_type: 'Choose Your Visa Type',
+        select_travel_visa: 'Select Your Travel Visa',
+        choose_visa_description: 'Choose the visa type that best fits your travel plans and requirements.',
+        back_to_programs: 'Back to Programs',
+        back_to_rooms: 'Back to Rooms',
+        select_this_program: 'Select This Program',
+        select_this_room: 'Select This Room',
+        select_this_visa: 'Select This Visa',
+        programs: {
+          ramadan_journey: {
+            name: 'Program 1 — Ramadan Journey',
+            duration: '15 days',
+            departure: '5 March 2026',
+            return: '20th March 2026',
+            from: 'Casablanca, Morocco',
+            to: 'Medina, Saudi Arabia',
+            description: 'Experience the blessed month of Ramadan in the holy lands with guided Umrah rituals',
+            highlights: '["Direct flights from Casablanca", "VIP airport transfers", "4-star hotel accommodations", "Guided prayers and lectures", "Traditional Iftar meals"]',
+            includes: '["Airfare", "Hotel accommodation", "Visa processing", "Transportation", "Guided tours", "Meals during Ramadan"]'
+          },
+          ramadan_last_ten: {
+            name: 'Program 2 — Last Ten Days of Ramadan Program',
+            duration: '17 days',
+            departure: '15th June 2026',
+            return: '1st July 2026',
+            from: 'Casablanca, Morocco',
+            to: 'Medina, Saudi Arabia',
+            description: 'Join the most blessed nights of Ramadan with special prayers and spiritual activities',
+            highlights: '["Laylat al-Qadr focus", "Special Taraweeh prayers", "Spiritual lectures by scholars", "Community Iftar gatherings", "Zamzam water distribution"]',
+            includes: '["Premium airfare", "5-star hotel accommodation", "Express visa processing", "Private transportation", "Scholar-led guidance", "Special Ramadan meals"]'
+          },
+          long_stay: {
+            name: 'Program 3 — Long Stay Program',
+            duration: 'Up to 35 days',
+            departure: '1st July 2026',
+            return: '31st August 2026',
+            from: 'Casablanca, Morocco',
+            to: 'Medina, Saudi Arabia',
+            description: 'Extended stay program for deep spiritual immersion and comprehensive pilgrimage experience',
+            highlights: '["Flexible duration options", "Cultural immersion activities", "Arabic language classes", "Community service opportunities", "Extended ziyarah tours"]',
+            includes: '["Flexible airfare", "Premium accommodation", "Long-stay visa support", "Complete transportation", "Educational programs", "Cultural activities"]'
+          }
+        },
+        rooms: {
+          twin: {
+            name: 'Twin Room',
+            size: '2 Separate Beds (2 Twin Beds)',
+            price: '€1,200 per person',
+            description: 'Suitable for two people – greater comfort and privacy.',
+            features: '["Private bathroom", "Air conditioning", "Mini refrigerator", "Complimentary WiFi", "Room service", "Daily housekeeping"]',
+            capacity: '2 guests',
+            view: 'City or courtyard view',
+            amenities: '["Television", "Safe box", "Coffee/tea maker", "Hair dryer", "Prayer direction indicator"]'
+          },
+          triple: {
+            name: 'Triple Room',
+            size: '3 Separate Beds (3 Twin Beds)',
+            price: '€1,800 per person',
+            description: 'Suitable for three people – ideal for family groups or friends traveling together.',
+            features: '["Spacious layout", "Multiple bathrooms", "Climate control", "Complimentary WiFi", "Room service", "Enhanced cleaning"]',
+            capacity: '3 guests',
+            view: 'City or Haram view',
+            amenities: '["Television", "Safe box", "Coffee/tea maker", "Hair dryer", "Prayer direction indicator", "Extra bedding"]'
+          },
+          quad: {
+            name: 'Quad Room',
+            size: '4 Separate Beds (4 Twin Beds)',
+            price: '€2,400 per person',
+            description: 'Suitable for four people – spacious and comfortable for larger groups.',
+            features: '["Extra spacious", "Multiple bathrooms", "Premium amenities", "High-speed WiFi", "24/7 concierge", "Priority cleaning"]',
+            capacity: '4 guests',
+            view: 'Haram or Kaaba view',
+            amenities: '["Smart TV", "Safe box", "Coffee/tea maker", "Hair dryer", "Prayer direction indicator", "Living area", "Mini kitchen"]'
+          },
+          penta: {
+            name: 'Penthouse Suite',
+            size: '5 Separate Beds (5 Twin Beds)',
+            price: '€3,000 per person',
+            description: 'Suitable for five people – luxurious and exclusive for larger groups.',
+            features: '["Penthouse level", "Panoramic views", "Butler service", "Premium amenities", "Private elevator", "VIP treatment"]',
+            capacity: '5 guests',
+            view: 'Panoramic Haram and Kaaba view',
+            amenities: '["Smart TV", "Safe box", "Coffee/tea maker", "Hair dryer", "Prayer direction indicator", "Full kitchen", "Dining area", "Private terrace"]'
+          }
+        },
+        visas: {
+          umrah: {
+            name: 'Umrah Visa',
+            detail: 'Dedicated for religious pilgrimage',
+            description: 'Official Saudi visa specifically for Umrah pilgrimage activities',
+            validity: '90 days from issuance',
+            stay_duration: 'Up to 90 days',
+            processing_time: '7-14 business days',
+            requirements: '["Valid passport (6+ months)", "Recent passport photos", "Umrah booking confirmation", "Health insurance", "Proof of financial means"]',
+            benefits: '["Dedicated pilgrimage visa", "Multiple entry allowed", "Extends stay permissions", "Official religious travel status", "Priority processing for groups"]',
+            price: '€85 per person'
+          },
+          tourist: {
+            name: 'Tourist Visa',
+            detail: 'Multi-purpose travel visa',
+            description: 'Standard tourist visa allowing Umrah alongside tourism activities',
+            validity: '90 days from issuance',
+            stay_duration: 'Up to 90 days',
+            processing_time: '3-7 business days',
+            requirements: '["Valid passport (6+ months)", "Recent passport photos", "Hotel booking confirmation", "Return flight tickets", "Bank statements"]',
+            benefits: '["Flexible travel options", "Combines tourism and pilgrimage", "Cost-effective for families", "Easier processing", "Extended validity period"]',
+            price: '€65 per person'
+          }
         }
       },
       umrah: {
@@ -372,7 +492,8 @@ const resources = {
         hotels: 'Hotels',
         visa: 'Visa',
         guide: 'Guide',
-        view_more: 'View more'
+        view_more: 'View more',
+        change_country: 'Change Country'
       },
       flights: {
         title: 'The Best Platform to Book Flight Tickets!',
@@ -781,6 +902,10 @@ const resources = {
         performer_info_title: 'Informations du Pèlerin Omra 1 - Adulte',
         first_name_label: 'Prénom',
         last_name_label: 'Nom de Famille',
+        gender_label: 'Genre',
+        select_gender: 'Sélectionner le Genre',
+        male: 'Homme',
+        female: 'Femme',
         nationality_label: 'Nationalité',
         document_type_label: 'Sélectionnez le type de document de voyage',
         select_document_option: 'Sélectionnez le type de document de voyage',
@@ -825,7 +950,122 @@ const resources = {
         feature_4: 'Service et attention aux détails de haut niveau',
         error: {
           submission_failed: 'Échec de la soumission de la réservation. Veuillez réessayer ou contacter le support.'
-        }
+        },
+        programs: {
+          ramadan_journey: {
+            name: 'Programme 1 — Voyage du Ramadan',
+            duration: '15 jours',
+            departure: '5 mars 2026',
+            return: '20 mars 2026',
+            from: 'Casablanca, Maroc',
+            to: 'Médine, Arabie Saoudite',
+            description: 'Découvrez le mois béni du Ramadan dans les terres saintes avec des rituels de Omra guidés',
+            highlights: '["Vols directs depuis Casablanca", "Transferts aéroport VIP", "Hébergements hôteliers 4 étoiles", "Prières et conférences guidées", "Repas Iftar traditionnels"]',
+            includes: '["Transport aérien", "Hébergement hôtelier", "Traitement des visas", "Transport", "Visites guidées", "Repas pendant le Ramadan"]'
+          },
+          ramadan_last_ten: {
+            name: 'Programme 2 — Derniers Dix Jours du Ramadan',
+            duration: '17 jours',
+            departure: '15 juin 2026',
+            return: '1er juillet 2026',
+            from: 'Casablanca, Maroc',
+            to: 'Médine, Arabie Saoudite',
+            description: 'Rejoignez les nuits les plus bénies du Ramadan avec des prières spéciales et des activités spirituelles',
+            highlights: '["Focus sur Laylat al-Qadr", "Prières Taraweeh spéciales", "Conférences spirituelles par des savants", "Rassemblements Iftar communautaires", "Distribution d\'eau Zamzam"]',
+            includes: '["Transport aérien premium", "Hébergement hôtelier 5 étoiles", "Traitement express des visas", "Transport privé", "Guidance dirigée par des savants", "Repas spéciaux du Ramadan"]'
+          },
+          long_stay: {
+            name: 'Programme 3 — Programme de Long Séjour',
+            duration: 'Jusqu\'à 35 jours',
+            departure: '1er juillet 2026',
+            return: '31 août 2026',
+            from: 'Casablanca, Maroc',
+            to: 'Médine, Arabie Saoudite',
+            description: 'Programme de séjour prolongé pour une immersion spirituelle profonde et une expérience de pèlerinage complète',
+            highlights: '["Options de durée flexibles", "Activités d\'immersion culturelle", "Cours de langue arabe", "Opportunités de service communautaire", "Tours de ziyarah étendus"]',
+            includes: '["Transport aérien flexible", "Hébergement premium", "Support visa longue durée", "Transport complet", "Programmes éducatifs", "Activités culturelles"]'
+          }
+        },
+        rooms: {
+          twin: {
+            name: 'Chambre Double',
+            size: '2 Lits Séparés (2 Lits Jumeaux)',
+            price: '1 200 € par personne',
+            description: 'Convient pour deux personnes – plus de confort et d\'intimité.',
+            features: ['Salle de bain privée', 'Climatisation', 'Mini réfrigérateur', 'WiFi gratuit', 'Service de chambre', 'Ménage quotidien'],
+            capacity: '2 invités',
+            view: 'Vue sur la ville ou la cour',
+            amenities: ['Télévision', 'Coffre-fort', 'Machine à café/thé', 'Sèche-cheveux', 'Indicateur de direction de prière']
+          },
+          triple: {
+            name: 'Chambre Triple',
+            size: '3 Lits Séparés (3 Lits Jumeaux)',
+            price: '1 800 € par personne',
+            description: 'Convient pour trois personnes – idéale pour les groupes familiaux ou les amis voyageant ensemble.',
+            features: ['Disposition spacieuse', 'Salles de bain multiples', 'Contrôle climatique', 'WiFi gratuit', 'Service de chambre', 'Nettoyage amélioré'],
+            capacity: '3 invités',
+            view: 'Vue sur la ville ou Haram',
+            amenities: ['Télévision', 'Coffre-fort', 'Machine à café/thé', 'Sèche-cheveux', 'Indicateur de direction de prière', 'Literie supplémentaire']
+          },
+          quad: {
+            name: 'Chambre Quadruple',
+            size: '4 Lits Séparés (4 Lits Jumeaux)',
+            price: '2 400 € par personne',
+            description: 'Convient pour quatre personnes – spacieuse et confortable pour les grands groupes.',
+            features: ['Très spacieuse', 'Salles de bain multiples', 'Équipements premium', 'WiFi haut débit', 'Concierge 24/7', 'Nettoyage prioritaire'],
+            capacity: '4 invités',
+            view: 'Vue sur Haram ou Kaaba',
+            amenities: ['Smart TV', 'Coffre-fort', 'Machine à café/thé', 'Sèche-cheveux', 'Indicateur de direction de prière', 'Espace salon', 'Mini cuisine']
+          },
+          penta: {
+            name: 'Suite Penthouse',
+            size: '5 Lits Séparés (5 Lits Jumeaux)',
+            price: '3 000 € par personne',
+            description: 'Convient pour cinq personnes – luxueuse et exclusive pour les grands groupes.',
+            features: ['Niveau penthouse', 'Vues panoramiques', 'Service de majordome', 'Équipements premium', 'Ascenseur privé', 'Traitement VIP'],
+            capacity: '5 invités',
+            view: 'Vue panoramique sur Haram et Kaaba',
+            amenities: ['Smart TV', 'Coffre-fort', 'Machine à café/thé', 'Sèche-cheveux', 'Indicateur de direction de prière', 'Cuisine complète', 'Salle à manger', 'Terrasse privée']
+          }
+        },
+        visas: {
+          umrah: {
+            name: 'Visa Omra',
+            detail: 'Dédié au pèlerinage religieux',
+            description: 'Visa officiel saoudien spécifiquement pour les activités de pèlerinage Omra',
+            validity: '90 jours à partir de l\'émission',
+            stay_duration: 'Jusqu\'à 90 jours',
+            processing_time: '7-14 jours ouvrables',
+            requirements: ['Passeport valide (6+ mois)', 'Photos de passeport récentes', 'Confirmation de réservation Omra', 'Assurance santé', 'Preuve de moyens financiers'],
+            benefits: ['Visa de pèlerinage dédié', 'Entrée multiple autorisée', 'Étends les permissions de séjour', 'Statut officiel de voyage religieux', 'Traitement prioritaire pour les groupes'],
+            price: '85 € par personne'
+          },
+          tourist: {
+            name: 'Visa Touristique',
+            detail: 'Visa de voyage multi-usage',
+            description: 'Visa touristique standard permettant l\'Omra ainsi que des activités touristiques',
+            validity: '90 jours à partir de l\'émission',
+            stay_duration: 'Jusqu\'à 90 jours',
+            processing_time: '3-7 jours ouvrables',
+            requirements: ['Passeport valide (6+ mois)', 'Photos de passeport récentes', 'Confirmation de réservation d\'hôtel', 'Billets de vol retour', 'Relevés bancaires'],
+            benefits: ['Options de voyage flexibles', 'Combine tourisme et pèlerinage', 'Rentable pour les familles', 'Traitement plus facile', 'Période de validité étendue'],
+            price: '65 € par personne'
+          }
+        },
+        choose_program: 'Choisissez Votre Programme Omra',
+        select_spiritual_journey: 'Sélectionnez Votre Voyage Spirituel',
+        choose_program_description: 'Choisissez parmi nos programmes Omra soigneusement élaborés pour répondre à vos besoins spirituels et à vos préférences de planning.',
+        choose_accommodation: 'Choisissez Votre Hébergement',
+        select_room_type: 'Sélectionnez Votre Type de Chambre',
+        choose_room_description: 'Choisissez parmi nos options d\'hébergement premium conçues pour le confort et la réflexion spirituelle.',
+        choose_visa_type: 'Choisissez Votre Type de Visa',
+        select_travel_visa: 'Sélectionnez Votre Visa de Voyage',
+        choose_visa_description: 'Choisissez le type de visa qui convient le mieux à vos plans de voyage et à vos exigences.',
+        back_to_programs: 'Retour aux Programmes',
+        back_to_rooms: 'Retour aux Chambres',
+        select_this_program: 'Sélectionner ce Programme',
+        select_this_room: 'Sélectionner cette Chambre',
+        select_this_visa: 'Sélectionner ce Visa'
       },
       umrah: {
         back_to_umrah: 'Retour à Omra',
@@ -911,7 +1151,8 @@ const resources = {
         hotels: 'Hôtels',
         visa: 'Visa',
         guide: 'Guide',
-        view_more: 'Voir plus'
+        view_more: 'Voir plus',
+        change_country: 'Changer de Pays'
       },
       flights: {
         title: 'La meilleure plateforme pour réserver des billets d\'avion !',
@@ -1320,6 +1561,10 @@ const resources = {
         performer_info_title: 'Informazioni Partecipante Umrah 1 - Adulto',
         first_name_label: 'Nome',
         last_name_label: 'Cognome',
+        gender_label: 'Genere',
+        select_gender: 'Seleziona Genere',
+        male: 'Uomo',
+        female: 'Donna',
         nationality_label: 'Nazionalità',
         document_type_label: 'Seleziona il tipo di documento di viaggio',
         select_document_option: 'Seleziona il tipo di documento di viaggio',
@@ -1364,7 +1609,122 @@ const resources = {
         feature_4: 'Servizio di alto livello e attenzione ai dettagli',
         error: {
           submission_failed: 'Invio della prenotazione fallito. Riprova o contatta il supporto.'
-        }
+        },
+        programs: {
+          ramadan_journey: {
+            name: 'Programma 1 — Viaggio del Ramadan',
+            duration: '15 giorni',
+            departure: '5 marzo 2026',
+            return: '20 marzo 2026',
+            from: 'Casablanca, Marocco',
+            to: 'Medina, Arabia Saudita',
+            description: 'Vivi il mese benedetto del Ramadan nelle terre sante con riti guidati di Umrah',
+            highlights: ['Voli diretti da Casablanca', 'Trasferimenti aeroportuali VIP', 'Sistemazioni alberghiere 4 stelle', 'Preghiere e conferenze guidate', 'Pasti Iftar tradizionali'],
+            includes: ['Trasporto aereo', 'Sistemazione alberghiera', 'Elaborazione visti', 'Trasporto', 'Tour guidati', 'Pasti durante il Ramadan']
+          },
+          ramadan_last_ten: {
+            name: 'Programma 2 — Ultimi Dieci Giorni del Ramadan',
+            duration: '17 giorni',
+            departure: '15 giugno 2026',
+            return: '1 luglio 2026',
+            from: 'Casablanca, Marocco',
+            to: 'Medina, Arabia Saudita',
+            description: 'Unisciti alle notti più benedette del Ramadan con preghiere speciali e attività spirituali',
+            highlights: ['Focus su Laylat al-Qadr', 'Preghiere Taraweeh speciali', 'Conferenze spirituali da studiosi', 'Raduni comunitari Iftar', 'Distribuzione acqua Zamzam'],
+            includes: ['Trasporto aereo premium', 'Sistemazione alberghiera 5 stelle', 'Elaborazione visti express', 'Trasporto privato', 'Guida guidata da studiosi', 'Pasti speciali del Ramadan']
+          },
+          long_stay: {
+            name: 'Programma 3 — Programma di Soggiorno Lungo',
+            duration: 'Fino a 35 giorni',
+            departure: '1 luglio 2026',
+            return: '31 agosto 2026',
+            from: 'Casablanca, Marocco',
+            to: 'Medina, Arabia Saudita',
+            description: 'Programma di soggiorno prolungato per immersione spirituale profonda ed esperienza di pellegrinaggio completa',
+            highlights: ['Opzioni di durata flessibili', 'Attività di immersione culturale', 'Classi di lingua araba', 'Opportunità di servizio comunitario', 'Tour ziyarah estesi'],
+            includes: ['Trasporto aereo flessibile', 'Sistemazione premium', 'Supporto visto soggiorno lungo', 'Trasporto completo', 'Programmi educativi', 'Attività culturali']
+          }
+        },
+        rooms: {
+          twin: {
+            name: 'Camera Doppia',
+            size: '2 Letti Separati (2 Letti Singoli)',
+            price: '1.200 € a persona',
+            description: 'Adatta per due persone – maggiore comfort e privacy.',
+            features: ['Bagno privato', 'Aria condizionata', 'Mini frigorifero', 'WiFi gratuito', 'Servizio in camera', 'Pulizia giornaliera'],
+            capacity: '2 ospiti',
+            view: 'Vista città o cortile',
+            amenities: ['Televisione', 'Cassaforte', 'Macchina caffè/tè', 'Asciugacapelli', 'Indicatore direzione preghiera']
+          },
+          triple: {
+            name: 'Camera Tripla',
+            size: '3 Letti Separati (3 Letti Singoli)',
+            price: '1.800 € a persona',
+            description: 'Adatta per tre persone – ideale per gruppi familiari o amici che viaggiano insieme.',
+            features: ['Disposizione spaziosa', 'Bagni multipli', 'Controllo climatico', 'WiFi gratuito', 'Servizio in camera', 'Pulizia migliorata'],
+            capacity: '3 ospiti',
+            view: 'Vista città o Haram',
+            amenities: ['Televisione', 'Cassaforte', 'Macchina caffè/tè', 'Asciugacapelli', 'Indicatore direzione preghiera', 'Biancheria aggiuntiva']
+          },
+          quad: {
+            name: 'Camera Quadrupla',
+            size: '4 Letti Separati (4 Letti Singoli)',
+            price: '2.400 € a persona',
+            description: 'Adatta per quattro persone – spaziosa e confortevole per gruppi più grandi.',
+            features: ['Extra spaziosa', 'Bagni multipli', 'Servizi premium', 'WiFi ad alta velocità', 'Concierge 24/7', 'Pulizia prioritaria'],
+            capacity: '4 ospiti',
+            view: 'Vista Haram o Kaaba',
+            amenities: ['Smart TV', 'Cassaforte', 'Macchina caffè/tè', 'Asciugacapelli', 'Indicatore direzione preghiera', 'Area salotto', 'Mini cucina']
+          },
+          penta: {
+            name: 'Suite Attico',
+            size: '5 Letti Separati (5 Letti Singoli)',
+            price: '3.000 € a persona',
+            description: 'Adatta per cinque persone – lussuosa ed esclusiva per gruppi più grandi.',
+            features: ['Livello attico', 'Viste panoramiche', 'Servizio maggiordomo', 'Servizi premium', 'Ascensore privato', 'Trattamento VIP'],
+            capacity: '5 ospiti',
+            view: 'Vista panoramica Haram e Kaaba',
+            amenities: ['Smart TV', 'Cassaforte', 'Macchina caffè/tè', 'Asciugacapelli', 'Indicatore direzione preghiera', 'Cucina completa', 'Sala da pranzo', 'Terrazza privata']
+          }
+        },
+        visas: {
+          umrah: {
+            name: 'Visto Umrah',
+            detail: 'Dedicato al pellegrinaggio religioso',
+            description: 'Visto ufficiale saudita specificamente per le attività di pellegrinaggio Umrah',
+            validity: '90 giorni dalla emissione',
+            stay_duration: 'Fino a 90 giorni',
+            processing_time: '7-14 giorni lavorativi',
+            requirements: ['Passaporto valido (6+ mesi)', 'Foto passaporto recenti', 'Conferma prenotazione Umrah', 'Assicurazione sanitaria', 'Prova di mezzi finanziari'],
+            benefits: ['Visto pellegrinaggio dedicato', 'Ingresso multiplo consentito', 'Estende permessi soggiorno', 'Stato ufficiale viaggio religioso', 'Elaborazione prioritaria per gruppi'],
+            price: '85 € a persona'
+          },
+          tourist: {
+            name: 'Visto Turistico',
+            detail: 'Visto di viaggio multi-scopo',
+            description: 'Visto turistico standard che permette Umrah insieme ad attività turistiche',
+            validity: '90 giorni dalla emissione',
+            stay_duration: 'Fino a 90 giorni',
+            processing_time: '3-7 giorni lavorativi',
+            requirements: ['Passaporto valido (6+ mesi)', 'Foto passaporto recenti', 'Conferma prenotazione hotel', 'Biglietti volo ritorno', 'Estratti conto bancari'],
+            benefits: ['Opzioni viaggio flessibili', 'Combina turismo e pellegrinaggio', 'Conveniente per famiglie', 'Elaborazione più facile', 'Periodo validità esteso'],
+            price: '65 € a persona'
+          }
+        },
+        choose_program: 'Scegli il Tuo Programma Umrah',
+        select_spiritual_journey: 'Seleziona il Tuo Viaggio Spirituale',
+        choose_program_description: 'Scegli tra i nostri programmi Umrah attentamente curati per soddisfare le tue esigenze spirituali e le preferenze di programmazione.',
+        choose_accommodation: 'Scegli il Tuo Alloggio',
+        select_room_type: 'Seleziona il Tuo Tipo di Camera',
+        choose_room_description: 'Scegli tra le nostre opzioni di alloggio premium progettate per il comfort e la riflessione spirituale.',
+        choose_visa_type: 'Scegli il Tuo Tipo di Visa',
+        select_travel_visa: 'Seleziona il Tuo Visa di Viaggio',
+        choose_visa_description: 'Scegli il tipo di visa che meglio si adatta ai tuoi piani di viaggio e alle tue esigenze.',
+        back_to_programs: 'Torna ai Programmi',
+        back_to_rooms: 'Torna alle Camere',
+        select_this_program: 'Seleziona Questo Programma',
+        select_this_room: 'Seleziona Questa Camera',
+        select_this_visa: 'Seleziona Questo Visa'
       },
       umrah: {
         back_to_umrah: 'Torna a Umrah',
@@ -1450,7 +1810,8 @@ const resources = {
         hotels: 'Hotel',
         visa: 'Visa',
         guide: 'Guida',
-        view_more: 'Vedi di più'
+        view_more: 'Vedi di più',
+        change_country: 'Cambia Paese'
       },
       flights: {
         title: 'La migliore piattaforma per prenotare biglietti aerei!',
@@ -1665,7 +2026,7 @@ const resources = {
       services: {
         title: 'خدماتنا',
         hajj: {
-          title: 'حج الحج',
+          title: 'الحج',
           description: 'باقات الحج الكاملة مع أماكن إقامة فاخرة وإرشاد خبير.'
         },
         umrah: {
@@ -1736,7 +2097,7 @@ const resources = {
         services: {
           title: 'خدماتنا',
           hajj: {
-            title: 'حج الحج',
+            title: 'الحج',
             description: 'باقات الحج الكاملة مع أماكن إقامة فاخرة وإرشاد خبير.'
           },
           umrah: {
@@ -1763,7 +2124,7 @@ const resources = {
         hajj: {
           title: 'حج الحج',
           subtitle: 'انطلقوا في أقدس الحج في الإسلام',
-          description1: 'حج الحج هو أحد أركان الإسلام الخمسة ورحلة روحية عميقة يجب على كل مسلم قادر بدنياً ومالياً القيام بها مرة واحدة على الأقل في حياته.',
+          description1: 'الحج هو أحد أركان الإسلام الخمسة ورحلة روحية عميقة يجب على كل مسلم قادر بدنياً ومالياً القيام بها مرة واحدة على الأقل في حياته.',
           description2: 'باقاتنا الشاملة للحج تضمن أن حجكم ليس فقط مرضياً روحياً بل مريحاً ومنظماً جيداً أيضاً. نحن نتولى كل جانب من جوانب رحلتكم، من معالجة التأشيرات إلى الإقامة والنقل.',
           description3: 'انضموا إلى آلاف الحجاج الذين ائتمنونا على رحلتهم المقدسة. فريقنا ذو الخبرة يقدم دعماً على مدار 24/7 طوال حجكم.'
         },
@@ -1859,6 +2220,10 @@ const resources = {
         performer_info_title: 'معلومات المعتمر 1 - بالغ',
         first_name_label: 'الاسم الأول',
         last_name_label: 'اسم العائلة',
+        gender_label: 'الجنس',
+        select_gender: 'اختر الجنس',
+        male: 'ذكر',
+        female: 'أنثى',
         nationality_label: 'الجنسية',
         document_type_label: 'اختر نوع وثيقة السفر',
         select_document_option: 'اختر نوع وثيقة السفر',
@@ -1903,7 +2268,122 @@ const resources = {
         feature_4: 'خدمة عالية المستوى واهتمام بالتفاصيل',
         error: {
           submission_failed: 'فشل في إرسال الحجز. يرجى المحاولة مرة أخرى أو الاتصال بالدعم.'
-        }
+        },
+        programs: {
+          ramadan_journey: {
+            name: 'البرنامج 1 — رحلة رمضان',
+            duration: '15 يوم',
+            departure: '5 مارس 2026',
+            return: '20 مارس 2026',
+            from: 'الدار البيضاء، المغرب',
+            to: 'المدينة المنورة، المملكة العربية السعودية',
+            description: 'اكتشف شهر رمضان المبارك في الأراضي المقدسة مع مناسك العمرة المرشدة',
+            highlights: ['رحلات مباشرة من الدار البيضاء', 'نقل مطار VIP', 'إقامات فندقية 4 نجوم', 'صلوات ومحاضرات مرشدة', 'وجبات إفطار تقليدية'],
+            includes: ['النقل الجوي', 'إقامة فندقية', 'معالجة التأشيرات', 'النقل', 'جولات مرشدة', 'وجبات خلال رمضان']
+          },
+          ramadan_last_ten: {
+            name: 'البرنامج 2 — العشر الأواخر من رمضان',
+            duration: '17 يوم',
+            departure: '15 يونيو 2026',
+            return: '1 يوليو 2026',
+            from: 'الدار البيضاء، المغرب',
+            to: 'المدينة المنورة، المملكة العربية السعودية',
+            description: 'انضم إلى أكثر ليالي رمضان بركة مع صلوات خاصة وأنشطة روحية',
+            highlights: ['تركيز على ليلة القدر', 'صلوات تراويح خاصة', 'محاضرات روحية من العلماء', 'تجمعات إفطار مجتمعية', 'توزيع ماء زمزم'],
+            includes: ['النقل الجوي المميز', 'إقامة فندقية 5 نجوم', 'معالجة سريعة للتأشيرات', 'نقل خاص', 'إرشاد موجه من العلماء', 'وجبات رمضان الخاصة']
+          },
+          long_stay: {
+            name: 'البرنامج 3 — برنامج الإقامة الطويلة',
+            duration: 'حتى 35 يوم',
+            departure: '1 يوليو 2026',
+            return: '31 أغسطس 2026',
+            from: 'الدار البيضاء، المغرب',
+            to: 'المدينة المنورة، المملكة العربية السعودية',
+            description: 'برنامج إقامة ممتد للغمر الروحي العميق وتجربة الحج الكاملة',
+            highlights: ['خيارات مدة مرنة', 'أنشطة غمر ثقافي', 'دروس اللغة العربية', 'فرص الخدمة المجتمعية', 'جولات زيارة ممتدة'],
+            includes: ['النقل الجوي المرن', 'إقامة مميزة', 'دعم تأشيرة الإقامة الطويلة', 'نقل كامل', 'برامج تعليمية', 'أنشطة ثقافية']
+          }
+        },
+        rooms: {
+          twin: {
+            name: 'غرفة مزدوجة',
+            size: 'سريران منفصلان (سريران فرديان)',
+            price: '1,200 يورو للشخص الواحد',
+            description: 'مناسبة لشخصين – راحة أكبر وخصوصية.',
+            features: ['حمام خاص', 'تكييف', 'ثلاجة صغيرة', 'واي فاي مجاني', 'خدمة الغرف', 'تنظيف يومي'],
+            capacity: 'شخصان',
+            view: 'إطلالة على المدينة أو الفناء',
+            amenities: ['تلفاز', 'خزنة آمنة', 'ماكينة قهوة/شاي', 'مجفف شعر', 'مؤشر اتجاه القبلة']
+          },
+          triple: {
+            name: 'غرفة ثلاثية',
+            size: 'ثلاثة أسرة منفصلة (ثلاثة أسرة فردية)',
+            price: '1,800 يورو للشخص الواحد',
+            description: 'مناسبة لثلاثة أشخاص – مثالية للمجموعات العائلية أو الأصدقاء الذين يسافرون معاً.',
+            features: ['تصميم واسع', 'حمامات متعددة', 'تحكم مناخي', 'واي فاي مجاني', 'خدمة الغرف', 'تنظيف محسن'],
+            capacity: 'ثلاثة أشخاص',
+            view: 'إطلالة على المدينة أو الحرم',
+            amenities: ['تلفاز', 'خزنة آمنة', 'ماكينة قهوة/شاي', 'مجفف شعر', 'مؤشر اتجاه القبلة', 'أغطية إضافية']
+          },
+          quad: {
+            name: 'غرفة رباعية',
+            size: 'أربعة أسرة منفصلة (أربعة أسرة فردية)',
+            price: '2,400 يورو للشخص الواحد',
+            description: 'مناسبة لأربعة أشخاص – واسعة ومريحة للمجموعات الأكبر.',
+            features: ['واسع جداً', 'حمامات متعددة', 'وسائل راحة مميزة', 'واي فاي عالي السرعة', 'كونسيرج 24/7', 'تنظيف ذو أولوية'],
+            capacity: 'أربعة أشخاص',
+            view: 'إطلالة على الحرم أو الكعبة',
+            amenities: ['تلفاز ذكي', 'خزنة آمنة', 'ماكينة قهوة/شاي', 'مجفف شعر', 'مؤشر اتجاه القبلة', 'منطقة جلوس', 'مطبخ صغير']
+          },
+          penta: {
+            name: 'جناح البنتهاوس',
+            size: 'خمسة أسرة منفصلة (خمسة أسرة فردية)',
+            price: '3,000 يورو للشخص الواحد',
+            description: 'مناسبة لخمسة أشخاص – فاخر وحصري للمجموعات الأكبر.',
+            features: ['مستوى البنتهاوس', 'إطلالات بانورامية', 'خدمة الساعي', 'وسائل راحة مميزة', 'مصعد خاص', 'معاملة VIP'],
+            capacity: 'خمسة أشخاص',
+            view: 'إطلالة بانورامية على الحرم والكعبة',
+            amenities: ['تلفاز ذكي', 'خزنة آمنة', 'ماكينة قهوة/شاي', 'مجفف شعر', 'مؤشر اتجاه القبلة', 'مطبخ كامل', 'غرفة طعام', 'شرفة خاصة']
+          }
+        },
+        visas: {
+          umrah: {
+            name: 'تأشيرة العمرة',
+            detail: 'مخصص للحج الديني',
+            description: 'تأشيرة سعودية رسمية مخصصة خصيصاً لأنشطة الحج عمرة',
+            validity: '90 يوماً من الإصدار',
+            stay_duration: 'حتى 90 يوم',
+            processing_time: '7-14 يوم عمل',
+            requirements: ['جواز سفر صالح (6+ أشهر)', 'صور جواز سفر حديثة', 'تأكيد حجز العمرة', 'تأمين صحي', 'إثبات الوسائل المالية'],
+            benefits: ['تأشيرة حج مخصصة', 'دخول متعدد مسموح', 'يمدد أذونات الإقامة', 'حالة رسمية للسفر الديني', 'معالجة ذات أولوية للمجموعات'],
+            price: '85 يورو للشخص الواحد'
+          },
+          tourist: {
+            name: 'تأشيرة سياحية',
+            detail: 'تأشيرة سفر متعددة الأغراض',
+            description: 'تأشيرة سياحية قياسية تسمح بالعمرة إلى جانب الأنشطة السياحية',
+            validity: '90 يوماً من الإصدار',
+            stay_duration: 'حتى 90 يوم',
+            processing_time: '3-7 أيام عمل',
+            requirements: ['جواز سفر صالح (6+ أشهر)', 'صور جواز سفر حديثة', 'تأكيد حجز فندق', 'تذاكر طيران عودة', 'كشوف حسابات بنكية'],
+            benefits: ['خيارات سفر مرنة', 'يجمع بين السياحة والحج', 'موفر للعائلات', 'معالجة أسهل', 'فترة صلاحية ممتدة'],
+            price: '65 يورو للشخص الواحد'
+          }
+        },
+        choose_program: 'اختر برنامج العمرة الخاص بك',
+        select_spiritual_journey: 'اختر رحلتك الروحية',
+        choose_program_description: 'اختر من برامج العمرة المصممة بعناية لتلبية احتياجاتك الروحية وتفضيلات جدولك الزمني.',
+        choose_accommodation: 'اختر إقامتك',
+        select_room_type: 'اختر نوع غرفتك',
+        choose_room_description: 'اختر من خيارات الإقامة الفاخرة المصممة للراحة والتأمل الروحي.',
+        choose_visa_type: 'اختر نوع تأشيرتك',
+        select_travel_visa: 'اختر تأشيرة سفرك',
+        choose_visa_description: 'اختر نوع التأشيرة التي تناسب خطط سفرك ومتطلباتك.',
+        back_to_programs: 'العودة إلى البرامج',
+        back_to_rooms: 'العودة إلى الغرف',
+        select_this_program: 'اختر هذا البرنامج',
+        select_this_room: 'اختر هذه الغرفة',
+        select_this_visa: 'اختر هذه التأشيرة'
       },
       umrah: {
         back_to_umrah: 'العودة إلى العمرة',
@@ -1989,7 +2469,8 @@ const resources = {
         hotels: 'فنادق',
         visa: 'تأشيرة',
         guide: 'مرشد',
-        view_more: 'عرض المزيد'
+        view_more: 'عرض المزيد',
+        change_country: 'تغيير البلد'
       },
       flights: {
         title: 'أفضل منصة لحجز تذاكر الطيران!',
@@ -2164,28 +2645,50 @@ const resources = {
 
 
 
-i18n
-  .use(LanguageDetector)
-  // .use(initReactI18next) // This passes i18n down to react-i18next
-  .init({
-    resources,
-    fallbackLng: 'en',
-    // In Next.js/SSR, don't set 'lng' explicitly if using a detector 
-    // unless you are handling hydration manually.
-    lng: typeof window !== 'undefined' ? undefined : 'en', 
+// i18n
+//   .use(LanguageDetector)
+//   .use(initReactI18next) // This passes i18n down to react-i18next
+//   .init({
+//     resources,
+//     fallbackLng: 'en',
+//     // In Next.js/SSR, don't set 'lng' explicitly if using a detector 
+//     // unless you are handling hydration manually.
+//     lng: typeof window !== 'undefined' ? undefined : 'en', 
     
-    debug: false,
-    interpolation: {
-      escapeValue: false, 
-    },
-    detection: {
-      // Re-enable detection but prioritize localStorage for consistency
-      order: ['localStorage', 'navigator'],
-      caches: ['localStorage'],
-    },
-    react: {
-      useSuspense: false,
-    },
-  });
+//     debug: false,
+//     interpolation: {
+//       escapeValue: false, 
+//     },
+//     detection: {
+//       // Re-enable detection but prioritize localStorage for consistency
+//       order: ['localStorage', 'navigator'],
+//       caches: ['localStorage'],
+//     },
+//     react: {
+//       useSuspense: false,
+//     },
+//   });
+
+
+if (!i18n.isInitialized) {
+  i18n
+    .use(LanguageDetector)
+    .use(initReactI18next)
+    .init({
+      resources,
+      fallbackLng: 'en',
+      debug: false,
+      interpolation: {
+        escapeValue: false,
+      },
+      detection: {
+        order: ['localStorage', 'cookie', 'navigator'],
+        caches: ['localStorage', 'cookie'],
+      },
+      react: {
+        useSuspense: false, // Vital for Next.js hydration
+      },
+    });
+}
 
 export default i18n;

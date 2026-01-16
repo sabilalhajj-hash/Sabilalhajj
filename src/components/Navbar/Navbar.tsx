@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePathname } from 'next/navigation';
 import CurrencySwitcher from './CurrencySwitcher';
@@ -11,6 +11,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState('en');
   const languageRef = useRef<HTMLDivElement>(null);
   const { t, i18n } = useTranslation();
   const pathname = usePathname();
@@ -24,6 +25,19 @@ export default function Navbar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Track current language
+  useEffect(() => {
+    setCurrentLanguage(i18n.language || 'en');
+    const handleLanguageChange = (lng: string) => {
+      setCurrentLanguage(lng);
+    };
+
+    i18n.on('languageChanged', handleLanguageChange);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChange);
+    };
+  }, [i18n]);
 
   // Close language dropdown when clicking outside
   useEffect(() => {
@@ -48,16 +62,21 @@ export default function Navbar() {
   };
 
   const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-    setIsLanguageOpen(false);
+    i18n.changeLanguage(lng, (err, t) => {
+      if (err) {
+        console.error('Failed to change language:', err);
+      } else {
+        setIsLanguageOpen(false);
+      }
+    });
   };
 
-  const languages = [
+  const languages = useMemo(() => [
     { code: 'en', name: t('languages.english'), flag: '🇺🇸' },
     { code: 'fr', name: t('languages.french'), flag: '🇫🇷' },
     { code: 'it', name: t('languages.italian'), flag: '🇮🇹' },
     { code: 'ar', name: t('languages.arabic'), flag: '🇸🇦' },
-  ];
+  ], [t]);
 
   const navItems = [
     { key: 'umrah', href: '/umrah' },
@@ -80,7 +99,7 @@ export default function Navbar() {
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
               <Image
-                src="/Logo-filtered.png"
+                src="/Logo-filtred.png"
                 alt="Sabil Al-Hajj Logo"
                 width={200}
                 height={90}
@@ -113,14 +132,14 @@ export default function Navbar() {
               <button
                 onClick={toggleLanguage}
                 className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
-                aria-expanded="false"
+                aria-expanded={isLanguageOpen}
                 suppressHydrationWarning={true}
               >
-                <span className="text-lg" suppressHydrationWarning>
-                  {languages.find(lang => lang.code === i18n.language)?.flag}
+                <span className="text-lg">
+                  {languages.find(lang => lang.code === currentLanguage)?.flag}
                 </span>
-                <span className="hidden lg:block" suppressHydrationWarning>
-                  {languages.find(lang => lang.code === i18n.language)?.name}
+                <span className="hidden lg:block">
+                  {languages.find(lang => lang.code === currentLanguage)?.name}
                 </span>
                 <svg
                   className={`w-4 h-4 transition-transform duration-200 ${isLanguageOpen ? 'rotate-180' : ''}`}
@@ -133,21 +152,20 @@ export default function Navbar() {
               </button>
 
               {/* Language Dropdown */}
-              <div className={`absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-[200] ${isLanguageOpen ? 'block' : 'hidden'}`}>
+              <div className={`absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-[300] ${isLanguageOpen ? 'block' : 'hidden'}`}>
                 <div className="py-1">
                   {languages.map((language) => (
                     <button
                       key={language.code}
                       onClick={() => changeLanguage(language.code)}
                       className={`flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100 transition-colors ${
-                        i18n.language === language.code ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
+                        currentLanguage === language.code ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
                       }`}
-                      suppressHydrationWarning
                     >
-                      <span className="text-lg mr-3" suppressHydrationWarning>{language.flag}</span>
-                      <span suppressHydrationWarning>{language.name}</span>
-                      {i18n.language === language.code && (
-                        <svg className="ml-auto w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20" suppressHydrationWarning>
+                      <span className="text-lg mr-3">{language.flag}</span>
+                      <span>{language.name}</span>
+                      {currentLanguage === language.code && (
+                        <svg className="ml-auto w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                       )}
@@ -224,7 +242,7 @@ export default function Navbar() {
           ))}
 
           {/* Mobile Language Selector */}
-          <div className="border-t border-gray-200  pt-3 mt-3" suppressHydrationWarning={true}>
+          <div className="border-t border-gray-200  pt-3 mt-3">
             <div className="px-3 py-2">
               <p className="text-sm font-medium text-gray-900 mb-2">{t('languages.language')} / {t('languages.language_arabic')}</p>
               <div className="grid grid-cols-2 gap-2">
@@ -236,7 +254,7 @@ export default function Navbar() {
                       setIsMenuOpen(false);
                     }}
                     className={`flex items-center justify-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                      i18n.language === language.code
+                      currentLanguage === language.code
                         ? 'bg-blue-600 text-white'
                         : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
                     }`}

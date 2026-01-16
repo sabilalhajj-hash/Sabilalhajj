@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
+import Image from "next/image"
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -17,7 +18,7 @@ export default function Footer() {
     company: [
       { name: t('navigation.about'), href: '/about' },
       { name: 'Our Portfolio', href: '/portfolio' },
-      { name: t('contact.title'), href: '/contact' },
+      { name: t('contact.title'), href: 'https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20inquire%20about%20Hajj/Umrah%20services.' },
       { name: 'Blog', href: '/blog' },
     ],
     legal: [
@@ -26,7 +27,7 @@ export default function Footer() {
       { name: t('footer.cookies'), href: '#' },
     ],
     contact: [
-      { text: '123 Pilgrimage Street, Makkah, Saudi Arabia', icon: '📍' },
+      { text: 'KHOURIBGA', icon: '📍' },
       { text: '+966 12 345 6789', icon: '📞' },
       { text: 'info@sabilalhajj.com', icon: '✉️' },
     ]
@@ -40,29 +41,35 @@ export default function Footer() {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="text-2xl">🕋</div>
+              
+              <Image
+                src="/Logo-filtred.png"
+                alt="Sabil Al-Hajj"
+                width={100}
+                height={100}
+              />
               <h3 className="text-xl font-bold">Sabil Al-Hajj</h3>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed">
               {t('footer.description')}
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a href="https://facebook.com/groups/1218706519691450/" className="text-gray-400 hover:text-white transition-colors">
                 <span className="sr-only">Facebook</span>
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fillRule="evenodd" d="M20 1a3 3 0 0 1 3 3v16a3 3 0 0 1-3 3h-4.28l-.082-8.675L16.6 12l-2.322-.675L14 5.325 10.4 5.4l-.08 8.6L8 12l1.48-.325-.08 8.675H4a3 3 0 0 1-3-3V4a3 3 0 0 1 3-3h16z" clipRule="evenodd"/>
                 </svg>
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <span className="sr-only">Twitter</span>
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+              <a href="https://www.tiktok.com/@sabilalhajj7?_r=1&_t=ZS-937eja58qlF" className="text-gray-400 hover:text-white transition-colors">
+                <span className="sr-only">TikTok</span>
+                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
                 </svg>
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a href="https://www.instagram.com/sabil.alhajj/" className="text-gray-400 hover:text-white transition-colors">
                 <span className="sr-only">Instagram</span>
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12.017 0C8.396 0 7.996.014 6.797.067 5.609.12 4.836.245 4.199.471c-.661.236-1.221.551-1.782.977C1.856 1.873.996 2.553.996 3.332c0 .78.86 1.46 1.421 1.886.561.426 1.121.691 1.782.927.637.226 1.41.351 2.599.404C7.996 6.55 8.396 6.564 12.017 6.564s4.021-.014 5.22-.067c1.189-.053 1.962-.178 2.599-.404.661-.236 1.221-.551 1.782-.977.561-.426 1.421-1.106 1.421-1.886 0-.78-.86-1.46-1.421-1.886-.561-.426-1.121-.691-1.782-.927-.637-.226-1.41-.351-2.599-.404C16.038.014 15.638 0 12.017 0zM12.017 3.937a8.063 8.063 0 100 16.126 8.063 8.063 0 000-16.126zm0 13.302a5.239 5.239 0 110-10.478 5.239 5.239 0 010 10.478zm8.406-13.527a1.886 1.886 0 11-3.772 0 1.886 1.886 0 013.772 0z"/>
+                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fillRule="evenodd" d="M12 2c2.717 0 3.056.01 4.122.06 1.065.05 1.79.217 2.428.465.66.254 1.216.598 1.772 1.153a4.908 4.908 0 0 1 1.153 1.772c.247.637.415 1.363.465 2.428.047 1.066.06 1.405.06 4.122 0 2.717-.01 3.056-.06 4.122-.05 1.065-.218 1.79-.465 2.428a4.883 4.883 0 0 1-1.153 1.772 4.915 4.915 0 0 1-1.772 1.153c-.637.247-1.363.415-2.428.465-1.066.047-1.405.06-4.122.06-2.717 0-3.056-.01-4.122-.06-1.065-.05-1.79-.218-2.428-.465a4.89 4.89 0 0 1-1.772-1.153 4.904 4.904 0 0 1-1.153-1.772c-.248-.637-.415-1.363-.465-2.428C2.013 15.056 2 14.717 2 12c0-2.717.01-3.056.06-4.122.05-1.066.217-1.79.465-2.428a4.88 4.88 0 0 1 1.153-1.772A4.897 4.897 0 0 1 5.45 2.525c.638-.248 1.362-.415 2.428-.465C8.944 2.013 9.283 2 12 2zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6.5-.25a1.25 1.25 0 1 0-2.5 0 1.25 1.25 0 0 0 2.5 0zM12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z" clipRule="evenodd"/>
                 </svg>
               </a>
             </div>
@@ -88,9 +95,20 @@ export default function Footer() {
             <ul className="space-y-2">
               {footerLinks.company.map((link, index) => (
                 <li key={index}>
-                  <Link href={link.href} className="text-gray-300 hover:text-white transition-colors text-sm">
-                    {link.name}
-                  </Link>
+                  {link.href.startsWith('http') ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-300 hover:text-white transition-colors text-sm"
+                    >
+                      {link.name}
+                    </a>
+                  ) : (
+                    <Link href={link.href} className="text-gray-300 hover:text-white transition-colors text-sm">
+                      {link.name}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -147,6 +165,11 @@ export default function Footer() {
                 </Link>
               ))}
             </div>
+            {/* <Image 
+            src="/logo-filtred.png"
+            width={30}
+            height={30}
+            /> */}
           </div>
         </div>
       </div>

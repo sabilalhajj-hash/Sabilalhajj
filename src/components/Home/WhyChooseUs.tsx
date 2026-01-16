@@ -44,7 +44,7 @@ export default function WhyChooseUs() {
     <section className="bg-white py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-emerald-600 font-medium mb-2 underline decoration-sky-400 underline-offset-8">{t('whyChooseUs.title')}</h2>
+          {/* <h2 className="text-emerald-600 font-medium mb-2 underline decoration-sky-400 underline-offset-8">{t('whyChooseUs.title')}</h2> */}
           <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t('whyChooseUs.title')}</h3>
           <p className="text-gray-600 max-w-2xl mx-auto">
             {t('whyChooseUs.subtitle')}

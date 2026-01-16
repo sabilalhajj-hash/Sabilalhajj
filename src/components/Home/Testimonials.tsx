@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { User, Star, ChevronDown, Plus, Minus } from 'lucide-react';
 
@@ -8,7 +8,7 @@ export default function Testimonials() {
   const { t } = useTranslation();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const testimonialData = [
+  const testimonialData = useMemo(() => [
     {
       name: t('testimonials.name1', 'Mouad'),
       location: t('testimonials.location1', 'Italy'),
@@ -24,9 +24,9 @@ export default function Testimonials() {
       location: t('testimonials.location3', 'Italy'),
       text: t('testimonials.text3', 'I am pleased with the services provided by the sabillhajj platform. The support team was always available, and the accommodation and transportation were comfortable and clean.')
     }
-  ];
+  ], [t]);
 
-  const commonQuestions = [
+  const commonQuestions = useMemo(() => [
     {
       q: t('testimonials.questions.secure_booking'),
       a: t('testimonials.questions.secure_booking_answer')
@@ -39,7 +39,7 @@ export default function Testimonials() {
       q: t('testimonials.questions.customize_package'),
       a: t('testimonials.questions.customize_package_answer')
     }
-  ];
+  ], [t]);
 
   return (
     <section className="py-24 px-4 max-w-7xl mx-auto border-t border-gray-50">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 import {
@@ -17,16 +17,16 @@ export default function PackageSelection() {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const categories = [
+  const categories = useMemo(() => [
     { name: t('packages.umrah_packages'), icon: <Calendar className="w-6 h-6" /> },
     { name: t('packages.hajj'), icon: <Building2 className="w-6 h-6" /> },
     { name: t('packages.flight_booking'), icon: <Plane className="w-6 h-6" /> },
     { name: t('packages.hotel_booking'), icon: <Hotel className="w-6 h-6" /> },
     { name: t('packages.visa_services'), icon: <FileText className="w-6 h-6" /> },
     { name: t('packages.personalized_umrah'), icon: <UserCircle className="w-6 h-6" /> },
-  ];
+  ], [t]);
 
-  const packages = [
+  const packages = useMemo(() => [
     {
       title: t('packages.hajj'),
       image: "/hajj1.jpg",
@@ -46,7 +46,7 @@ export default function PackageSelection() {
       features: [t('packages.flight'), t('packages.hotels'), t('packages.visa'), t('packages.guide')],
       path: "/hajj"
     }
-  ];
+  ], [t]);
   return (
     <section className="bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -97,9 +97,9 @@ export default function PackageSelection() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
               {/* Logo in corner */}
-              <div className="absolute top-4 right-4 w-16 h-12 bg-white rounded-lg flex items-center justify-center p-1">
+              <div className="absolute top-4 right-4 w-16 h-12  border-1  bg-gray/80 backdrop-blur-sm  rounded-lg flex items-center justify-center p-1">
                  <div className="relative w-full h-full">
-                    <Image src="/Logo.png" alt="Logo" fill className="object-contain" sizes="64px" />
+                    <Image src="/Logo-filtred.png" alt="Logo" fill className="object-contain" sizes="64px" />
                  </div>
               </div>
 

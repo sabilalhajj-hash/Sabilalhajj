@@ -12,7 +12,7 @@ interface Section {
 interface SectionIndicatorProps {
   sections?: Section[];
   className?: string;
-  pageType?: 'umrah' | 'hajj' | 'generic';
+  pageType?: 'umrah' | 'hajj' | 'home' | 'generic';
 }
 
 const umrahSections: Section[] = [
@@ -32,11 +32,24 @@ const hajjSections: Section[] = [
   { id: 'policies', labelKey: 'navigation.terms_policies', icon: '📋', fallback: 'Terms & Policies' },
 ];
 
+const homeSections: Section[] = [
+  { id: 'hero', labelKey: 'navigation.overview', icon: '🏠', fallback: 'Home' },
+  { id: 'package-selection', labelKey: 'navigation.package_options', icon: '📦', fallback: 'Packages' },
+  { id: 'services', labelKey: 'services.title', icon: '🛎️', fallback: 'Services' },
+  { id: 'why-choose-us', labelKey: 'whyChooseUs.title', icon: '⭐', fallback: 'Why Choose Us' },
+  { id: 'testimonials', labelKey: 'testimonials.title', icon: '💬', fallback: 'Testimonials' },
+  { id: 'gallery', labelKey: 'gallery.title', icon: '🖼️', fallback: 'Gallery' },
+];
+
 export default function SectionIndicator({ sections: propSections, className, pageType = 'umrah' }: SectionIndicatorProps = {}) {
   const { t } = useTranslation();
 
   // Use predefined sections based on page type, or custom sections if provided
-  const sections = propSections || (pageType === 'hajj' ? hajjSections : umrahSections);
+  const sections = propSections || (
+    pageType === 'hajj' ? hajjSections :
+    pageType === 'home' ? homeSections :
+    umrahSections
+  );
   const [activeSection, setActiveSection] = useState<string>('');
 
   // Initialize active section
@@ -88,8 +101,8 @@ export default function SectionIndicator({ sections: propSections, className, pa
   return (
     <>
       {/* Desktop Version - Right Side */}
-      <div className={`fixed right-6 top-1/2 -translate-y-1/2 z-[90] hidden lg:block ${className || ''}`}>
-        <div className="bg-white/90 backdrop-blur-md border border-emerald-100 p-4 rounded-2xl shadow-2xl min-w-[200px]">
+      <div className={`fixed right-6 top-1/2 cursor-pointer -translate-y-1/2 z-[90] hidden lg:block ${className || ''}`}>
+        <div className="bg-white/65  backdrop-blur-md border-3 border-emerald-300 p-4 rounded-2xl shadow-2xl min-w-[200px]">
           <div className="text-center mb-3">
             <span className="text-[10px] font-black uppercase text-emerald-600 tracking-widest">Page Navigation</span>
           </div>
@@ -138,7 +151,7 @@ export default function SectionIndicator({ sections: propSections, className, pa
       </div>
 
       {/* Mobile Version - Sticky Under Navbar */}
-      <div className={`fixed top-28 left-0 right-0 z-[90] lg:hidden bg-white/95 backdrop-blur-md border-b border-emerald-100 shadow-lg ${className || ''}`}>
+      <div className={`fixed top-28 left-0 right-0 cursor-pointer z-[90] lg:hidden bg-white/95 backdrop-blur-md border-b border-emerald-100 shadow-lg ${className || ''}`}>
         <div className="px-4 py-3">
           <div className="flex items-center justify-between">
 

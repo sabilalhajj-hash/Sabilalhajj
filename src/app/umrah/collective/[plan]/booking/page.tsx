@@ -4,7 +4,7 @@ import React, { useState, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Minus, Plus, CheckCircle2, ChevronDown, ArrowLeft, Loader2 } from 'lucide-react';
-import { sendBookingEmail } from '@/lib/resend';
+
 
 
 export default function BookingPage() {
