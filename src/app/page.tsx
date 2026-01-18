@@ -12,6 +12,8 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import Gallery from '@/components/Gallery';
 
+export const dynamic = 'force-dynamic';
+
 export default function Home() {
 
   return (
