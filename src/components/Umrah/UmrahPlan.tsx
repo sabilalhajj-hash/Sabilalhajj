@@ -14,6 +14,7 @@ const UmrahPlan = () => {
     {
       title: t('umrah_plan.collective'),
       image: "/hajj1.jpg",
+      route: "/umrah/collective",
       action: () => setShowPackageSelection(true),
       features: [
         { icon: <Plane size={18} />, label: t('umrah_plan.flight') },
@@ -27,10 +28,11 @@ const UmrahPlan = () => {
       subtitle: t('umrah_plan.personalized_subtitle'),
       image: "/hajj2.jpg",
       route: "/umrah/personalized",
+      
       features: [
         { icon: <Plane size={18} />, label: t('umrah_plan.reserve_flight') },
         { icon: <Hotel size={18} />, label: t('umrah_plan.reserve_hotels') },
-        { icon: <FileText size={18} />, label: "Reserve your visa" },
+        { icon: <FileText size={18} />, label: t('umrah_plan.reserve_visa') },
       ]
     }
   ];
@@ -58,7 +60,7 @@ const UmrahPlan = () => {
           {plans.map((plan, index) => (
             <div
               key={index}
-              onClick={() => router.push("/umrah/collective")}
+              onClick={() => router.push(plan.route)}
               className="relative h-[420px] rounded-2xl overflow-hidden shadow-2xl group cursor-pointer transform transition-all duration-300 hover:-translate-y-2 hover:shadow-3xl"
             >
               
@@ -109,7 +111,7 @@ const UmrahPlan = () => {
                   }}
                   className="w-full py-3 bg-gradient-to-r from-green-900 to-green-400 text-white rounded-xl font-bold text-sm transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
                 >
-                  View more
+                  {t('umrah_plan.view_more')}
                 </button>
               </div>
             </div>

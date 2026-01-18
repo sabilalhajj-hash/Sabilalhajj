@@ -4,17 +4,20 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Program {
-  id: string;
+  id?: string;
   name: string;
-  ApproximateDuration: string;
-  departure: string;
-  return: string;
-  from: string;
-  to: string;
-  description: string;
-  highlights: string[];
+  ApproximateDuration?: string;
+  duration?: string;
+  departure?: string;
+  return?: string;
+  from?: string;
+  to?: string;
+  description?: string;
+  highlights?: string[];
+  features?: string[];
   price: string;
-  includes: string[];
+  includes?: string[];
+  recommended?: boolean;
 }
 
 interface StickyCTAProps {
@@ -28,7 +31,10 @@ const StickyCTA = ({ selectedProgram }: StickyCTAProps) => {
 
   // Extract package information
   const packageTitle = selectedProgram?.name || '';
-  const packageDates = selectedProgram ? `${selectedProgram.departure} - ${selectedProgram.return}` : '';
+  const packageDuration = selectedProgram?.ApproximateDuration || selectedProgram?.duration || '';
+  const packageDates = selectedProgram?.departure && selectedProgram?.return 
+    ? `${selectedProgram.departure} - ${selectedProgram.return}` 
+    : packageDuration;
   const packagePrice = selectedProgram?.price.replace(/[^\d.,]/g, '') || '0'; // Extract numeric price
   const packageCurrency = selectedProgram?.price.includes('€') ? '€' : '$'; // Determine currency
 
@@ -96,7 +102,7 @@ const StickyCTA = ({ selectedProgram }: StickyCTAProps) => {
               </div>
 
               <button
-                onClick={() => console.log("Booking logic here")}
+                onClick={() => {}}
                 className="bg-white text-green-600 px-6 py-3 rounded-lg font-bold hover:scale-105 hover:bg-yellow-50 hover:text-green-700 transform duration-300 cursor-pointer transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
               >
                 {t('sticky_cta.book_package') || 'Book Package'}

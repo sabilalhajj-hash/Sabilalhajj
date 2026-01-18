@@ -1,33 +1,33 @@
 'use client';
 import Link from 'next/link';
+import Image from "next/image";
 import { useTranslation } from 'react-i18next';
-import Image from "next/image"
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
   const { t } = useTranslation();
+  const currentYear = new Date().getFullYear();
 
   const footerLinks = {
     services: [
-      { name: t('services.hajj.title'), href: '/services' },
-      { name: t('services.umrah.title'), href: '/services' },
-      { name: t('services.visa.title'), href: '/services' },
-      { name: 'Transportation', href: '/services' },
-      { name: 'Accommodation', href: '/services' },
+      { name: t('footer.services.hajj'), href: '/hajj' },
+      { name: t('footer.services.umrah'), href: '/umrah' },
+      { name: t('footer.services.visa'), href: '/visa' },
+      { name: t('footer.services.transportation'), href: '/services' },
+      { name: t('footer.services.accommodation'), href: '/hotels' },
     ],
     company: [
-      { name: t('navigation.about'), href: '/about' },
-      { name: 'Our Portfolio', href: '/portfolio' },
-      { name: t('contact.title'), href: 'https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20inquire%20about%20Hajj/Umrah%20services.' },
-      { name: 'Blog', href: '/blog' },
+      { name: t('footer.company.about'), href: '/about' },
+      { name: t('footer.company.portfolio'), href: '/portfolio' },
+      { name: t('footer.company.contact'), href: 'https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20inquire%20about%20Hajj/Umrah%20services.' },
+      { name: t('footer.company.blog'), href: '/blog' },
     ],
     legal: [
-      { name: t('footer.privacy'), href: '#' },
-      { name: t('footer.terms'), href: '#' },
-      { name: t('footer.cookies'), href: '#' },
+      { name: t('footer.legal.privacy'), href: '#' },
+      { name: t('footer.legal.terms'), href: '#' },
+      { name: t('footer.legal.cookies'), href: '#' },
     ],
     contact: [
-      { text: 'KHOURIBGA', icon: '📍' },
+      { text: t('footer.contact.location'), icon: '📍' },
       { text: '+966 12 345 6789', icon: '📞' },
       { text: 'info@sabilalhajj.com', icon: '✉️' },
     ]
@@ -77,7 +77,7 @@ export default function Footer() {
 
           {/* Services */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">{t('footer.services')}</h4>
+            <h4 className="text-lg font-semibold mb-4">{t('footer.sections.services')}</h4>
             <ul className="space-y-2">
               {footerLinks.services.map((link, index) => (
                 <li key={index}>
@@ -91,7 +91,7 @@ export default function Footer() {
 
           {/* Company */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">{t('footer.company')}</h4>
+            <h4 className="text-lg font-semibold mb-4">{t('footer.sections.company')}</h4>
             <ul className="space-y-2">
               {footerLinks.company.map((link, index) => (
                 <li key={index}>
@@ -116,7 +116,7 @@ export default function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">{t('footer.contact_info')}</h4>
+            <h4 className="text-lg font-semibold mb-4">{t('footer.sections.contact')}</h4>
             <ul className="space-y-3">
               {footerLinks.contact.map((item, index) => (
                 <li key={index} className="flex items-start space-x-3">
@@ -131,9 +131,9 @@ export default function Footer() {
         {/* Newsletter Signup */}
         {/* <div className="mt-12 pt-8 border-t border-gray-800">
           <div className="max-w-md mx-auto text-center">
-            <h4 className="text-lg font-semibold mb-4">{t('footer.newsletter_title')}</h4>
+            <h4 className="text-lg font-semibold mb-4">Newsletter</h4>
             <p className="text-gray-300 text-sm mb-4">
-              {t('footer.newsletter_description')}
+              Subscribe to our newsletter for the latest updates on Hajj and Umrah services.
             </p>
             <div className="flex flex-col sm:flex-row gap-2">
               <input
@@ -142,7 +142,7 @@ export default function Footer() {
                 className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                {t('footer.subscribe')}
+                Subscribe
               </button>
             </div>
           </div>

@@ -2,16 +2,18 @@
 
 import { useTranslation } from 'react-i18next';
 
+export const dynamic = 'force-dynamic';
+
 export default function Hotels() {
   const { t } = useTranslation();
 
   const hotelFeatures = [
-    { icon: '📍', title: 'Prime Location', description: 'Walking distance to Holy Sites' },
-    { icon: '🍽️', title: 'Halal Cuisine', description: 'Authentic meals and dietary requirements' },
-    { icon: '🛏️', title: 'Comfortable Rooms', description: 'Modern amenities and clean facilities' },
-    { icon: '🕌', title: 'Prayer Facilities', description: 'Dedicated prayer rooms and Qibla direction' },
-    { icon: '🚐', title: 'Transportation', description: 'Free shuttle service to Haram' },
-    { icon: '👨‍💼', title: '24/7 Support', description: 'Concierge and guest services' }
+    { icon: '📍', title: t('pages.hotels.features.location.title'), description: t('pages.hotels.features.location.description') },
+    { icon: '🍽️', title: t('pages.hotels.features.cuisine.title'), description: t('pages.hotels.features.cuisine.description') },
+    { icon: '🛏️', title: t('pages.hotels.features.rooms.title'), description: t('pages.hotels.features.rooms.description') },
+    { icon: '🕌', title: t('pages.hotels.features.prayer.title'), description: t('pages.hotels.features.prayer.description') },
+    { icon: '🚐', title: t('pages.hotels.features.transport.title'), description: t('pages.hotels.features.transport.description') },
+    { icon: '👨‍💼', title: t('pages.hotels.features.support.title'), description: t('pages.hotels.features.support.description') }
   ];
 
   return (

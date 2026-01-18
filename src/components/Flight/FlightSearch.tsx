@@ -924,6 +924,8 @@ const locations = [
 
 ];
 
+
+
 // Main Hajj/Umrah destinations for TO field
 const destinationCities = [
   { city: 'Mecca', country: 'Saudi Arabia', code: 'JED' },
@@ -939,6 +941,7 @@ export default function FlightSearch() {
   const [fromDropdownOpen, setFromDropdownOpen] = useState(false);
   const [toDropdownOpen, setToDropdownOpen] = useState(false);
   const [fromFilteredLocations, setFromFilteredLocations] = useState(locations);
+  const [showResults, setShowResults] = useState(false);
 
   // Date picker state
   const getTomorrow = () => {
@@ -946,6 +949,7 @@ export default function FlightSearch() {
     tomorrow.setDate(tomorrow.getDate() + 1);
     return tomorrow;
   };
+  
   const [selectedDate, setSelectedDate] = useState<Date>(getTomorrow());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(selectedDate.getMonth());
@@ -1044,10 +1048,10 @@ export default function FlightSearch() {
         {/* Header Section */}
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            {t('flights.title')}
+            {t('flight.find_perfect_flight')}
           </h2>
           <p className="text-xl text-gray-600 font-medium">
-            {t('flights.subtitle')}
+            {t('flight.book_to_holy_cities')}
           </p>
         </div>
 
@@ -1057,9 +1061,9 @@ export default function FlightSearch() {
           {/* Trip Type Selectors */}
           <div className="flex flex-wrap justify-center gap-8 mb-10">
             {[
-              { id: 'one-way', label: t('flights.trip_types.one_way') },
-              { id: 'round-trip', label: t('flights.trip_types.round_trip') },
-              { id: 'multi-route', label: t('flights.trip_types.multi_route') }
+              { id: 'one-way', label: t('flight.one_way') },
+              { id: 'round-trip', label: t('flight.round_trip') },
+              { id: 'multi-route', label: t('flight.multi_route') }
             ].map((type) => (
               <label key={type.id} className="flex items-center space-x-3 cursor-pointer group">
                 <div className="relative">
@@ -1093,14 +1097,14 @@ export default function FlightSearch() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             {/* FROM */}
             <div className="space-y-2" ref={fromRef}>
-              <label className="text-[10px] font-black uppercase tracking-widest text-emerald-900/60 ml-1">{t('flights.from')}</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-emerald-900/60 ml-1">{t('flight.from')}</label>
               <div className="relative">
                 <input
                   type="text"
                   value={fromLocation}
                   onChange={(e) => handleFromInputChange(e.target.value)}
                   onFocus={() => setFromDropdownOpen(true)}
-                  placeholder="Type city or country"
+                  placeholder={t('flight.type_city_country')}
                   className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-black placeholder-gray-400 focus:border-emerald-500 transition-all"
                 />
                 {fromLocation && (
@@ -1149,14 +1153,14 @@ export default function FlightSearch() {
 
             {/* TO */}
             <div className="space-y-2" ref={toRef}>
-              <label className="text-[10px] font-black uppercase tracking-widest text-emerald-900/60 ml-1">{t('flights.to')}</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-emerald-900/60 ml-1">{t('flight.to')}</label>
               <div className="relative">
                 <div
                   onClick={() => setToDropdownOpen(!toDropdownOpen)}
                   className="w-full bg-white border border-gray-200 text-black rounded-xl px-4 py-3.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all cursor-pointer flex items-center justify-between"
                 >
                   <span className={toLocation ? 'text-black' : 'text-gray-400'}>
-                    {toLocation || 'Select destination city'}
+                    {toLocation || t('flight.select_destination_city')}
                   </span>
                   <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${toDropdownOpen ? 'rotate-180' : ''}`} />
                 </div>
@@ -1165,20 +1169,20 @@ export default function FlightSearch() {
                 {toDropdownOpen && (
                   <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg z-50">
                     {destinationCities.map((city, index) => (
-                      <div
-                        key={index}
+                        <div
+                          key={index}
                         onClick={() => {
                           setToLocation(`${city.city}, ${city.country}`);
                           setToDropdownOpen(false);
                         }}
                         className="px-4 py-3 hover:bg-emerald-50 cursor-pointer border-b border-gray-100 last:border-b-0 first:rounded-t-xl last:rounded-b-xl"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div>
+                        >
+                          <div className="flex items-center justify-between">
+                            <div>
                             <div className="font-medium text-gray-900">{city.city}</div>
                             <div className="text-sm text-gray-500">{city.country}</div>
-                          </div>
-                          <div className="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">
+                            </div>
+                            <div className="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">
                             {city.code}
                           </div>
                         </div>
@@ -1191,10 +1195,10 @@ export default function FlightSearch() {
 
             {/* DEPARTURE DATE */}
             <div className="space-y-2" ref={dateRef}>
-              <label className="text-[10px] font-black uppercase tracking-widest text-emerald-900/60 ml-1">{t('flights.departure')}</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-emerald-900/60 ml-1">{t('flight.departure')}</label>
               <div className="relative">
-                <input
-                  type="text"
+                <input 
+                  type="text" 
                   value={formatDate(selectedDate)}
                   readOnly
                   onClick={() => {
@@ -1282,12 +1286,12 @@ export default function FlightSearch() {
 
             {/* TRAVELERS */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-emerald-900/60 ml-1">{t('flights.passengers')}</label>
+              <label className="block text-[10px] font-black uppercase tracking-widest text-emerald-900/60 ml-1">{t('flight.passengers')}</label>
               <div className="relative">
-                <select className="w-full bg-white text-black border border-gray-200 text-bl  rounded-xl px-4 py-3.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all appearance-none cursor-pointer">c
-                  <option>1 Traveler</option>
-                  <option>2 Travelers</option>
-                  <option>Family (3+)</option>
+                <select className="w-full bg-white text-black border border-gray-200 rounded-xl px-4 py-3.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all appearance-none cursor-pointer">
+                  <option>{t('flight.traveler_single')}</option>
+                  <option>{t('flight.traveler_double')}</option>
+                  <option>{t('flight.traveler_family')}</option>
                 </select>
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
@@ -1307,16 +1311,167 @@ export default function FlightSearch() {
                   </svg>
                 </div>
               </div>
-              <span className="text-sm font-bold text-emerald-900">Include nearby airports</span>
+              <span className="text-sm font-bold text-emerald-900">{t('flight.include_nearby_airports')}</span>
             </label>
           </div>
 
           {/* Search Button */}
-          <button className="w-full py-4.5 bg-[#2D4A31] hover:bg-[#1f3322] text-white rounded-xl font-bold flex items-center justify-center space-x-3 transition-all transform hover:scale-[1.01] active:scale-[0.99] shadow-lg">
+          <button
+            onClick={() => setShowResults(true)}
+            className="w-full py-4.5 bg-[#2D4A31] hover:bg-[#1f3322] text-white rounded-xl font-bold flex items-center justify-center space-x-3 transition-all transform hover:scale-[1.01] active:scale-[0.99] shadow-lg"
+          >
             <Search className="w-5 h-5" />
-            <span className="text-lg">{t('flights.search_flights')}</span>
+            <span className="text-lg">{t('flight.search_flights')}</span>
           </button>
         </div>
+
+        {/* Search Results */}
+        {showResults && (
+          <div className="mt-8 bg-white rounded-[2.5rem] shadow-xl p-8 md:p-12 border border-gray-100">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                {t('flight.search_results')}
+              </h3>
+              <p className="text-gray-600">
+                {t('flight.flights_from')} {fromLocation} {t('flight.to')} {toLocation}
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {/* Sample Flight Result 1 */}
+              <div className="border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow">
+                <div className="flex flex-col md:flex-row md:items-center justify-between">
+                  <div className="flex items-center space-x-4 mb-4 md:mb-0">
+                    <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
+                      <span className="text-emerald-600 font-bold text-sm">RAM</span>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-gray-900">{t('flight.airline_royal_air_maroc')}</div>
+                      <div className="text-sm text-gray-500">AT 456</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-6">
+                    <div className="text-center">
+                      <div className="text-lg font-bold text-gray-900">08:30</div>
+                      <div className="text-sm text-gray-500">CMN</div>
+                    </div>
+
+                    <div className="flex flex-col items-center">
+                      <div className="text-xs text-gray-400 mb-1">3h 45m</div>
+                      <div className="w-20 h-px bg-gray-300 relative">
+                        <div className="absolute -top-1 left-0 w-2 h-2 bg-gray-400 rounded-full"></div>
+                        <div className="absolute -top-1 right-0 w-2 h-2 bg-gray-400 rounded-full"></div>
+                      </div>
+                      <div className="text-xs text-gray-400 mt-1">{t('flight.flight_type_direct')}</div>
+                    </div>
+
+                    <div className="text-center">
+                      <div className="text-lg font-bold text-gray-900">12:15</div>
+                      <div className="text-sm text-gray-500">JED</div>
+                    </div>
+                  </div>
+
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-emerald-600">$450</div>
+                    <div className="text-sm text-gray-500">{t('flight.flight_class_economy')}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sample Flight Result 2 */}
+              <div className="border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow">
+                <div className="flex flex-col md:flex-row md:items-center justify-between">
+                  <div className="flex items-center space-x-4 mb-4 md:mb-0">
+                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <span className="text-blue-600 font-bold text-sm">SV</span>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-gray-900">{t('flight.airline_saudia')}</div>
+                      <div className="text-sm text-gray-500">SV 123</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-6">
+                    <div className="text-center">
+                      <div className="text-lg font-bold text-gray-900">14:20</div>
+                      <div className="text-sm text-gray-500">CMN</div>
+                    </div>
+
+                    <div className="flex flex-col items-center">
+                      <div className="text-xs text-gray-400 mb-1">4h 10m</div>
+                      <div className="w-20 h-px bg-gray-300 relative">
+                        <div className="absolute -top-1 left-0 w-2 h-2 bg-gray-400 rounded-full"></div>
+                        <div className="absolute -top-1 right-0 w-2 h-2 bg-gray-400 rounded-full"></div>
+                      </div>
+                      <div className="text-xs text-gray-400 mt-1">{t('flight.flight_type_direct')}</div>
+                    </div>
+
+                    <div className="text-center">
+                      <div className="text-lg font-bold text-gray-900">18:30</div>
+                      <div className="text-sm text-gray-500">JED</div>
+                    </div>
+                  </div>
+
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-emerald-600">$520</div>
+                    <div className="text-sm text-gray-500">{t('flight.flight_class_economy')}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sample Flight Result 3 */}
+              <div className="border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow">
+                <div className="flex flex-col md:flex-row md:items-center justify-between">
+                  <div className="flex items-center space-x-4 mb-4 md:mb-0">
+                    <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                      <span className="text-purple-600 font-bold text-sm">TK</span>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-gray-900">{t('flight.airline_turkish_airlines')}</div>
+                      <div className="text-sm text-gray-500">TK 789</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-6">
+                    <div className="text-center">
+                      <div className="text-lg font-bold text-gray-900">22:45</div>
+                      <div className="text-sm text-gray-500">CMN</div>
+                    </div>
+
+                    <div className="flex flex-col items-center">
+                      <div className="text-xs text-gray-400 mb-1">5h 25m</div>
+                      <div className="w-20 h-px bg-gray-300 relative">
+                        <div className="absolute -top-1 left-0 w-2 h-2 bg-gray-400 rounded-full"></div>
+                        <div className="absolute -top-1 right-0 w-2 h-2 bg-gray-400 rounded-full"></div>
+                      </div>
+                      <div className="text-xs text-gray-400 mt-1">{t('flight.flight_type_direct')}</div>
+                    </div>
+
+                    <div className="text-center">
+                      <div className="text-lg font-bold text-gray-900">04:10</div>
+                      <div className="text-sm text-gray-500">JED</div>
+                    </div>
+                  </div>
+
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-emerald-600">$480</div>
+                    <div className="text-sm text-gray-500">{t('flight.flight_class_economy')}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center mt-8">
+              <button
+                onClick={() => setShowResults(false)}
+                className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors"
+              >
+                {t('flight.new_search')}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

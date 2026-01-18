@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Navbar from "../components/Navbar/Navbar";
-import Footer from "../components/Footer/Footer";
-import WhatsappButton from "./../components/WhatsappButton";
-import I18nProvider from "../components/Languages/I18nProvider";
-import DynamicHtml from "../components/DynamicHtml";
+import Providers from "../components/Providers";
+import LayoutContent from "../components/LayoutContent";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -28,19 +25,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <I18nProvider>
-          <DynamicHtml>
-            <Navbar />
-            {children}
-            <Footer />
-            <WhatsappButton />
-          </DynamicHtml>
-        </I18nProvider>
-      </body>
-    </html>
+    <Providers>
+      <LayoutContent>
+        {children}
+      </LayoutContent>
+    </Providers>
   );
 }

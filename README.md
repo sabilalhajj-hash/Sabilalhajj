@@ -150,4 +150,6 @@ Language switching is available in the navigation bar.
 
 ---
 
+
+
 *May Allah accept the prayers and efforts of all pilgrims. 🤲*

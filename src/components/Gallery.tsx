@@ -71,9 +71,10 @@ export default function BentoGallery() {
           slidesPerView={3}
           loop={true}
           autoplay={{
-            delay: 3000,
+            delay: 0,
             disableOnInteraction: false,
           }}
+          speed={5000}
           // pagination={{
           //   clickable: true,
           //   dynamicBullets: true,

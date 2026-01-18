@@ -2,6 +2,8 @@
 
 import { useTranslation } from 'react-i18next';
 
+export const dynamic = 'force-dynamic';
+
 export default function Hajj() {
   const { t } = useTranslation();
 

@@ -2,8 +2,8 @@
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import Image from 'next/image';
 
 // Import Swiper styles
@@ -14,40 +14,50 @@ import 'swiper/css/navigation';
 export default function Hero() {
   const { t } = useTranslation();
 
-  const heroSlides = useMemo(() => [
-    {
-      title: t('hero.title1'),
-      subtitle: t('hero.subtitle1'),
-      // bgClass: "bg-gradient-to-r from-blue-600 to-green-600",
-      image: "/hajj1.jpg",
-      ctaPrimary: t('hero.cta1_primary'),
-      ctaSecondary: t('hero.cta1_secondary')
-    },
-    {
-      title: t('hero.title2'),
-      subtitle: t('hero.subtitle2'),
-      // bgClass: "bg-gradient-to-r from-emerald-600 to-teal-600",
-      image: "/hajj2.jpg",
-      ctaPrimary: t('hero.cta2_primary'),
-      ctaSecondary: t('hero.cta2_secondary')
-    },
-    {
-      title: t('hero.title3'),
-      subtitle: t('hero.subtitle3'),
-      // bgClass: "bg-gradient-to-r from-purple-600 to-indigo-600",
-      image: "/hajj3.jpg",
-      ctaPrimary: t('hero.cta3_primary'),
-      ctaSecondary: t('hero.cta3_secondary')
-    },
-    {
-      title: t('hero.title4'),
-      subtitle: t('hero.subtitle4'),
-      // bgClass: "bg-gradient-to-r from-amber-600 to-orange-600",
-      image: "/hajj4.jpg",
-      ctaPrimary: t('hero.cta4_primary'),
-      ctaSecondary: t('hero.cta4_secondary')
+  const heroSlides = useMemo(() => {
+    const slides = t('hero.slides', { returnObjects: true }) as any[];
+    // Ensure slides is an array
+    if (!Array.isArray(slides)) {
+      // Fallback to default slides if translation is not loaded
+      return [
+        {
+          title: 'Welcome to Sabil Al-Hajj',
+          subtitle: 'Your trusted partner for Hajj and Umrah pilgrimage services. Experience a spiritual journey filled with peace, devotion, and unforgettable memories.',
+          image: "/hajj1.jpg",
+          ctaPrimary: 'Book Your Pilgrimage',
+          ctaSecondary: 'Learn More'
+        },
+        {
+          title: 'Experience Sacred Hajj',
+          subtitle: 'Embark on the most sacred pilgrimage with our expert guidance. Every step of your journey is carefully planned for spiritual fulfillment.',
+          image: "/hajj2.jpg",
+          ctaPrimary: 'Plan Hajj Journey',
+          ctaSecondary: 'View Packages'
+        },
+        {
+          title: 'Discover Umrah Blessings',
+          subtitle: 'Find inner peace through Umrah pilgrimage. Our comprehensive services ensure a meaningful and comfortable spiritual experience.',
+          image: "/hajj3.jpg",
+          ctaPrimary: 'Book Umrah Now',
+          ctaSecondary: 'Explore Options'
+        },
+        {
+          title: 'Premium Accommodations',
+          subtitle: 'Stay in the most convenient and comfortable accommodations near the Holy Sites. Luxury meets spirituality in our premium hotels.',
+          image: "/hajj4.jpg",
+          ctaPrimary: 'View Hotels',
+          ctaSecondary: 'Check Availability'
+        }
+      ];
     }
-  ], [t]);
+    return slides.map((slide: any, index: number) => ({
+      title: slide.title,
+      subtitle: slide.subtitle,
+      image: `/hajj${index + 1}.jpg`,
+      ctaPrimary: slide.ctaPrimary,
+      ctaSecondary: slide.ctaSecondary
+    }));
+  }, [t]);
 
   return (
     <div className="relative">
@@ -55,8 +65,9 @@ export default function Hero() {
         modules={[Autoplay, Pagination, Navigation]}
         spaceBetween={0}
         slidesPerView={1}
+        speed={2000}
         autoplay={{
-          delay: 5000,
+          delay: 4000,
           disableOnInteraction: false,
         }}
         // pagination={{

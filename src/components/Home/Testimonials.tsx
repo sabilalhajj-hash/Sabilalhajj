@@ -3,6 +3,13 @@
 import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { User, Star, ChevronDown, Plus, Minus } from 'lucide-react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 export default function Testimonials() {
   const { t } = useTranslation();
@@ -13,6 +20,26 @@ export default function Testimonials() {
       name: t('testimonials.name1', 'Mouad'),
       location: t('testimonials.location1', 'Italy'),
       text: t('testimonials.text1', 'I am pleased with the services provided by the sabillhajj platform. The support team was always available, and the accommodation and transportation were comfortable and clean.')
+    },
+    {
+      name: t('testimonials.name2', 'Mouad'),
+      location: t('testimonials.location2', 'Italy'),
+      text: t('testimonials.text2', 'I am pleased with the services provided by the sabillhajj platform. The support team was always available, and the accommodation and transportation were comfortable and clean.')
+    },
+    {
+      name: t('testimonials.name2', 'Mouad'),
+      location: t('testimonials.location2', 'Italy'),
+      text: t('testimonials.text2', 'I am pleased with the services provided by the sabillhajj platform. The support team was always available, and the accommodation and transportation were comfortable and clean.')
+    },
+    {
+      name: t('testimonials.name2', 'Mouad'),
+      location: t('testimonials.location2', 'Italy'),
+      text: t('testimonials.text2', 'I am pleased with the services provided by the sabillhajj platform. The support team was always available, and the accommodation and transportation were comfortable and clean.')
+    },
+    {
+      name: t('testimonials.name2', 'Mouad'),
+      location: t('testimonials.location2', 'Italy'),
+      text: t('testimonials.text2', 'I am pleased with the services provided by the sabillhajj platform. The support team was always available, and the accommodation and transportation were comfortable and clean.')
     },
     {
       name: t('testimonials.name2', 'Mouad'),
@@ -42,7 +69,7 @@ export default function Testimonials() {
   ], [t]);
 
   return (
-    <section className="py-24 px-4 max-w-7xl mx-auto border-t border-gray-50">
+    <section className="py-24 px-4 w-full mx-auto border-t border-gray-50">
       {/* Testimonials Grid */}
       <div className="text-center mb-20">
         <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('testimonials.title')}</h2>
@@ -51,26 +78,60 @@ export default function Testimonials() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-24">
-        {testimonialData.map((t, i) => (
-          <div key={i} className="flex flex-col items-center text-center">
-            <div className="flex items-center gap-4 mb-6 text-left">
-              <div className="bg-gray-100 p-4 rounded-full">
-                <User className="w-8 h-8 text-gray-400" />
+      <div className="mb-24 ">
+        <Swiper
+          modules={[Navigation, Pagination, Autoplay]}
+          spaceBetween={30}
+          slidesPerView={1}
+          breakpoints={{
+            640: {
+              slidesPerView: 1,
+              spaceBetween: 20,
+            },
+            768: {
+              slidesPerView: 2,
+              spaceBetween: 30,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 30,
+            },
+          }}
+          speed={5000}
+          // navigation={true}
+          // pagination={{
+          //   clickable: true,
+          //   dynamicBullets: true,
+          // }}
+          autoplay={{
+            delay: 0,
+            disableOnInteraction: false,
+          }}
+          loop={true}
+          className="testimonials-swiper"
+        >
+          {testimonialData.map((t, i) => (
+            <SwiperSlide key={i}>
+              <div className="flex flex-col border-2 border-green-400 rounded-lg shadow-lg items-center text-center h-full px-4 py-8">
+                <div className="flex items-center gap-4 mb-6 text-left w-full">
+                  <div className="bg-gray-100 p-4 rounded-full flex-shrink-0">
+                    <User className="w-8 h-8 text-gray-400" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-900">{t.name}</h4>
+                    <p className="text-gray-400 text-sm">{t.location}</p>
+                  </div>
+                </div>
+                <div className="flex gap-1 mb-6 justify-center">
+                  {[...Array(5)].map((_, idx) => (
+                    <Star key={idx} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+                <p className="text-gray-600 leading-relaxed italic text-sm">"{t.text}"</p>
               </div>
-              <div>
-                <h4 className="font-bold text-gray-900">{t.name}</h4>
-                <p className="text-gray-400 text-sm">{t.location}</p>
-              </div>
-            </div>
-            <div className="flex gap-1 mb-6">
-              {[...Array(5)].map((_, idx) => (
-                <Star key={idx} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-              ))}
-            </div>
-            <p className="text-gray-600 leading-relaxed italic text-sm">"{t.text}"</p>
-          </div>
-        ))}
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
 
       {/* Common Q&A Block Replacement */}

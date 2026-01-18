@@ -104,7 +104,7 @@ export default function SectionIndicator({ sections: propSections, className, pa
       <div className={`fixed right-6 top-1/2 cursor-pointer -translate-y-1/2 z-[90] hidden lg:block ${className || ''}`}>
         <div className="bg-white/65  backdrop-blur-md border-3 border-emerald-300 p-4 rounded-2xl shadow-2xl min-w-[200px]">
           <div className="text-center mb-3">
-            <span className="text-[10px] font-black uppercase text-emerald-600 tracking-widest">Page Navigation</span>
+            <span className="text-[10px] font-black uppercase text-emerald-600 tracking-widest">{t('navigation.page_navigation')}</span>
           </div>
 
           <div className="space-y-2">

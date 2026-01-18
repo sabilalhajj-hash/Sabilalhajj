@@ -1,0 +1,857 @@
+{
+  "nav": {
+    "umrah": "Umrah",
+    "hajj": "Hajj",
+    "flights": "Voli",
+    "hotels": "Hotel",
+    "visa": "Visa",
+    "about": "Chi Siamo"
+  },
+  "hero": {
+    "slides": [
+      {
+        "title": "Benvenuti in Sabil Al-Hajj",
+        "subtitle": "Il vostro partner affidabile per i servizi di pellegrinaggio Hajj e Umrah. Vivete un viaggio spirituale pieno di pace, devozione e ricordi indimenticabili.",
+        "ctaPrimary": "Prenota il Tuo Pellegrinaggio",
+        "ctaSecondary": "Scopri di Più"
+      },
+      {
+        "title": "Sperimenta il Sacro Hajj",
+        "subtitle": "Imbarcati per il pellegrinaggio più sacro con la nostra guida esperta. Ogni passo del tuo viaggio è pianificato con cura per l'adempimento spirituale.",
+        "ctaPrimary": "Pianifica il Viaggio Hajj",
+        "ctaSecondary": "Visualizza Pacchetti"
+      },
+      {
+        "title": "Scopri le Benedizioni dell'Umrah",
+        "subtitle": "Trova pace interiore attraverso il pellegrinaggio Umrah. I nostri servizi completi garantiscono un'esperienza spirituale significativa e confortevole.",
+        "ctaPrimary": "Prenota Umrah Ora",
+        "ctaSecondary": "Esplora Opzioni"
+      },
+      {
+        "title": "Sistemazioni Premium",
+        "subtitle": "Alloggia nelle sistemazioni più convenienti e confortevoli vicino ai Luoghi Santi. Il lusso incontra la spiritualità nei nostri hotel premium.",
+        "ctaPrimary": "Visualizza Hotel",
+        "ctaSecondary": "Verifica Disponibilità"
+      }
+    ]
+  },
+  "services": {
+    "title": "I Nostri Servizi",
+    "hajj": {
+      "title": "Pacchetti Hajj",
+      "description": "Pacchetti completi di pellegrinaggio Hajj con guida esperta"
+    },
+    "umrah": {
+      "title": "Pacchetti Umrah",
+      "description": "Viaggi spirituali Umrah con servizi completi"
+    },
+    "transportation": {
+      "title": "Trasporto",
+      "description": "Servizi di trasporto affidabili per il tuo pellegrinaggio"
+    }
+  },
+  "packages": {
+    "choose_package": "Scegli il Tuo Pacchetto",
+    "explore_packages": "Esplora i nostri pacchetti completi di pellegrinaggio progettati per il tuo viaggio spirituale",
+    "umrah_packages": "Pacchetti Umrah",
+    "hajj": "Hajj",
+    "flight_booking": "Prenotazione Volo",
+    "hotel_booking": "Prenotazione Hotel",
+    "visa_services": "Servizi Visa",
+    "personalized_umrah": "Umrah Personalizzata",
+    "personalized_subtitle": "Viaggi spirituali personalizzati su misura per le tue esigenze",
+    "flight": "Volo",
+    "hotels": "Hotel",
+    "visa": "Visa",
+    "guide": "Guida",
+    "view_more": "Vedi di Più"
+  },
+  "cta": {
+    "bookNow": "Prenota Ora",
+    "contactUs": "Contattaci",
+    "learnMore": "Scopri di Più"
+  },
+  "footer": {
+    "companyName": "Sabil Al-Hajj",
+    "description": "Il tuo partner affidabile per i servizi di pellegrinaggio Hajj e Umrah. Vivi un viaggio spirituale pieno di pace, devozione e ricordi indimenticabili.",
+    "sections": {
+      "services": "Servizi",
+      "company": "Azienda",
+      "contact": "Informazioni di Contatto"
+    },
+    "services": {
+      "hajj": "Hajj",
+      "umrah": "Umrah",
+      "visa": "Visa",
+      "transportation": "Trasporto",
+      "accommodation": "Sistemazione"
+    },
+    "company": {
+      "about": "Chi Siamo",
+      "portfolio": "Il Nostro Portfolio",
+      "contact": "Contatto",
+      "blog": "Blog"
+    },
+    "legal": {
+      "privacy": "Informativa sulla Privacy",
+      "terms": "Termini di Servizio",
+      "cookies": "Politica sui Cookie"
+    },
+    "contact": {
+      "location": "KHOURIBGA"
+    },
+    "copyright": "© {{year}} Sabil Al-Hajj. Tutti i diritti riservati.",
+    "quickLinks": "Link Rapidi",
+    "followUs": "Seguici"
+  },
+  "whyChooseUs": {
+    "title": "Perché Sceglierci",
+    "subtitle": "Sperimenta un servizio senza pari e una guida spirituale per il tuo viaggio di pellegrinaggio",
+    "trusted_partner_title": "Il Tuo Partner Affidabile",
+    "trusted_partner_subtitle": "Con anni di esperienza e migliaia di pellegrini soddisfatti, garantiamo che il tuo viaggio del Hajj e dell'Umrah sia memorabile e spiritualmente appagante",
+    "excellence_title": "Eccellenza",
+    "excellence_description": "Manteniamo i più alti standard in tutti i nostri servizi, dall'alloggio al trasporto",
+    "guidance_title": "Guida Esperta",
+    "guidance_description": "Il nostro team esperto fornisce una guida completa durante tutto il tuo pellegrinaggio",
+    "certified_title": "Certificato e Autorizzato",
+    "certified_description": "Completamente autorizzato e certificato per fornire servizi di pellegrinaggio con totale trasparenza",
+    "care_title": "Cura Personalizzata",
+    "care_description": "Attenzione e cura individuali per ogni pellegrino durante tutto il suo viaggio spirituale",
+    "reserve_button": "Inizia il Tuo Viaggio",
+    "features": {
+      "secure_trusted": {
+        "title": "Sicuro e Affidabile",
+        "description": "La tua sicurezza è la nostra priorità assoluta con servizi autorizzati e assicurati"
+      },
+      "fast_processing": {
+        "title": "Elaborazione Veloce",
+        "description": "Elaborazione rapida ed efficiente di tutti i tuoi accordi e prenotazioni di pellegrinaggio"
+      },
+      "support_journey": {
+        "title": "Supporto 24/7",
+        "description": "Assistenza e supporto 24 ore su 24 durante tutto il tuo viaggio di pellegrinaggio"
+      },
+      "support_247": {
+        "title": "Supporto 24/7",
+        "description": "Assistenza e supporto 24 ore su 24 durante tutto il tuo viaggio di pellegrinaggio"
+      },
+      "premium_quality": {
+        "title": "Qualità Premium",
+        "description": "Sperimenta servizi e alloggi di qualità premium per il tuo viaggio spirituale"
+      },
+      "expert_team": {
+        "title": "Team Esperto",
+        "description": "Il nostro team esperto e qualificato garantisce un pellegrinaggio fluido e significativo"
+      }
+    }
+  },
+  "testimonials": {
+    "title": "Cosa Dicono i Nostri Pellegrini",
+    "subtitle": "Ascolta dai pellegrini che hanno vissuto viaggi spirituali con noi",
+    "common_questions": "Domande Frequenti",
+    "name1": "Ahmed",
+    "location1": "Arabia Saudita",
+    "text1": "Alhamdulillah, la mia esperienza del Hajj con Sabil Al-Hajj è stata veramente benedetta. Gli accordi erano perfetti e il supporto del team ha reso l'intero viaggio confortevole e spiritualmente arricchente.",
+    "name2": "Fatima",
+    "location2": "Emirati Arabi Uniti",
+    "text2": "Il pacchetto Umrah è stato eccezionale. Tutto era ben organizzato, dal ritiro in aeroporto agli alloggi in hotel. La guida spirituale fornita è stata inestimabile.",
+    "name3": "Mohammed",
+    "location3": "Pakistan",
+    "text3": "Raccomando vivamente Sabil Al-Hajj a chiunque stia pianificando un pellegrinaggio. La loro attenzione ai dettagli e l'impegno per l'eccellenza del servizio sono davvero encomiabili.",
+    "questions": {
+      "secure_booking": "La mia prenotazione è sicura?",
+      "secure_booking_answer": "Sì, tutte le prenotazioni sono protette con molteplici livelli di sicurezza. Utilizziamo sistemi di pagamento crittografati e forniamo conferme di prenotazione immediatamente.",
+      "support_247": "Fornite supporto 24/7?",
+      "support_247_answer": "Assolutamente! Il nostro team di supporto dedicato è disponibile 24 ore su 24 durante tutto il vostro viaggio di pellegrinaggio, incluso durante il soggiorno nelle Terre Sante.",
+      "customize_package": "Posso personalizzare il mio pacchetto di pellegrinaggio?",
+      "customize_package_answer": "Sì, offriamo pacchetti completamente personalizzabili. Puoi scegliere le tue compagnie aeree preferite, hotel, durata e servizi aggiuntivi per adattarti alle tue esigenze e budget specifici."
+    }
+  },
+  "pages": {
+    "hajj": {
+      "title": "Pellegrinaggio del Hajj",
+      "subtitle": "Imbarcati nel viaggio sacro del Hajj con i nostri servizi completi",
+      "description1": "Il Hajj è il quinto pilastro dell'Islam e un viaggio spirituale che ogni musulmano fisicamente e finanziariamente in grado deve intraprendere almeno una volta nella vita. Forniamo pacchetti Hajj completi che includono alloggio, trasporto e guida esperta durante tutto il pellegrinaggio.",
+      "description2": "I nostri servizi Hajj includono alloggio premium vicino ai Luoghi Santi, trasporto tra le posizioni chiave, guide religiose esperte e supporto completo durante tutto il vostro viaggio spirituale.",
+      "description3": "Contattateci oggi per saperne di più sui nostri pacchetti Hajj e iniziare il vostro viaggio sacro."
+    },
+    "hotels": {
+      "title": "Hotel Premium",
+      "subtitle": "Sistemazioni di lusso per il vostro viaggio spirituale",
+      "description1": "Collaboriamo con i migliori hotel della Mecca e Medina, garantendo che il vostro soggiorno sia confortevole e conveniente per il pellegrinaggio. Le nostre sistemazioni sono strategicamente posizionate per ridurre al minimo i tempi di viaggio verso i Luoghi Santi.",
+      "description2": "Tutti i nostri hotel partner forniscono cucina halal, strutture per la preghiera e comfort moderni mantenendo l'atmosfera spirituale appropriata per i pellegrini.",
+      "description3": "Sperimentate comfort e convenienza durante il vostro pellegrinaggio con le nostre sistemazioni alberghiere premium.",
+      "features": {
+        "location": {
+          "title": "Posizione Premium",
+          "description": "A distanza di cammino dai Luoghi Santi"
+        },
+        "cuisine": {
+          "title": "Cucina Halal",
+          "description": "Pasti autentici e requisiti dietetici"
+        },
+        "rooms": {
+          "title": "Camere Confortevoli",
+          "description": "Servizi moderni e strutture pulite"
+        },
+        "prayer": {
+          "title": "Strutture di Preghiera",
+          "description": "Sale di preghiera dedicate e direzione della Qibla"
+        },
+        "transport": {
+          "title": "Trasporto",
+          "description": "Servizio navetta gratuito verso l'Haram"
+        },
+        "support": {
+          "title": "Supporto 24/7",
+          "description": "Concierge e servizi clienti"
+        }
+      }
+    },
+    "services": {
+      "title": "I Nostri Servizi",
+      "hajj": {
+        "title": "Servizi Hajj",
+        "description": "Pacchetti completi di pellegrinaggio Hajj con guida esperta"
+      },
+      "umrah": {
+        "title": "Servizi Umrah",
+        "description": "Viaggi spirituali Umrah con supporto completo"
+      },
+      "visa": {
+        "title": "Servizi Visa",
+        "description": "Elaborazione veloce e affidabile dei visti per pellegrini"
+      },
+      "transportation": {
+        "title": "Trasporto",
+        "description": "Servizi di trasporto sicuri e confortevoli"
+      },
+      "accommodation": {
+        "title": "Sistemazione",
+        "description": "Hotel premium vicino ai Luoghi Santi"
+      },
+      "spiritual": {
+        "title": "Guida Spirituale",
+        "description": "Guide religiose esperte e supporto spirituale"
+      }
+    },
+    "about": {
+      "title": "Chi Siamo",
+      "subtitle": "Il vostro partner affidabile per i servizi di pellegrinaggio Hajj e Umrah",
+      "our_mission": {
+        "title": "La Nostra Missione",
+        "description": "Siamo un team dedicato di professionisti appassionati nell'aiutare i musulmani a compiere il loro dovere religioso del Hajj e dell'Umrah. Con anni di esperienza nei servizi di pellegrinaggio, garantiamo che ogni aspetto del vostro viaggio spirituale sia gestito con cura, rispetto ed eccellenza."
+      },
+      "our_experience": {
+        "title": "La Nostra Esperienza",
+        "description": "Da oltre un decennio serviamo pellegrini da tutto il mondo, fornendo pacchetti Hajj e Umrah completi che combinano comfort, convenienza e realizzazione spirituale. Il nostro team è composto da professionisti esperti e studiosi religiosi che comprendono il significato di questo viaggio sacro."
+      },
+      "contact_message": "Pronto a intraprendere il tuo viaggio spirituale? Contattaci oggi per saperne di più sui nostri servizi e iniziare a pianificare il tuo pellegrinaggio Hajj o Umrah."
+    }
+  },
+  "languages": {
+    "english": "Inglese",
+    "french": "Francese",
+    "italian": "Italiano",
+    "arabic": "Arabo"
+  },
+  "navigation": {
+    "overview": "Panoramica",
+    "package_options": "Opzioni Pacchetto",
+    "madinah_itinerary": "Itinerario Medina",
+    "makkah_itinerary": "Itinerario Mecca",
+    "terms_policies": "Termini & Politiche",
+    "responsibility_policy": "Politica di Responsabilità",
+    "hajj_info": "Informazioni Hajj",
+    "requirements": "Requisiti",
+    "packages": "Pacchetti",
+    "page_navigation": "Navigazione Pagina"
+  },
+  "itinerary": {
+    "madinah_header": "Itinerario Medina",
+    "your_accommodation": "Il Tuo Alloggio",
+    "included_in_package": "Incluso nel tuo pacchetto",
+    "your_program": "Il Tuo Programma a Medina",
+    "spiritual_journey": "Viaggio spirituale completo con visite guidate ai luoghi sacri",
+    "makkah_header": "Itinerario Mecca",
+    "your_program_makkah": "Il Tuo Programma a Mecca",
+    "sacred_journey": "Viaggio sacro intorno alla Santa Kaaba e ai luoghi sacri",
+    "madinah_masjid": "Al-Masjid An-Nabawi – Medina",
+    "madinah_masjid_desc": "Situata nel cuore di Medina, Al-Masjid An-Nabawi è la seconda moschea più sacra dell'islam. È rinomata per la sua magnifica architettura e i suoi ampi cortili. Visitare dà ai musulmani l'onore di pregare nella Rawdah Al-Sharifah e salutare il Profeta Muhammad (PBSL).",
+    "quba_mosque": "Moschea Quba – La Prima Moschea dell'Islam",
+    "first_mosque": "La Prima Moschea dell'Islam",
+    "quba_mosque_desc": "Istituita dopo la migrazione del Profeta Muhammad (PBSL) a Medina. Situata a sud di Al-Masjid An-Nabawi, è nota per la sua atmosfera pacifica. Una visita permette ai pellegrini di vivere lo spirito dei primi giorni dell'islam.",
+    "qiblatain_mosque": "Masjid Al-Qiblatain",
+    "two_qiblahs": "La Moschea delle Due Qiblah",
+    "qiblatain_desc": "Uno dei monumenti storici più significativi della città. È dove il Profeta (PBSL) ricevette la rivelazione di cambiare la direzione della Qiblah da Gerusalemme alla Kaaba nella Mecca.",
+    "sacred_mosque": "Al-Masjid Al-Haram – La Moschea Sacra",
+    "holy_kaaba": "Casa della Santa Kaaba",
+    "sacred_mosque_desc": "La Grande Moschea della Mecca, conosciuta anche come Al-Masjid Al-Haram, è la moschea più grande e più sacra dell'islam. Circonda la Kaaba, il sito più sacro dell'islam e la direzione della preghiera (Qiblah) per tutti i musulmani nel mondo. La moschea può ospitare fino a 4 milioni di fedeli e presenta il Pozzo Zamzam e Maqam Ibrahim.",
+    "mount_arafat": "Monte Arafat – Il Monte della Misericordia",
+    "day_of_arafah": "Sito del Giorno di Arafah",
+    "mount_arafat_desc": "Situato 20 km a sud-est della Mecca, il Monte Arafat ha un'immensa importanza nella storia islamica. È qui che il Profeta Muhammad (PBSL) pronunciò il suo sermone di addio e dove i pellegrini si riuniscono per il giorno più importante dell'Hajj. La pianura di Arafat simboleggia misericordia, perdono e il Giorno del Giudizio.",
+    "mina_valley": "Valle di Mina – La Valle delle Tende",
+    "stoning_devil": "Sito della Lapidazione del Diavolo",
+    "mina_valley_desc": "Una valle situata tra la Mecca e Muzdalifah, Mina è dove i pellegrini soggiornano durante l'Hajj e compiono il rituale della lapidazione del diavolo. La valle contiene il Ponte Jamarat dove i pellegrini gettano sassolini a tre pilastri che simboleggiano il rifiuto del male. L'area si trasforma drasticamente durante la stagione dell'Hajj.",
+    "cave_of_hira": "Grotta di Hira – Inizia la Rivelazione",
+    "first_revelation": "Dove Avvenne la Prima Rivelazione",
+    "cave_of_hira_desc": "Situata sul lato nord-ovest del Monte Nur, la Grotta di Hira è dove il Profeta Muhammad (PBSL) ricevette la prima rivelazione da Allah attraverso l'Angelo Gabriele. Questa grotta segna l'inizio dell'islam ed è un luogo di profonda riflessione spirituale. La grotta è circa 4 km dal centro città della Mecca.",
+    "mount_noor": "Jabal Al-Noor – Monte della Luce",
+    "home_to_cave": "Casa della Grotta di Hira",
+    "mount_noor_desc": "Il Monte Noor, conosciuto anche come Jabal Al-Noor, è la montagna dove si trova la Grotta di Hira. Questa montagna ha grande importanza poiché era il luogo dove il Profeta Muhammad (PBSL) si ritirava per la meditazione e l'adorazione. La montagna offre viste spettacolari e un ambiente pacifico per la contemplazione."
+  },
+  "umrah": {
+    "round_trip_flights": "Voli di Andata e Ritorno",
+    "round_trip_detail": "Voli diretti a Jeddah o Medina",
+    "luxury_stay": "Soggiorno di Lusso",
+    "luxury_detail": "Hotel a 5 stelle vicino ai Luoghi Santi",
+    "visa_concierge": "Concierge Visa",
+    "visa_detail": "Servizio di assistenza visa completo",
+    "expert_guides": "Guide Esperte",
+    "expert_detail": "Studiosi religiosi ed esperti locali",
+    "flexible_duration": "Durata Flessibile",
+    "flexible_desc": "Scegli la tua durata di soggiorno preferita",
+    "hotel_selection": "Selezione Hotel",
+    "hotel_desc": "Opzioni hotel multiple e categorie",
+    "flight_options": "Opzioni Volo",
+    "flight_desc": "Varie compagnie aeree e città di partenza",
+    "group_size": "Dimensione del Gruppo",
+    "group_desc": "Pellegrinaggi in piccoli gruppi disponibili",
+    "essential_package": "Pacchetto Essenziale",
+    "premium_package": "Pacchetto Premium",
+    "luxury_package": "Pacchetto di Lusso",
+    "starting_from": "A partire da",
+    "customize_title": "Personalizza la Tua Umrah",
+    "customize_subtitle": "Crea un viaggio spirituale personalizzato su misura per le tue esigenze e preferenze",
+    "customize_duration": "Personalizza la Durata",
+    "days_makka": "Giorni alla Mecca",
+    "days_madina": "Giorni a Medina",
+    "total_duration": "Durata Totale",
+    "choose_package": "Scegli il Tuo Pacchetto",
+    "select_package": "Seleziona Pacchetto",
+    "start_planning": "Inizia la Pianificazione",
+    "back_to_umrah_plans": "Torna ai Piani Umrah",
+    "recommended": "Raccomandato",
+    "days_label": "Giorni",
+    "select_residence": "Seleziona la Tua Residenza",
+    "residence_subtitle": "Scegli il tuo paese di residenza per vedere i pacchetti disponibili",
+    "search_country": "Cerca il tuo paese...",
+    "back_to_umrah": "Torna a Umrah",
+    "change_country": "Cambia Paese",
+    "choose_package_title": "Scegli il Tuo Pacchetto Umrah",
+    "choose_package_subtitle": "Esplora i viaggi spirituali da",
+    "premium": "Premium",
+    "ramadan_package_title": "Umrah Ramadan",
+    "select_program": "Seleziona il Tuo Programma",
+    "makkah_hotels": "Hotel 5 stelle alla Mecca",
+    "direct_flights": "Voli diretti per Gedda/Medina",
+    "comfortable_transfers": "Trasferimenti aeroportuali confortevoli",
+    "guided_visits": "Visite guidate ai luoghi sacri",
+    "registering_now": "{{count}} pellegrini si registrano ora",
+    "coming_soon": "Presto Disponibile",
+    "more_packages": "Altri Pacchetti",
+    "stay_tuned": "Rimani sintonizzato per i prossimi viaggi spirituali"
+  },
+  "flight": {
+    "find_perfect_flight": "Trova il Tuo Volo Perfetto",
+    "book_to_holy_cities": "Prenota voli per le Città Sante con facilità",
+    "one_way": "Solo Andata",
+    "round_trip": "Andata e Ritorno",
+    "multi_route": "Multi Tratta",
+    "from": "DA",
+    "to": "A",
+    "departure": "PARTENZA",
+    "passengers": "PASSEGGERI",
+    "type_city_country": "Digita città o paese",
+    "select_destination_city": "Seleziona città di destinazione",
+    "include_nearby_airports": "Includi aeroporti vicini",
+    "search_flights": "Cerca Voli",
+    "traveler_single": "1 Viaggiatore",
+    "traveler_double": "2 Viaggiatori",
+    "traveler_family": "Famiglia (3+)",
+    "search_results": "Risultati della Ricerca",
+    "flights_from": "Voli da",
+    "new_search": "Nuova Ricerca",
+    "popular_destinations": "Destinazioni Popolari",
+    "popular_destinations_subtitle": "Scopri le nostre destinazioni di volo più ricercate",
+    "special_offers": "Offerte Speciali e Promozioni",
+    "special_offers_subtitle": "Offerte esclusive per rendere il tuo viaggio più conveniente",
+    "why_choose_us_flights": "Perché Sceglierci per i Tuoi Voli",
+    "why_choose_us_flights_subtitle": "Sperimenta il meglio nei servizi di prenotazione voli",
+    "travel_tips": "Consigli di Viaggio e Informazioni",
+    "travel_tips_subtitle": "Consigli utili per rendere il tuo viaggio più fluido",
+    "booking_assistance": "Hai Bisogno di Aiuto per Prenotare il Tuo Volo?",
+    "booking_assistance_subtitle": "I nostri esperti di viaggio sono qui per assisterti con tutte le tue esigenze di prenotazione voli",
+    "contact_experts": "Contatta i Nostri Esperti",
+    "learn_more": "Scopri di Più",
+    "early_bird_title": "Offerta Early Bird",
+    "early_bird_desc": "Prenota 60 giorni prima e risparmia fino al 25%",
+    "group_discount_title": "Sconto di Gruppo",
+    "group_discount_desc": "Viaggia con 5+ passeggeri e ottieni tariffe speciali",
+    "last_minute_title": "Offerte Last Minute",
+    "last_minute_desc": "Prezzi fantastici per voli in partenza entro 7 giorni",
+    "round_trip_bonus_title": "Bonus Andata e Ritorno",
+    "round_trip_bonus_desc": "Prenota andata e ritorno e ottieni assicurazione di viaggio gratuita",
+    "secure_booking_title": "Prenotazione Sicura",
+    "secure_booking_desc": "La tua prenotazione è protetta con misure di sicurezza all'avanguardia",
+    "support_247_title": "Supporto 24/7",
+    "support_247_desc": "Servizio clienti disponibile 24 ore su 24 per tutte le tue esigenze di viaggio",
+    "best_prices_title": "Migliori Prezzi",
+    "best_prices_desc": "Confrontiamo i prezzi di più compagnie aeree per trovare le migliori offerte",
+    "easy_booking_title": "Prenotazione Facile",
+    "easy_booking_desc": "Processo di prenotazione semplice e veloce con conferma istantanea",
+    "best_time_title": "Moment Migliore per Prenotare",
+    "best_time_desc": "Prenota i voli 6-8 settimane prima per i migliori prezzi",
+    "flexible_dates_title": "Date Flessibili",
+    "flexible_dates_desc": "Considera di volare nei giorni feriali per prezzi più bassi",
+    "baggage_title": "Franchigia Bagagli",
+    "baggage_desc": "Controlla le politiche sui bagagli delle compagnie aeree prima di prenotare",
+    "travel_docs_title": "Documenti di Viaggio",
+    "travel_docs_desc": "Assicurati che il tuo passaporto sia valido per almeno 6 mesi",
+    "airline_royal_air_maroc": "Royal Air Maroc",
+    "airline_saudia": "Saudia",
+    "airline_turkish_airlines": "Turkish Airlines",
+    "flight_type_direct": "Diretto",
+    "flight_class_economy": "Economy",
+    "badge_popular": "Popolare",
+    "badge_best_value": "Miglior Rapporto Qualità-Prezzo",
+    "badge_trending": "Di Tendenza",
+    "badge_hot_deal": "Offerta Speciale",
+    "price_from": "Da",
+    "discount_25_off": "25% DI SCONTO",
+    "discount_15_off": "15% DI SCONTO",
+    "discount_30_off": "30% DI SCONTO",
+    "discount_free": "GRATIS"
+  },
+  "itinerary": {
+    "madinah_header": "Itinerario Medina",
+    "makkah_header": "Itinerario Mecca",
+    "your_accommodation": "Il Tuo Alloggio",
+    "included_in_package": "Incluso nel tuo pacchetto",
+    "your_program": "Il Tuo Programma a",
+    "spiritual_journey": "Viaggio spirituale completo con visite guidate ai siti sacri",
+    "sacred_journey": "Viaggio sacro intorno alla Santa Kaaba e ai siti sacri",
+    "madinah_masjid": "Al-Masjid An-Nabawi – Medina",
+    "first_mosque": "La Prima Moschea in Islam",
+    "quba_mosque": "Moschea Quba – La Prima Moschea in Islam",
+    "qiblatain_mosque": "Masjid Al-Qiblatain",
+    "two_qiblahs": "La Moschea delle Due Qibla",
+    "central_hotel": "Hotel della Zona Centrale – Vicino ad Al-Masjid An-Nabawi",
+    "location": "Posizione",
+    "central_area_desc": "Situato nella Zona Centrale di Medina, a circa 7 minuti a piedi da Al-Masjid An-Nabawi. Fornisce prossimità pratica e facile accesso all'Haram durante tutto il soggiorno.",
+    "makkah_accommodation": "Il Tuo Alloggio alla Mecca",
+    "premium_hotels": "Hotel premium vicino ad Al-Masjid Al-Haram",
+    "haram_hotel": "Hotel del Distretto Al-Haram – Passi dalla Kaaba",
+    "haram_desc": "Situato nel prestigioso distretto Al-Haram, a pochi passi dalla Grande Moschea e dalla Santa Kaaba. Sperimenta una prossimità incomparabile con i siti più sacri dell'Islam con servizi moderni e ospitalità tradizionale.",
+    "kaaba_view": "Vista sulla Kaaba Disponibile",
+    "haram_access": "Accesso all'Haram 24/7",
+    "prayer_notification": "Notifica dell'Adhan",
+    "zamzam_service": "Servizio Acqua Zamzam",
+    "makkah_haram": "Al-Masjid Al-Haram – La Moschea Sacra",
+    "holy_kaaba": "Casa della Santa Kaaba",
+    "arafat_mountain": "Monte Arafat – Il Monte della Misericordia",
+    "day_arafah": "Sito del Giorno di Arafah",
+    "mina_valley": "Valle di Mina – La Valle delle Tende",
+    "stoning_devil": "Sito della Lapidazione del Diavolo",
+    "hera_cave": "Grotta di Hira – Inizio della Rivelazione",
+    "first_revelation": "Dove avvenne la Prima Rivelazione",
+    "light_mountain": "Jabal Al-Noor – Monte della Luce",
+    "hera_home": "Casa della Grotta di Hira",
+    "day1_title": "Arrivo a Gedda",
+    "day1_desc": "Benvenuti in Arabia Saudita! Trasferimento al vostro hotel alla Mecca per riposare e prepararvi ai riti dell'Umrah.",
+    "day24_title": "Riti Umrah alla Mecca",
+    "day24_desc": "Compiere i riti dell'Umrah inclusi il Tawaf intorno alla Kaaba e il Sa'i tra Safa e Marwa. Guida spirituale fornita.",
+    "day5_title": "Viaggio a Medina",
+    "day5_desc": "Partenza per Medina per visitare la Moschea del Profeta e vivere l'atmosfera benedetta della città.",
+    "day68_title": "Soggiorno Spirituale a Medina",
+    "day68_desc": "Preghiere quotidiane nella Masjid An-Nabawi, visita alla Moschea Quba, e riflessione spirituale nella città benedetta.",
+    "day9_title": "Viaggio di Ritorno",
+    "day9_desc": "Benedizioni finali e partenza per il vostro viaggio di ritorno a casa con ricordi spirituali indimenticabili.",
+    "day_1": "Giorno 1",
+    "day_2_4": "Giorno 2-4",
+    "day_5": "Giorno 5",
+    "day_6_8": "Giorno 6-8",
+    "day_9": "Giorno 9",
+    "type_travel": "Viaggio",
+    "type_spiritual": "Spirituale"
+  },
+  "umrah_plan": {
+    "collective": "Umrah Collettiva",
+    "personalized": "Umrah Personalizzata",
+    "personalized_subtitle": "Viaggi spirituali personalizzati progettati per te",
+    "flight": "Volo",
+    "hotels": "Hotel",
+    "visa": "Visa",
+    "guide": "Guida",
+    "reserve_flight": "Prenota Volo",
+    "reserve_hotels": "Prenota Hotel",
+    "reserve_visa": "Prenota il tuo visto",
+    "plan_title": "Scegli il Tuo Piano Umrah",
+    "plan_subtitle": "Seleziona il pacchetto Umrah perfetto che si adatta al tuo viaggio spirituale e alle tue preferenze",
+    "view_more": "Vedi di più"
+  },
+  "programs": {
+    "ramadan_journey": {
+      "name": "Viaggio Ramadan",
+      "description": "Vivi il mese benedetto di Ramadan nelle città sante. Unisciti a noi per un viaggio spirituale pieno di preghiere Taraweeh, riunioni Iftar e momenti benedetti nell'Haram.",
+      "highlights": [
+        "Preghiere Taraweeh nell'Haram",
+        "Iftar nei Luoghi Santi",
+        "Attività delle Notti di Ramadan",
+        "Guida Spirituale"
+      ],
+      "includes": [
+        "Voli",
+        "Alloggio",
+        "Pasti",
+        "Trasporto",
+        "Guida",
+        "Visa"
+      ]
+    },
+    "ramadan_last_ten": {
+      "name": "Ultimi Dieci Giorni di Ramadan",
+      "description": "Vivi le notti più benedette di Ramadan nelle città sante. Unisciti ai fedeli durante Laylatul Qadr e gli ultimi dieci giorni di Ramadan.",
+      "highlights": [
+        "Notti di Laylatul Qadr",
+        "Ultimi Dieci Giorni di Ramadan",
+        "Programmi Iftar Speciali",
+        "Preghiere Notturne"
+      ],
+      "includes": [
+        "Voli",
+        "Alloggio",
+        "Pasti",
+        "Trasporto",
+        "Guida",
+        "Visa"
+      ]
+    },
+    "long_stay": {
+      "name": "Umrah Soggiorno Lungo",
+      "description": "Programma di soggiorno prolungato per coloro che desiderano trascorrere più tempo nell'adorazione e nell'apprendimento nelle città sante. Perfetto per una profonda riflessione spirituale.",
+      "highlights": [
+        "Tempo di Adorazione Esteso",
+        "Studi Islamici",
+        "Attività Comunitarie",
+        "Ritirata Spirituale"
+      ],
+      "includes": [
+        "Voli",
+        "Alloggio",
+        "Pasti",
+        "Trasporto",
+        "Guida",
+        "Visa",
+        "Materiali di Studio"
+      ]
+    }
+  },
+  "rooms": {
+    "twin": {
+      "name": "Camera Doppia",
+      "size": "25 m²",
+      "price": "150€/notte",
+      "description": "Camera doppia confortevole perfetta per due pellegrini che condividono l'alloggio.",
+      "features": [
+        "Aria condizionata",
+        "Bagno privato",
+        "WiFi",
+        "Mini frigorifero"
+      ],
+      "capacity": "2 Persone",
+      "view": "Vista città",
+      "amenities": [
+        "Tappeto da preghiera",
+        "Corano",
+        "Acqua calda",
+        "Servizio in camera"
+      ]
+    },
+    "triple": {
+      "name": "Camera Tripla",
+      "size": "35 m²",
+      "price": "200€/notte",
+      "description": "Camera tripla spaziosa ideale per tre pellegrini che viaggiano insieme.",
+      "features": [
+        "Aria condizionata",
+        "Bagno privato",
+        "WiFi",
+        "Mini frigorifero",
+        "Letto aggiuntivo"
+      ],
+      "capacity": "3 Persone",
+      "view": "Vista città",
+      "amenities": [
+        "Tappeti da preghiera",
+        "Corano",
+        "Acqua calda",
+        "Servizio in camera",
+        "Asciugamani aggiuntivi"
+      ]
+    },
+    "quad": {
+      "name": "Camera Quadrupla",
+      "size": "45 m²",
+      "price": "250€/notte",
+      "description": "Camera quadrupla spaziosa perfetta per quattro pellegrini che condividono l'alloggio.",
+      "features": [
+        "Aria condizionata",
+        "Bagno privato",
+        "WiFi",
+        "Mini frigorifero",
+        "Area salotto"
+      ],
+      "capacity": "4 Persone",
+      "view": "Vista città",
+      "amenities": [
+        "Tappeti da preghiera",
+        "Corano",
+        "Acqua calda",
+        "Servizio in camera",
+        "Asciugamani aggiuntivi",
+        "Tavolino da caffè"
+      ]
+    },
+    "penta": {
+      "name": "Camera Quintupla",
+      "size": "55 m²",
+      "price": "300€/notte",
+      "description": "Camera quintupla lussuosa ideale per cinque pellegrini con comfort e spazio aggiuntivi.",
+      "features": [
+        "Aria condizionata",
+        "Bagno privato",
+        "WiFi",
+        "Mini frigorifero",
+        "Area salotto",
+        "Balcone"
+      ],
+      "capacity": "5 Persone",
+      "view": "Vista città",
+      "amenities": [
+        "Tappeti da preghiera",
+        "Corano",
+        "Acqua calda",
+        "Servizio in camera",
+        "Asciugamani aggiuntivi",
+        "Tavolino da caffè",
+        "Accesso al balcone"
+      ]
+    }
+  },
+  "sticky_cta": {
+    "price_per_person": "Prezzo per persona",
+    "book_package": "Prenota Pacchetto"
+  },
+  "visa": {
+    "hero": {
+      "title": "Servizi Visa Sauditi",
+      "subtitle": "Elaborazione Veloce & Affidabile",
+      "description": "Ottieni il tuo visto per l'Arabia Saudita velocemente e facilmente con il nostro aiuto esperto. Gestiamo tutti i tipi di visto per pellegrini e turisti."
+    },
+    "services": {
+      "title": "Scegli il Tuo Tipo di Visto",
+      "subtitle": "Seleziona il servizio visto che meglio si adatta alle tue esigenze di viaggio",
+      "umrah": "Visto Umrah",
+      "tourist": "Visto Turistico"
+    },
+    "umrah_section": {
+      "title": "Requisiti del Visto Umrah",
+      "description1": "Il visto Umrah permette ai musulmani di compiere il piccolo pellegrinaggio alla Mecca e Medina. Il nostro servizio include l'elaborazione completa del visto e l'assistenza per tutti i documenti necessari.",
+      "description2": "Garantiamo che la tua richiesta di visto sia elaborata efficientemente e che tutti i requisiti siano soddisfatti per un'esperienza di pellegrinaggio fluida.",
+      "services": {
+        "flights": "Prenotazioni Volo",
+        "accommodation": "Sistemazione",
+        "transportation": "Trasporto",
+        "coordination": "Coordinamento"
+      },
+      "documents": {
+        "title": "Documenti Richiesti",
+        "subtitle": "Prepara i seguenti documenti per la tua richiesta di visto",
+        "passport": "Passaporto valido (validità 6+ mesi)",
+        "personal_photo": "Foto del passaporto recente",
+        "address": "Prova di indirizzo",
+        "residence_permit": "Permesso di residenza",
+        "residence_permit_title": "Titolare di permesso di residenza europeo",
+        "passport_title": "Titolare di passaporto europeo",
+        "additional_note": "* Potrebbero essere richiesti documenti aggiuntivi basati sulla tua nazionalità e circostanze."
+      },
+      "processing": {
+        "title": "Tempo di Elaborazione",
+        "time": "2-4 settimane",
+        "note": "I tempi di elaborazione possono variare a seconda della tua posizione e della domanda attuale."
+      }
+    },
+    "tourist_section": {
+      "title": "Requisiti del Visto Turistico",
+      "description": "Il visto turistico permette ai visitatori di esplorare il ricco patrimonio culturale dell'Arabia Saudita, le sue città moderne e le sue meraviglie naturali.",
+      "documents": {
+        "title": "Documenti Richiesti",
+        "subtitle": "Documenti di base richiesti per la richiesta di visto turistico"
+      },
+      "processing": {
+        "title": "Tempo di Elaborazione",
+        "time": "1-2 settimane",
+        "note": "Elaborazione più veloce disponibile per richieste urgenti."
+      }
+    }
+  },
+  "common": {
+    "book_now": "Prenota Ora",
+    "view_details": "Visualizza Dettagli",
+    "contact_us": "Contattaci",
+    "export_to_excel": "Esporta in Excel"
+  },
+  "validation": {
+    "first_name_required": "Il nome è richiesto",
+    "first_name_min_length": "Il nome deve contenere almeno 2 caratteri",
+    "first_name_letters_only": "Il nome può contenere solo lettere e spazi",
+    "last_name_required": "Il cognome è richiesto",
+    "last_name_min_length": "Il cognome deve contenere almeno 2 caratteri",
+    "last_name_letters_only": "Il cognome può contenere solo lettere e spazi",
+    "email_required": "L'email è richiesta",
+    "email_invalid": "Inserisci un indirizzo email valido",
+    "phone_required": "Il numero di telefono è richiesto",
+    "phone_min_digits": "Il numero di telefono deve contenere almeno 8 cifre",
+    "phone_max_digits": "Il numero di telefono deve contenere meno di 15 cifre",
+    "phone_invalid": "Inserisci un numero di telefono valido",
+    "city_required": "La città è richiesta",
+    "city_min_length": "La città deve contenere almeno 2 caratteri",
+    "address_required": "L'indirizzo è richiesto",
+    "address_min_length": "L'indirizzo deve contenere almeno 5 caratteri",
+    "gender_required": "Seleziona un genere",
+    "zip_required": "Il codice postale è richiesto",
+    "zip_invalid": "Inserisci un codice postale valido (4-10 cifre)"
+  },
+  "form": {
+    "first_name": "Nome",
+    "first_name_placeholder": "Nome",
+    "last_name": "Cognome",
+    "last_name_placeholder": "Cognome",
+    "email": "Email",
+    "email_placeholder": "Email",
+    "phone": "Telefono",
+    "phone_placeholder": "Telefono",
+    "city": "Città",
+    "city_placeholder": "Città",
+    "address": "Indirizzo",
+    "address_placeholder": "Indirizzo",
+    "gender": "Genere",
+    "select_gender": "Seleziona Genere",
+    "male": "Uomo",
+    "female": "Donna",
+    "zip_code": "Codice Postale",
+    "zip_code_placeholder": "Codice Postale",
+    "user_data": "Dati Utente"
+  },
+  "selection": {
+    "selected_program": "Programma Selezionato",
+    "selected_room": "Camera Selezionata",
+    "selected_visa": "Visa Selezionato",
+    "change": "Cambia"
+  },
+  "package": {
+    "package_details": "Dettagli Pacchetto",
+    "ramadan_umrah_package": "Pacchetto Umrah Ramadan"
+  },
+  "overlay": {
+    "choose_program": "Scegli Programma",
+    "select_spiritual_journey": "Seleziona il Tuo Viaggio Spirituale",
+    "choose_program_description": "Scegli il programma Umrah che meglio si adatta al tuo viaggio spirituale e al tuo programma",
+    "programs_footer": "Tutti i programmi includono guida spirituale completa, alloggi premium e logistica senza soluzione di continuità. Puoi cambiare la tua selezione in seguito se necessario.",
+    "choose_accommodation": "Scegli Sistemazione",
+    "select_room_type": "Seleziona Tipo di Camera",
+    "choose_accommodation_description": "Scegli la sistemazione che meglio si adatta al tuo comfort e alle tue esigenze di budget",
+    "back_to_programs": "Torna ai Programmi",
+    "back_to_rooms": "Torna alle Camere",
+    "choose_visa_type": "Scegli Tipo di Visa",
+    "select_travel_visa": "Seleziona Visa di Viaggio",
+    "choose_visa_description": "Scegli il tipo di visa che meglio si adatta alle tue esigenze di viaggio"
+  },
+  "booking": {
+    "complete_form_message": "Completa la tua prenotazione compilando il modulo sottostante. Tutte le informazioni sono richieste per elaborare la tua prenotazione di pellegrinaggio Umrah.",
+    "why_choose_us": "Perché Sceglierci?",
+    "features": {
+      "expert_guidance": "Guida Religiosa Esperta",
+      "premium_accommodations": "Sistemazioni Premium",
+      "comprehensive_support": "Supporto Completo",
+      "spiritual_experience": "Esperienza Spirituale"
+    },
+    "confirm_book_now": "Conferma Prenota Ora",
+    "confirmed": "Confermato",
+    "confirmed_title": "Prenotazione Confermata!",
+    "confirmed_message": "Il tuo viaggio Umrah è stato riservato. Possa Allah accettare il tuo pellegrinaggio e concederti la pace."
+  },
+  "responsibility": {
+    "title": "Politica di Responsabilità e Organizzazione",
+    "subtitle": "Piattaforma SabilHajj — SabilHajj",
+    "description": "SabilHajj si impegna a fornire un'esperienza di viaggio religioso organizzata, trasparente e rispettosa, basata su una completa chiarezza nei servizi e nelle responsabilità, garantendo i diritti del pellegrino e fornendo tranquillità d'animo.",
+    "scope_title": "1. Ambito degli Impegni della Piattaforma",
+    "scope_content": "La piattaforma SabilHajj si impegna a implementare il programma come mostrato e annunciato nella pagina del pacchetto selezionato, e questo include solo i servizi menzionati nei dettagli del programma, come:",
+    "scope_list": [
+      "Alloggio secondo la categoria e la posizione specificate",
+      "Trasferimenti di gruppo annunciati",
+      "Siti inclusi nel programma",
+      "Guida religiosa e accompagnamento di gruppo durante l'esecuzione dell'Umrah"
+    ],
+    "scope_footer": "SabilHajj non assume alcun impegno per servizi o richieste non menzionati nel programma annunciato.",
+    "airlines_title": "2. Compagnie Aeree e Fornitori Esterni",
+    "airlines_content": "Alcune componenti del viaggio dipendono da fornitori indipendenti e approvati (come compagnie aeree, hotel e società di trasporto). Pertanto SabilHajj:",
+    "airlines_list": [
+      "Gli orari dei voli, ritardi, cancellazioni o modifiche sono soggetti ai termini e alle normative della compagnia aerea operante",
+      "SabilHajj non assume responsabilità per circostanze al di fuori del suo controllo, come: Condizioni meteorologiche, Decisioni operative delle compagnie aeree, o Decisioni ufficiali/di emergenza"
+    ],
+    "airlines_footer": "SabilHajj si impegna in tutti i casi a informare il pellegrino e fornire supporto organizzativo il più possibile senza assumere responsabilità diretta per queste situazioni.",
+    "group_title": "3. Natura dei Programmi di Gruppo",
+    "group_content": "Tutti i programmi offerti attraverso SabilHajj sono programmi di gruppo organizzati, e sono basati su:",
+    "group_list": [
+      "Impegno verso il programma annunciato",
+      "Rispetto delle istruzioni della guida e dei supervisori",
+      "Cooperazione collettiva per garantire il regolare svolgimento del viaggio"
+    ],
+    "group_footer": "Qualsiasi violazione di questi controlli può influire sull'organizzazione generale senza che SabilHajj ne assuma la responsabilità.",
+    "requests_title": "4. Richieste Individuali e Servizi Non Inclusi",
+    "requests_content": "Per mantenere la qualità dell'organizzazione e l'equità tra tutti i membri del gruppo presso SabilHajj:",
+    "requests_list": [
+      "Qualsiasi richiesta o servizio aggiuntivo al di fuori del quadro del programma (come arrangiamenti speciali, modifiche individuali o servizi non annunciati) non rientra negli impegni di SabilHajj",
+      "Qualsiasi arrangiamento individuale al di fuori del programma è fatto sotto la responsabilità personale del pellegrino"
+    ],
+    "visa_title": "5. Visti e Assicurazione",
+    "visa_content": "SabilHajj fornisce supporto tecnico e organizzativo al pellegrino nelle procedure di visto secondo il tipo selezionato. Nota che:",
+    "visa_list": [
+      "Il tipo di visto selezionato (Umrah o turistico) può influenzare la natura dell'assicurazione, alcuni servizi e il costo del pacchetto",
+      "Le normative ufficiali approvate dalle autorità competenti rimangono il riferimento finale in tutti i casi"
+    ],
+    "transparency_title": "6. Politica di Trasparenza e Consenso",
+    "transparency_content": "Completare la prenotazione attraverso SabilHajj costituisce consenso esplicito del pellegrino a:",
+    "transparency_list": [
+      "I dettagli del programma selezionato",
+      "Servizi inclusi e non inclusi",
+      "La politica di responsabilità e organizzazione"
+    ],
+    "commitment_title": "Il Nostro Impegno verso il Pellegrino",
+    "commitment_list": [
+      "Non fare promesse irrealizzabili",
+      "Non gravare il pellegrino con impegni poco chiari",
+      "Lavorare per organizzare il viaggio in modo professionale e calmo",
+      "Lasciare al pellegrino ciò che è più importante: concentrarsi sul culto"
+    ],
+    "slogan": "Organizzazione Chiara • Responsabilità Definita • Fiducia Costruita sulla Trasparenza"
+  },
+  "currencies": {
+    "usd": {
+      "name": "Dollaro Statunitense"
+    },
+    "eur": {
+      "name": "Euro"
+    },
+    "mad": {
+      "name": "Dirham Marocchino",
+      "native": "درهم مغربي"
+    }
+  },
+  "gallery": {
+    "title": "Galleria",
+    "subtitle": "Esplora la nostra collezione di momenti spirituali e siti sacri"
+  }
+}

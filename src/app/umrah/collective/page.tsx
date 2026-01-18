@@ -12,6 +12,8 @@ import {
 
 import UmrahPackageSelection from "./../../../components/Umrah/UmrahPackageSelection"
 
+export const dynamic = 'force-dynamic';
+
 export default function UmrahCollective() {
   const router = useRouter();
   const { t } = useTranslation();
@@ -66,11 +68,11 @@ export default function UmrahCollective() {
   ];
 
   const itinerary = [
-    { day: "Day 1", title: t('umrah.day1_title'), description: t('umrah.day1_desc'), type: "Travel" },
-    { day: "Day 2-4", title: t('umrah.day24_title'), description: t('umrah.day24_desc'), type: "Spiritual" },
-    { day: "Day 5", title: t('umrah.day5_title'), description: t('umrah.day5_desc'), type: "Travel" },
-    { day: "Day 6-8", title: t('umrah.day68_title'), description: t('umrah.day68_desc'), type: "Spiritual" },
-    { day: "Day 9", title: t('umrah.day9_title'), description: t('umrah.day9_desc'), type: "Travel" },
+    { day: t('umrah.day_1'), title: t('umrah.day1_title'), description: t('umrah.day1_desc'), type: t('umrah.type_travel') },
+    { day: t('umrah.day_2_4'), title: t('umrah.day24_title'), description: t('umrah.day24_desc'), type: t('umrah.type_spiritual') },
+    { day: t('umrah.day_5'), title: t('umrah.day5_title'), description: t('umrah.day5_desc'), type: t('umrah.type_travel') },
+    { day: t('umrah.day_6_8'), title: t('umrah.day68_title'), description: t('umrah.day68_desc'), type: t('umrah.type_spiritual') },
+    { day: t('umrah.day_9'), title: t('umrah.day9_title'), description: t('umrah.day9_desc'), type: t('umrah.type_travel') },
   ];
 
   return (

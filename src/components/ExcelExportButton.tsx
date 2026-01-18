@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Download } from 'lucide-react';
 import { exportBookingData, exportToExcel } from '@/lib/excelExport';
 
@@ -35,7 +36,7 @@ interface ExcelExportButtonProps {
 export default function ExcelExportButton({
   data,
   filename = 'export.xlsx',
-  buttonText = 'Export to Excel',
+  buttonText,
   className = '',
   programs,
   roomTypes,
@@ -43,6 +44,8 @@ export default function ExcelExportButton({
   selectedOptions,
   userData
 }: ExcelExportButtonProps) {
+  const { t } = useTranslation();
+  const displayButtonText = buttonText || t('common.export_to_excel');
 
   const handleExport = () => {
     if (programs && roomTypes && visaTypes) {
@@ -68,7 +71,7 @@ export default function ExcelExportButton({
       className={`inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors ${className}`}
     >
       <Download size={16} />
-      {buttonText}
+      {displayButtonText}
     </button>
   );
 }
