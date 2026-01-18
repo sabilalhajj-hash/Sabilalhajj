@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { i18n } from './next-i18next.config';
 import { rateLimit, getClientIP } from './src/lib/rateLimit';
 
 // Rate limiting configuration
@@ -68,7 +67,6 @@ export function middleware(request: NextRequest) {
 
   // CSRF Protection: Add CSRF token header for POST/PUT/DELETE requests
   if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(request.method)) {
-    const csrfToken = request.headers.get('x-csrf-token');
     const origin = request.headers.get('origin');
     const referer = request.headers.get('referer');
     
@@ -100,25 +98,14 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // Check if the pathname starts with a locale
-  const pathnameHasLocale = i18n.locales.some(
-    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
-  );
-
-  if (pathnameHasLocale) {
-    return response;
-  }
-
-  // Redirect if there is no locale
-  const locale = i18n.defaultLocale;
-  request.nextUrl.pathname = `/${locale}${pathname}`;
-
-  return NextResponse.redirect(request.nextUrl);
+  // Return response without locale redirect
+  // Locale detection is handled client-side by i18next-browser-languagedetector
+  return response;
 }
 
 export const config = {
   matcher: [
-    // Skip all internal paths (_next)
-    '/((?!_next|_static|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)).*)',
+    // Skip all internal paths (_next), static files, and API routes
+    '/((?!_next|_static|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|json|css|js)|api|locales).*)',
   ],
 };
