@@ -9,8 +9,6 @@ import {
   Calendar, Globe, Zap, Heart, ArrowRight
 } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
-
 export default function Flights() {
   const { t } = useTranslation();
 

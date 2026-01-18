@@ -12,8 +12,6 @@ import {
 
 import UmrahPackageSelection from "./../../../components/Umrah/UmrahPackageSelection"
 
-export const dynamic = 'force-dynamic';
-
 export default function UmrahCollective() {
   const router = useRouter();
   const { t } = useTranslation();

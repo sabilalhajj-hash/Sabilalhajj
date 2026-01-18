@@ -24,8 +24,6 @@ const gallery = [
   { id: '4', image: '/hajj4.jpg', alt: 'Gallery For Hajj images4' }
 ];
 
-export const dynamic = 'force-dynamic';
-
 export default function UmrahPersonalized() {
   const router = useRouter();
   const { t } = useTranslation();

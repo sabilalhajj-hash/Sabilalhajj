@@ -13,8 +13,6 @@ import { ChevronLeft, ChevronRight, Landmark, BookOpenCheck,  Plane,
   MessageCircle  } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-export const dynamic = 'force-dynamic';
-
 
   
   
