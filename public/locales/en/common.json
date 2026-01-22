@@ -768,7 +768,8 @@
         "time": "1-2 Weeks",
         "note": "Faster processing available for urgent applications."
       }
-    }
+    },
+    "booking_button": "Book Now via WhatsApp"
   },
   "common": {
     "book_now": "Book Now",
@@ -923,6 +924,10 @@
       "name": "Moroccan Dirham",
       "native": "درهم مغربي"
     }
+  },
+  "trustedPartners": {
+    "title": "Our Trusted Partners",
+    "subtitle": "We are proud to partner with the best companies in Hajj and Umrah services"
   },
   "gallery": {
     "title": "Gallery",

@@ -5,6 +5,7 @@ import Hero from '../components/Home/Hero';
 import PackageSelection from '../components/Home/PackageSelection';
 import Services from '../components/Home/Services';
 import Testimonials from '../components/Home/Testimonials';
+import TrustedPartners from '../components/Home/TrustedPartners';
 import SectionIndicator from '../components/SectionIndicator';
 // Import Swiper styles
 import 'swiper/css';
@@ -43,6 +44,11 @@ export default function Home() {
       {/* Testimonials Section */}
       <section id="testimonials">
         <Testimonials />
+      </section>
+
+      {/* Trusted Partners Section */}
+      <section id="trusted-partners">
+        <TrustedPartners />
       </section>
 
       {/* Gallery Section */}

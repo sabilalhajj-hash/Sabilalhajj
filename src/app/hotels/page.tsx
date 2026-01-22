@@ -55,14 +55,17 @@ export default function Hotels() {
           </div>
         </div>
 
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-6">
-          <p className="text-lg text-amber-800 leading-relaxed">
+        <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+          <p className="text-lg text-green-800 leading-relaxed">
             {t('pages.hotels.description3')}
           </p>
         </div>
 
         <div className="text-center mt-8">
-          <button className="bg-amber-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors">
+          <button 
+            onClick={() => window.open('https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20inquire%20about%20hotel%20accommodations.', '_blank')}
+            className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+          >
             {t('common.view_details')}
           </button>
         </div>

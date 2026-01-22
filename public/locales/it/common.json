@@ -694,7 +694,8 @@
         "time": "1-2 settimane",
         "note": "Elaborazione più veloce disponibile per richieste urgenti."
       }
-    }
+    },
+    "booking_button": "Prenota ora tramite WhatsApp"
   },
   "common": {
     "book_now": "Prenota Ora",
@@ -849,6 +850,10 @@
       "name": "Dirham Marocchino",
       "native": "درهم مغربي"
     }
+  },
+  "trustedPartners": {
+    "title": "I Nostri Partner Fidati",
+    "subtitle": "Siamo orgogliosi di collaborare con le migliori aziende nei servizi di Hajj e Umrah"
   },
   "gallery": {
     "title": "Galleria",

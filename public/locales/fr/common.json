@@ -694,7 +694,8 @@
         "time": "1-2 semaines",
         "note": "Traitement plus rapide disponible pour les demandes urgentes."
       }
-    }
+    },
+    "booking_button": "Réserver maintenant via WhatsApp"
   },
   "common": {
     "book_now": "Réserver Maintenant",
@@ -911,6 +912,10 @@
       "name": "Dirham Marocain",
       "native": "درهم مغربي"
     }
+  },
+  "trustedPartners": {
+    "title": "Nos Partenaires de Confiance",
+    "subtitle": "Nous sommes fiers de nous associer aux meilleures entreprises dans les services de Hajj et d'Omra"
   },
   "gallery": {
     "title": "Galerie",

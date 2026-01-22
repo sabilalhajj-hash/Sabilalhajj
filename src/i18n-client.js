@@ -15,7 +15,8 @@ if (!i18n.isInitialized) {
       .use(LanguageDetector)
       .use(initReactI18next)
       .init({
-        fallbackLng: 'en',
+        lng: 'ar', // Default language is Arabic
+        fallbackLng: 'ar',
         debug: process.env.NODE_ENV === 'development',
         interpolation: {
           escapeValue: false,
@@ -24,8 +25,10 @@ if (!i18n.isInitialized) {
           loadPath: '/locales/{{lng}}/common.json',
         },
         detection: {
-          order: ['localStorage', 'navigator', 'htmlTag'],
+          order: ['localStorage'], // Only check localStorage for saved preference
           caches: ['localStorage'],
+          lookupLocalStorage: 'i18nextLng',
+          // Don't auto-detect from browser, always default to Arabic
         },
       });
   } else {
@@ -33,8 +36,8 @@ if (!i18n.isInitialized) {
     i18n
       .use(initReactI18next)
       .init({
-        fallbackLng: 'en',
-        lng: 'en',
+        fallbackLng: 'ar',
+        lng: 'ar',
         interpolation: {
           escapeValue: false,
         },

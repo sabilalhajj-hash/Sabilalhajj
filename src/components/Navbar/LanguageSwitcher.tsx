@@ -9,10 +9,10 @@ export default function LanguageSwitcher() {
   const { i18n, t } = useTranslation();
 
   const languages = [
-    { code: 'en', name: 'English', nativeName: 'English' },
-    { code: 'fr', name: 'French', nativeName: 'Français' },
-    { code: 'it', name: 'Italian', nativeName: 'Italiano' },
-    { code: 'ar', name: 'Arabic', nativeName: 'العربية' },
+    { code: 'en', name: 'English', nativeName: 'English', flag: '🇬🇧' },
+    { code: 'fr', name: 'French', nativeName: 'Français', flag: '🇫🇷' },
+    { code: 'it', name: 'Italian', nativeName: 'Italiano', flag: '🇮🇹' },
+    { code: 'ar', name: 'Arabic', nativeName: 'العربية', flag: '🇸🇦' },
   ];
 
   useEffect(() => {
@@ -31,14 +31,9 @@ export default function LanguageSwitcher() {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium uppercase"
       >
-        <svg
-          className="w-4 h-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0 9c-1.657 0-3-4.03-3-9s1.343-9 3-9m0 18c1.657 0 3-4.03 3-9s-1.343-9-3-9" />
-        </svg>
+        <span className="text-lg">
+          {languages.find(l => l.code === i18n.language)?.flag || '🌐'}
+        </span>
         <span>{i18n.language.toUpperCase()}</span>
         <svg
           className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
@@ -62,10 +57,10 @@ export default function LanguageSwitcher() {
                 }}
                 className="flex items-center w-full px-4 py-3 hover:bg-gray-50 transition-colors group"
               >
-                <span className="text-gray-500 font-semibold w-10 text-left group-hover:text-emerald-600 uppercase">
-                  {language.code}
+                <span className="text-2xl mr-3">
+                  {language.flag}
                 </span>
-                <div className="flex flex-col items-start ml-2">
+                <div className="flex flex-col items-start">
                   <span className={`text-sm font-medium ${i18n.language === language.code ? 'text-emerald-600' : 'text-gray-700'}`}>
                     {language.name}
                   </span>

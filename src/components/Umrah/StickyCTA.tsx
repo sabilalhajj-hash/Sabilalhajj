@@ -22,9 +22,11 @@ interface Program {
 
 interface StickyCTAProps {
   selectedProgram: Program | null;
+  whatsappUrl?: string;
+  whatsappMessage?: string;
 }
 
-const StickyCTA = ({ selectedProgram }: StickyCTAProps) => {
+const StickyCTA = ({ selectedProgram, whatsappUrl, whatsappMessage }: StickyCTAProps) => {
   const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(true);
   const [scrollY, setScrollY] = useState(0);
@@ -35,8 +37,27 @@ const StickyCTA = ({ selectedProgram }: StickyCTAProps) => {
   const packageDates = selectedProgram?.departure && selectedProgram?.return 
     ? `${selectedProgram.departure} - ${selectedProgram.return}` 
     : packageDuration;
-  const packagePrice = selectedProgram?.price.replace(/[^\d.,]/g, '') || '0'; // Extract numeric price
-  const packageCurrency = selectedProgram?.price.includes('€') ? '€' : '$'; // Determine currency
+  
+  // Handle price - check if it's a numeric price or text like "Contact us"
+  const hasNumericPrice = selectedProgram?.price && /[\d.,]/.test(selectedProgram.price);
+  const packagePrice = hasNumericPrice 
+    ? selectedProgram.price.replace(/[^\d.,]/g, '') || '0'
+    : selectedProgram?.price || '';
+  const packageCurrency = hasNumericPrice && selectedProgram?.price?.includes('€') ? '€' : hasNumericPrice ? '$' : '';
+  
+  // Default WhatsApp URL if not provided
+  const defaultWhatsappUrl = 'https://wa.me/2120606420326';
+  const defaultWhatsappMessage = whatsappMessage || (selectedProgram?.name 
+    ? `Hello! I would like to book ${selectedProgram.name}.` 
+    : 'Hello! I would like to inquire about your services.');
+  const finalWhatsappUrl = whatsappUrl || `${defaultWhatsappUrl}?text=${encodeURIComponent(defaultWhatsappMessage)}`;
+  
+  // Handle button click
+  const handleBookClick = () => {
+    if (finalWhatsappUrl) {
+      window.open(finalWhatsappUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -88,21 +109,35 @@ const StickyCTA = ({ selectedProgram }: StickyCTAProps) => {
                 {packageDates}
               </p>
               {/* Mobile price display */}
-              <div className="sm:hidden mt-2">
-                <span className="block text-xs uppercase text-green-200">{t('sticky_cta.price_per_person') || 'Price per person'}</span>
-                <span className="text-xl font-bold">{packageCurrency}{packagePrice}</span>
-              </div>
+              {hasNumericPrice && (
+                <div className="sm:hidden mt-2">
+                  <span className="block text-xs uppercase text-green-200">{t('sticky_cta.price_per_person') || 'Price per person'}</span>
+                  <span className="text-xl font-bold">{packageCurrency}{packagePrice}</span>
+                </div>
+              )}
+              {!hasNumericPrice && packagePrice && (
+                <div className="sm:hidden mt-2">
+                  <span className="text-sm text-green-200">{packagePrice}</span>
+                </div>
+              )}
             </div>
 
             {/* Right Side: Price and Button */}
             <div className="flex items-center gap-4">
-              <div className="text-right hidden sm:block">
-                <span className="block text-xs uppercase text-green-200">{t('sticky_cta.price_per_person') || 'Price per person'}</span>
-                <span className="text-2xl font-bold">{packageCurrency}{packagePrice}</span>
-              </div>
+              {hasNumericPrice && (
+                <div className="text-right hidden sm:block">
+                  <span className="block text-xs uppercase text-green-200">{t('sticky_cta.price_per_person') || 'Price per person'}</span>
+                  <span className="text-2xl font-bold">{packageCurrency}{packagePrice}</span>
+                </div>
+              )}
+              {!hasNumericPrice && packagePrice && (
+                <div className="text-right hidden sm:block">
+                  <span className="text-sm text-green-200">{packagePrice}</span>
+                </div>
+              )}
 
               <button
-                onClick={() => {}}
+                onClick={handleBookClick}
                 className="bg-white text-green-600 px-6 py-3 rounded-lg font-bold hover:scale-105 hover:bg-yellow-50 hover:text-green-700 transform duration-300 cursor-pointer transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
               >
                 {t('sticky_cta.book_package') || 'Book Package'}

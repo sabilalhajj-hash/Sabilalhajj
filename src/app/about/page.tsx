@@ -33,16 +33,21 @@ export default function About() {
             </p>
           </div>
 
-          <div className="bg-blue-50 p-6 rounded-lg">
+          {/* <div className="bg-blue-50 p-6 rounded-lg">
             <p className="text-lg text-blue-800 leading-relaxed">
               {t('pages.about.contact_message')}
             </p>
-          </div>
+          </div> */}
 
           <div className="text-center pt-6">
-            <button className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+            <a
+              href="https://wa.me/0606420326"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            >
               {t('common.contact_us')}
-            </button>
+            </a>
           </div>
         </div>
       </div>

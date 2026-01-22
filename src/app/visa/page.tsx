@@ -12,6 +12,7 @@ import { ChevronLeft, ChevronRight, Landmark, BookOpenCheck,  Plane,
   Globe,
   MessageCircle  } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import StickyCTA from '@/components/Umrah/StickyCTA';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,6 +45,15 @@ export const dynamic = 'force-dynamic';
   
   const VisaServiceHero = () => {
     const { t } = useTranslation();
+
+    // Create visa object for StickyCTA
+    const visa = {
+      id: 'visa-service',
+      name: t('visa.hero.title') || 'Visa Services',
+      duration: t('visa.umrah_section.processing.time') || '2-4 weeks',
+      price: 'Contact us',
+      description: t('visa.hero.description'),
+    };
 
     const inclusiveServices = [
       { icon: <Plane className="text-emerald-700" size={24} />, title: t('visa.umrah_section.services.flights') },
@@ -106,6 +116,7 @@ export const dynamic = 'force-dynamic';
                 <Landmark className="text-emerald-800" size={40} />
               </div>
               <span className="text-emerald-900 font-bold text-lg">{t('visa.services.umrah')}</span>
+              
             </div>
 
             {/* Tourist Visa Card */}
@@ -120,8 +131,9 @@ export const dynamic = 'force-dynamic';
           {/* Heading and Subtext */}
           <div className="text-center">
             <h2 className="text-5xl font-bold text-emerald-900 mb-6">{t('visa.services.title')}</h2>
+            <button className='bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors shadow-lg hover:shadow-xl' onClick={() => window.open('https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20book%20a%20visa%20service.', '_blank')}>Book Now</button>
             <p className="text-slate-500 text-lg max-w-xl mx-auto leading-relaxed">
-              {t('visa.services.subtitle')}
+              {t('visa.services.subtitle')} 
             </p>
           </div>
         </div>
@@ -215,10 +227,18 @@ export const dynamic = 'force-dynamic';
           </div>
         </div>
 
-        {/* Floating WhatsApp Button */}
-        <button className="fixed bottom-6 right-6 bg-[#25D366] p-4 rounded-full shadow-lg hover:scale-110 transition-transform z-50">
-          <MessageCircle className="text-white" size={28} />
-        </button>
+        {/* Booking Button */}
+        <div className="text-center mt-12">
+          <a
+            href="https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20book%20an%20Umrah%20visa."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors shadow-lg hover:shadow-xl"
+          >
+            <MessageCircle className="text-white" size={24} />
+            {t('visa.booking_button') || 'Book Now via WhatsApp'}
+          </a>
+        </div>
 
       </div>
     </div>
@@ -282,17 +302,29 @@ export const dynamic = 'force-dynamic';
           </div>
         </div>
 
-        {/* Floating WhatsApp Button */}
-        <button className="fixed bottom-6 right-6 bg-[#25D366] p-4 rounded-full shadow-lg hover:scale-110 transition-transform z-50">
-          <MessageCircle className="text-white" size={28} />
-        </button>
+        {/* Booking Button */}
+        <div className="text-center mt-12">
+          <a
+            href="https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20book%20a%20Tourist%20visa."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors shadow-lg hover:shadow-xl"
+          >
+            <MessageCircle className="text-white" size={24} />
+            {t('visa.booking_button') || 'Book Now via WhatsApp'}
+          </a>
+        </div>
 
       </div>
     </div>
 
     
 
-
+<StickyCTA 
+  selectedProgram={visa} 
+  whatsappUrl="https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20book%20a%20visa%20service."
+  whatsappMessage="Hello! I would like to book a visa service."
+/>
 
 
 
