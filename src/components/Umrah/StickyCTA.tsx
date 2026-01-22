@@ -30,6 +30,11 @@ const StickyCTA = ({ selectedProgram, whatsappUrl, whatsappMessage }: StickyCTAP
   const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(true);
   const [scrollY, setScrollY] = useState(0);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Extract package information
   const packageTitle = selectedProgram?.name || '';
@@ -111,7 +116,7 @@ const StickyCTA = ({ selectedProgram, whatsappUrl, whatsappMessage }: StickyCTAP
               {/* Mobile price display */}
               {hasNumericPrice && (
                 <div className="sm:hidden mt-2">
-                  <span className="block text-xs uppercase text-green-200">{t('sticky_cta.price_per_person') || 'Price per person'}</span>
+                  <span className="block text-xs uppercase text-green-200">{mounted ? (t('sticky_cta.price_per_person') || 'Price per person') : 'Price per person'}</span>
                   <span className="text-xl font-bold">{packageCurrency}{packagePrice}</span>
                 </div>
               )}
@@ -126,7 +131,7 @@ const StickyCTA = ({ selectedProgram, whatsappUrl, whatsappMessage }: StickyCTAP
             <div className="flex items-center gap-4">
               {hasNumericPrice && (
                 <div className="text-right hidden sm:block">
-                  <span className="block text-xs uppercase text-green-200">{t('sticky_cta.price_per_person') || 'Price per person'}</span>
+                  <span className="block text-xs uppercase text-green-200">{mounted ? (t('sticky_cta.price_per_person') || 'Price per person') : 'Price per person'}</span>
                   <span className="text-2xl font-bold">{packageCurrency}{packagePrice}</span>
                 </div>
               )}
@@ -140,7 +145,7 @@ const StickyCTA = ({ selectedProgram, whatsappUrl, whatsappMessage }: StickyCTAP
                 onClick={handleBookClick}
                 className="bg-white text-green-600 px-6 py-3 rounded-lg font-bold hover:scale-105 hover:bg-yellow-50 hover:text-green-700 transform duration-300 cursor-pointer transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
               >
-                {t('sticky_cta.book_package') || 'Book Package'}
+                {mounted ? (t('sticky_cta.book_package') || 'Book Package') : 'Book Package'}
               </button>
             </div>
           </div>

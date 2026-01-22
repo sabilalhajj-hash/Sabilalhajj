@@ -1,11 +1,31 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
 
 export const dynamic = 'force-dynamic';
 
 export default function About() {
   const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Wait for component to mount (client-side only) to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="h-full bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="text-6xl mb-4">ℹ️</div>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">Loading...</h1>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

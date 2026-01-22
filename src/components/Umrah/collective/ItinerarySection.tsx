@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 import { Calendar, MapPin, Star } from 'lucide-react';
@@ -67,6 +67,20 @@ export default function ItinerarySection({
   headerColor = 'emerald',
 }: ItinerarySectionProps) {
   const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Wait for component to mount (client-side only) to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="bg-emerald-50 py-4 px-4 sm:px-6 lg:px-8 flex justify-center items-center border-b">
+        <h1 className="font-bold flex items-center gap-2 text-lg sm:text-xl">Loading...</h1>
+      </div>
+    );
+  }
   const colorClasses = {
     emerald: 'bg-emerald-50 border-emerald-100 text-emerald-800',
     blue: 'bg-blue-50 border-blue-100 text-blue-800',
@@ -122,7 +136,7 @@ export default function ItinerarySection({
         <div className="max-w-6xl mx-auto">
           <div className="py-4 sm:py-6 text-center">
             <h2 className="text-emerald-900 text-xl sm:text-2xl lg:text-3xl font-bold">{subtitle}</h2>
-            <p className="text-emerald-600 text-sm sm:text-base mt-2 font-medium">{t('itinerary.spiritual_journey')}</p>
+            <p className="text-emerald-600 text-sm sm:text-base mt-2 font-medium">{mounted ? t('itinerary.spiritual_journey') : 'Loading...'}</p>
           </div>
 
           {items.map((item, index) => (

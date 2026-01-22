@@ -1,11 +1,31 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
 
 export const dynamic = 'force-dynamic';
 
 export default function Hotels() {
   const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Wait for component to mount (client-side only) to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="text-6xl mb-4">🏨</div>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">Loading...</h1>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const hotelFeatures = [
     { icon: '📍', title: t('pages.hotels.features.location.title'), description: t('pages.hotels.features.location.description') },
@@ -30,7 +50,7 @@ export default function Hotels() {
         <div className="bg-white shadow rounded-lg p-8 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Premium Accommodations</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">{t('pages.hotels.accommodations_title')}</h2>
               <p className="text-lg text-gray-700 leading-relaxed mb-6">
                 {t('pages.hotels.description1')}
               </p>
@@ -39,7 +59,7 @@ export default function Hotels() {
               </p>
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Hotel Features</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('pages.hotels.features_title')}</h3>
               <div className="grid grid-cols-1 gap-4">
                 {hotelFeatures.map((feature, index) => (
                   <div key={index} className="flex items-start space-x-3">

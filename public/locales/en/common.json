@@ -164,7 +164,23 @@
       "support_247": "Do you provide 24/7 support?",
       "support_247_answer": "Absolutely! Our dedicated support team is available 24/7 throughout your pilgrimage journey, including during your stay in the Holy Lands.",
       "customize_package": "Can I customize my pilgrimage package?",
-      "customize_package_answer": "Yes, we offer fully customizable packages. You can choose your preferred airlines, hotels, duration, and additional services to match your specific needs and budget."
+      "customize_package_answer": "Yes, we offer fully customizable packages. You can choose your preferred airlines, hotels, duration, and additional services to match your specific needs and budget.",
+      "required_documents": "What documents do I need for Umrah or Hajj?",
+      "required_documents_answer": "You will need a valid passport (valid for at least 6 months), a visa, vaccination certificates (meningitis and COVID-19), and travel insurance. We assist with all visa processing and document requirements to ensure a smooth journey.",
+      "first_time_guidance": "Do you provide guidance for first-time pilgrims?",
+      "first_time_guidance_answer": "Absolutely! We provide comprehensive pre-departure guidance, step-by-step ritual instructions, experienced multilingual guides, and continuous support throughout your journey. Our virtual reality experience also helps you prepare mentally and spiritually.",
+      "health_safety": "What are your health and safety measures?",
+      "health_safety_answer": "We maintain strict health protocols, provide travel insurance, have 24/7 medical support, ensure all accommodations meet safety standards, and follow all government health guidelines for international travel.",
+      "visa_processing_time": "Visa processing duration?",
+      "visa_processing_time_answer": "It varies by season and country, typically from several days to weeks. We inform you of the expected duration as soon as we receive your complete file.",
+      "form_assistance": "Do you help with filling forms and translating documents?",
+      "form_assistance_answer": "Yes, we assist with filling applications, verifying data accuracy, and translating/formatting required documents according to your country.",
+      "package_includes": "What exactly does the package price include?",
+      "package_includes_answer": "Includes (according to package): flight tickets, hotel, transportation, visit program, insurance, guidance, and support service. Each package has clear \"comprehensive details\" within the platform.",
+      "room_type": "Are rooms shared or private?",
+      "room_type_answer": "According to package: shared rooms (economical) or private (more comfort and privacy). You choose this during booking.",
+      "elderly_suitable": "Are packages suitable for elderly people?",
+      "elderly_suitable_answer": "Yes, we have \"comfort\" packages with lighter itineraries, closer hotels, and additional support."
     }
   },
   "pages": {
@@ -178,6 +194,8 @@
     "hotels": {
       "title": "Premium Hotels",
       "subtitle": "Luxury accommodations for your spiritual journey",
+      "accommodations_title": "Premium Accommodations",
+      "features_title": "Hotel Features",
       "description1": "We partner with the finest hotels in Mecca and Medina, ensuring your stay is comfortable and convenient for your pilgrimage. Our accommodations are strategically located to minimize travel time to the Holy Sites.",
       "description2": "All our partner hotels provide halal cuisine, prayer facilities, and modern amenities while maintaining the spiritual atmosphere appropriate for pilgrims.",
       "description3": "Experience comfort and convenience during your pilgrimage with our premium hotel accommodations.",

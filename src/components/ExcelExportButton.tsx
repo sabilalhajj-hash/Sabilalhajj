@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Download } from 'lucide-react';
 import { exportBookingData, exportToExcel } from '@/lib/excelExport';
@@ -45,7 +45,13 @@ export default function ExcelExportButton({
   userData
 }: ExcelExportButtonProps) {
   const { t } = useTranslation();
-  const displayButtonText = buttonText || t('common.export_to_excel');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const displayButtonText = buttonText || (mounted ? t('common.export_to_excel') : 'Export to Excel');
 
   const handleExport = () => {
     if (programs && roomTypes && visaTypes) {

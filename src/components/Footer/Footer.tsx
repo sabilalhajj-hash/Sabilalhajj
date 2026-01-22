@@ -2,10 +2,29 @@
 import Link from 'next/link';
 import Image from "next/image";
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
 
 export default function Footer() {
   const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
   const currentYear = new Date().getFullYear();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Wait for component to mount (client-side only) to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <footer className="bg-green-900/90 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="text-center">
+            <p className="text-gray-300 text-sm">Loading...</p>
+          </div>
+        </div>
+      </footer>
+    );
+  }
 
   const footerLinks = {
     services: [

@@ -6,14 +6,23 @@ import { useCurrency } from '../../context/CurrencyContext';
 
 export default function CurrencySelector() {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const currencyRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
   const { currency, setCurrency } = useCurrency();
 
-  const currencies = [
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const currencies = mounted ? [
     { code: 'USD', name: t('currencies.usd.name'), symbol: '$', flag: '🇺🇸' },
     { code: 'EUR', name: t('currencies.eur.name'), symbol: '€', flag: '🇪🇺' },
     { code: 'MAD', name: t('currencies.mad.name'), symbol: 'MAD', sub: t('currencies.mad.native'), flag: '🇲🇦' },
+  ] : [
+    { code: 'USD', name: 'US Dollar', symbol: '$', flag: '🇺🇸' },
+    { code: 'EUR', name: 'Euro', symbol: '€', flag: '🇪🇺' },
+    { code: 'MAD', name: 'Moroccan Dirham', symbol: 'MAD', sub: 'درهم', flag: '🇲🇦' },
   ];
 
   useEffect(() => {

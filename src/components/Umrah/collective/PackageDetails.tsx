@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapPin, Star, Calendar, Info } from 'lucide-react';
 import Image from 'next/image';
@@ -11,7 +13,6 @@ interface ItineraryItemProps {
 }
 
 const ItineraryItem = ({ title, subtitle, description, imageSrc, badge }: ItineraryItemProps) => {
-  const { t } = useTranslation();
   return (
     <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 p-4 sm:p-6 border-b border-gray-100 last:border-0">
       <div className="w-full lg:w-1/3">
@@ -40,6 +41,23 @@ const ItineraryItem = ({ title, subtitle, description, imageSrc, badge }: Itiner
 
 const MadinahItinerary = () => {
   const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Wait for component to mount (client-side only) to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="w-full w-full mx-auto my-5 bg-white shadow-lg rounded-2xl overflow-hidden my-8 font-sans">
+        <div className="bg-emerald-50 py-4 px-4 sm:px-6 lg:px-8 flex justify-center items-center border-b border-emerald-100">
+          <h1 className="text-emerald-800 font-bold flex items-center gap-2 text-lg sm:text-xl">Loading...</h1>
+        </div>
+      </div>
+    );
+  }
+
   const madinahLandmarks = [
     {
       title: t('itinerary.madinah_masjid'),

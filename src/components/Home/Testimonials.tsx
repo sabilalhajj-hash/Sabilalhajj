@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { User, Star, ChevronDown, Plus, Minus } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -14,8 +14,15 @@ import 'swiper/css/pagination';
 export default function Testimonials() {
   const { t } = useTranslation();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
 
-  const testimonialData = useMemo(() => [
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // All hooks must be called before any conditional returns
+  const testimonialData = useMemo((): Array<{ name: string; location: string; text: string }> => {
+    return [
     {
       name: t('testimonials.name1', 'Mouad'),
       location: t('testimonials.location1', 'Italy'),
@@ -51,22 +58,60 @@ export default function Testimonials() {
       location: t('testimonials.location3', 'Italy'),
       text: t('testimonials.text3', 'I am pleased with the services provided by the sabillhajj platform. The support team was always available, and the accommodation and transportation were comfortable and clean.')
     }
-  ], [t]);
+    ];
+  }, [mounted, t]);
 
-  const commonQuestions = useMemo(() => [
-    {
-      q: t('testimonials.questions.secure_booking'),
-      a: t('testimonials.questions.secure_booking_answer')
-    },
-    {
-      q: t('testimonials.questions.support_247'),
-      a: t('testimonials.questions.support_247_answer')
-    },
+  const commonQuestions = useMemo((): Array<{ q: string; a: string }> => {
+    return [
     {
       q: t('testimonials.questions.customize_package'),
       a: t('testimonials.questions.customize_package_answer')
+    },
+    {
+      q: t('testimonials.questions.required_documents'),
+      a: t('testimonials.questions.required_documents_answer')
+    },
+    {
+      q: t('testimonials.questions.first_time_guidance'),
+      a: t('testimonials.questions.first_time_guidance_answer')
+    },
+    {
+      q: t('testimonials.questions.health_safety'),
+      a: t('testimonials.questions.health_safety_answer')
+    },
+    {
+      q: t('testimonials.questions.visa_processing_time'),
+      a: t('testimonials.questions.visa_processing_time_answer')
+    },
+    {
+      q: t('testimonials.questions.form_assistance'),
+      a: t('testimonials.questions.form_assistance_answer')
+    },
+    {
+      q: t('testimonials.questions.package_includes'),
+      a: t('testimonials.questions.package_includes_answer')
+    },
+    {
+      q: t('testimonials.questions.room_type'),
+      a: t('testimonials.questions.room_type_answer')
+    },
+    {
+      q: t('testimonials.questions.elderly_suitable'),
+      a: t('testimonials.questions.elderly_suitable_answer')
     }
-  ], [t]);
+    ];
+  }, [mounted, t]);
+
+  // Wait for component to mount (client-side only) to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <section className="py-24 px-4 w-full mx-auto border-t border-gray-50">
+        <div className="text-center mb-20">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Loading...</h2>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-24 px-4 w-full mx-auto border-t border-gray-50">

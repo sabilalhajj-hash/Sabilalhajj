@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { X, Maximize2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +22,23 @@ const galleryImages = [
 
 export default function BentoGallery() {
   const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Wait for component to mount (client-side only) to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <section className="w-full mx-auto px-6 py-12">
+        <div className="mb-10 text-center">
+          <h2 className="text-3xl font-black text-[#1B3C33] tracking-tight">Loading...</h2>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="w-full mx-auto px-6 py-12">

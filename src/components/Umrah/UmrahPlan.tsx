@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +11,24 @@ const UmrahPlan = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const [showPackageSelection, setShowPackageSelection] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Wait for component to mount (client-side only) to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <section className="py-16 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-semibold text-gray-900 mb-4">Loading...</h2>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   const plans = [
     {

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -15,6 +15,24 @@ interface Partner {
 
 export default function TrustedPartners() {
   const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Wait for component to mount (client-side only) to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <section className="bg-white w-full py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <div className="w-full mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Loading...</h2>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   // Partner logos - add actual logo images to /public/partners/ folder
   const partners: Partner[] = [

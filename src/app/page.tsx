@@ -2,6 +2,7 @@
 
 import WhyChooseUs from '../components/Home/WhyChooseUs';
 import Hero from '../components/Home/Hero';
+import ServiceCards from '../components/Home/ServiceCards';
 import PackageSelection from '../components/Home/PackageSelection';
 import Services from '../components/Home/Services';
 import Testimonials from '../components/Home/Testimonials';
@@ -24,6 +25,11 @@ export default function Home() {
       {/* Hero Section */}
       <section id="hero">
         <Hero />
+      </section>
+
+      {/* Service Cards Section */}
+      <section id="service-cards">
+        <ServiceCards />
       </section>
 
       {/* Package Selection Section */}

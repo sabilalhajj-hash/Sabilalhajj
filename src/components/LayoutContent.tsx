@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
 import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer/Footer";
 import WhatsappButton from "./WhatsappButton";
@@ -13,12 +14,19 @@ interface LayoutContentProps {
 
 export default function LayoutContent({ children }: LayoutContentProps) {
   const { i18n } = useTranslation();
+  const [mounted, setMounted] = useState(false);
 
-  const dir = getDirection(i18n.language);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Use default language during SSR to avoid hydration mismatch
+  const language = mounted ? i18n.language : 'ar';
+  const dir = getDirection(language);
 
   return (
-    <html lang={i18n.language} dir={dir}>
-      <body className="antialiased" dir={dir}>
+    <html lang={language} dir={dir} suppressHydrationWarning>
+      <body className="antialiased" dir={dir} suppressHydrationWarning>
         <DynamicHtml>
           <Navbar />
           {children}

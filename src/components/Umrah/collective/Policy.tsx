@@ -1,9 +1,27 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CreditCard, Calendar, FileText, Plane, Building, AlertCircle, ShieldCheck, Info } from 'lucide-react';
 
 const PolicyPage = () => {
   const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Wait for component to mount (client-side only) to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="w-full bg-white font-sans text-slate-800 border-t border-gray-100">
+        <div className="w-full bg-emerald-50/50 py-6 px-4 md:px-12 border-b border-emerald-100 text-center">
+          <h1 className="text-2xl font-bold text-emerald-900">Loading...</h1>
+        </div>
+      </div>
+    );
+  }
 
   const sections = [
     {

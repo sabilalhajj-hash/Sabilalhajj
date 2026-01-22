@@ -2,7 +2,7 @@
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Image from 'next/image';
 
@@ -11,45 +11,25 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
+const FALLBACK_SLIDES = [
+  { title: 'Welcome to Sabil Al-Hajj', subtitle: 'Your trusted partner for Hajj and Umrah pilgrimage services. Experience a spiritual journey filled with peace, devotion, and unforgettable memories.', image: '/hajj1.jpg', ctaPrimary: 'Book Your Pilgrimage', ctaSecondary: 'Learn More' },
+  { title: 'Experience Sacred Hajj', subtitle: 'Embark on the most sacred pilgrimage with our expert guidance. Every step of your journey is carefully planned for spiritual fulfillment.', image: '/hajj2.jpg', ctaPrimary: 'Plan Hajj Journey', ctaSecondary: 'View Packages' },
+  { title: 'Discover Umrah Blessings', subtitle: 'Find inner peace through Umrah pilgrimage. Our comprehensive services ensure a meaningful and comfortable spiritual experience.', image: '/hajj3.jpg', ctaPrimary: 'Book Umrah Now', ctaSecondary: 'Explore Options' },
+  { title: 'Premium Accommodations', subtitle: 'Stay in the most convenient and comfortable accommodations near the Holy Sites. Luxury meets spirituality in our premium hotels.', image: '/hajj4.jpg', ctaPrimary: 'View Hotels', ctaSecondary: 'Check Availability' },
+];
+
 export default function Hero() {
   const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const heroSlides = useMemo(() => {
+    if (!mounted) return FALLBACK_SLIDES;
     const slides = t('hero.slides', { returnObjects: true }) as any[];
-    // Ensure slides is an array
-    if (!Array.isArray(slides)) {
-      // Fallback to default slides if translation is not loaded
-      return [
-        {
-          title: 'Welcome to Sabil Al-Hajj',
-          subtitle: 'Your trusted partner for Hajj and Umrah pilgrimage services. Experience a spiritual journey filled with peace, devotion, and unforgettable memories.',
-          image: "/hajj1.jpg",
-          ctaPrimary: 'Book Your Pilgrimage',
-          ctaSecondary: 'Learn More'
-        },
-        {
-          title: 'Experience Sacred Hajj',
-          subtitle: 'Embark on the most sacred pilgrimage with our expert guidance. Every step of your journey is carefully planned for spiritual fulfillment.',
-          image: "/hajj2.jpg",
-          ctaPrimary: 'Plan Hajj Journey',
-          ctaSecondary: 'View Packages'
-        },
-        {
-          title: 'Discover Umrah Blessings',
-          subtitle: 'Find inner peace through Umrah pilgrimage. Our comprehensive services ensure a meaningful and comfortable spiritual experience.',
-          image: "/hajj3.jpg",
-          ctaPrimary: 'Book Umrah Now',
-          ctaSecondary: 'Explore Options'
-        },
-        {
-          title: 'Premium Accommodations',
-          subtitle: 'Stay in the most convenient and comfortable accommodations near the Holy Sites. Luxury meets spirituality in our premium hotels.',
-          image: "/hajj4.jpg",
-          ctaPrimary: 'View Hotels',
-          ctaSecondary: 'Check Availability'
-        }
-      ];
-    }
+    if (!Array.isArray(slides)) return FALLBACK_SLIDES;
     return slides.map((slide: any, index: number) => ({
       title: slide.title,
       subtitle: slide.subtitle,
@@ -57,7 +37,7 @@ export default function Hero() {
       ctaPrimary: slide.ctaPrimary,
       ctaSecondary: slide.ctaSecondary
     }));
-  }, [t]);
+  }, [mounted, t]);
 
   return (
     <div className="relative">

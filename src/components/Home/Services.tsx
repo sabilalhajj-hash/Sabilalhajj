@@ -1,4 +1,6 @@
-import React, { useMemo } from 'react';
+'use client';
+
+import React, { useMemo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
@@ -9,7 +11,13 @@ import 'swiper/css/pagination';
 
 export default function Services() {
   const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // All hooks must be called before any conditional returns
   const services = useMemo(() => [
     {
       icon: '🕋',
@@ -46,7 +54,18 @@ export default function Services() {
       title: t('services.transportation.title'),
       description: t('services.transportation.description')
     }
-  ], [t]);
+  ], [mounted, t]);
+
+  // Wait for component to mount (client-side only) to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="w-full mx-auto">
+          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Loading...</h2>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="py-16 px-4 sm:px-6 lg:px-8">

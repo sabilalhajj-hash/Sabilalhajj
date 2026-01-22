@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
@@ -22,6 +22,24 @@ export default function UserDataForm({
   submitLabel,
 }: UserDataFormProps) {
   const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Wait for component to mount (client-side only) to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <form className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="h-20 bg-gray-100 rounded animate-pulse"></div>
+          <div className="h-20 bg-gray-100 rounded animate-pulse"></div>
+        </div>
+        <div className="h-12 bg-gray-100 rounded animate-pulse"></div>
+      </form>
+    );
+  }
   
   const {
     register,

@@ -1,4 +1,6 @@
-import React, { useMemo } from 'react';
+'use client';
+
+import React, { useMemo, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 import {
@@ -16,7 +18,13 @@ import { useRouter } from 'next/navigation';
 export default function PackageSelection() {
   const { t } = useTranslation();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // All hooks must be called before any conditional returns
   const categories = useMemo(() => [
     { name: t('packages.umrah_packages'), icon: <Calendar className="w-6 h-6" /> },
     { name: t('packages.hajj'), icon: <Building2 className="w-6 h-6" /> },
@@ -24,7 +32,7 @@ export default function PackageSelection() {
     { name: t('packages.hotel_booking'), icon: <Hotel className="w-6 h-6" /> },
     { name: t('packages.visa_services'), icon: <FileText className="w-6 h-6" /> },
     { name: t('packages.personalized_umrah'), icon: <UserCircle className="w-6 h-6" /> },
-  ], [t]);
+  ], [mounted, t]);
 
   const packages = useMemo(() => [
     {
@@ -46,7 +54,21 @@ export default function PackageSelection() {
       features: [t('packages.flight'), t('packages.hotels'), t('packages.visa'), t('packages.guide')],
       path: "/hajj"
     }
-  ], [t]);
+  ], [mounted, t]);
+
+  // Wait for component to mount (client-side only) to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <section className="bg-white py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Loading...</h2>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">

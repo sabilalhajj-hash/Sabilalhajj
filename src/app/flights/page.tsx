@@ -2,6 +2,7 @@
 
 import FlightSearch from '@/components/Flight/FlightSearch';
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { 
   Plane, MapPin, Clock, DollarSign, Shield, Star, TrendingDown, 
@@ -13,6 +14,24 @@ export const dynamic = 'force-dynamic';
 
 export default function Flights() {
   const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Wait for component to mount (client-side only) to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="py-12 px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">Loading...</h1>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const popularDestinations = [
     { city: 'Mecca', country: 'Saudi Arabia', code: 'JED', image: '/hajj1.jpg', price: `${t('flight.price_from')} $450`, badge: t('flight.badge_popular') },

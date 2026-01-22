@@ -164,7 +164,23 @@
       "support_247": "Fournissez-vous un support 24/7 ?",
       "support_247_answer": "Absolument ! Notre équipe de support dédiée est disponible 24h/24 tout au long de votre voyage de pèlerinage, y compris pendant votre séjour dans les Terres Saintes.",
       "customize_package": "Puis-je personnaliser mon forfait de pèlerinage ?",
-      "customize_package_answer": "Oui, nous proposons des forfaits entièrement personnalisables. Vous pouvez choisir vos compagnies aériennes préférées, hôtels, durée et services supplémentaires pour répondre à vos besoins et budget spécifiques."
+      "customize_package_answer": "Oui, nous proposons des forfaits entièrement personnalisables. Vous pouvez choisir vos compagnies aériennes préférées, hôtels, durée et services supplémentaires pour répondre à vos besoins et budget spécifiques.",
+      "required_documents": "Quels documents ai-je besoin pour l'Omra ou le Hajj ?",
+      "required_documents_answer": "Vous aurez besoin d'un passeport valide (valide pendant au moins 6 mois), d'un visa, de certificats de vaccination (méningite et COVID-19), et d'une assurance voyage. Nous assistons avec tous les traitements de visa et les exigences de documents pour assurer un voyage en douceur.",
+      "first_time_guidance": "Fournissez-vous des conseils pour les pèlerins pour la première fois ?",
+      "first_time_guidance_answer": "Absolument ! Nous fournissons des conseils complets avant le départ, des instructions étape par étape pour les rituels, des guides multilingues expérimentés, et un soutien continu tout au long de votre voyage. Notre expérience de réalité virtuelle vous aide également à vous préparer mentalement et spirituellement.",
+      "health_safety": "Quelles sont vos mesures de santé et de sécurité ?",
+      "health_safety_answer": "Nous maintenons des protocoles de santé stricts, fournissons une assurance voyage, avons un soutien médical 24/7, assurons que tous les hébergements répondent aux normes de sécurité, et suivons toutes les directives sanitaires gouvernementales pour les voyages internationaux.",
+      "visa_processing_time": "Durée de traitement du visa ?",
+      "visa_processing_time_answer": "Cela varie selon la saison et le pays, généralement de plusieurs jours à semaines. Nous vous informons de la durée attendue dès réception de votre dossier complet.",
+      "form_assistance": "Aidez-vous à remplir les formulaires et traduire les documents ?",
+      "form_assistance_answer": "Oui, nous aidons à remplir les demandes, vérifier l'exactitude des données, et traduire/formater les documents requis selon votre pays.",
+      "package_includes": "Qu'est-ce qui est exactement inclus dans le prix du forfait ?",
+      "package_includes_answer": "Inclut (selon le forfait) : billets d'avion, hôtel, transport, programme de visite, assurance, guidance, et service de soutien. Chaque forfait a des \"détails complets\" clairs dans la plateforme.",
+      "room_type": "Les chambres sont-elles partagées ou privées ?",
+      "room_type_answer": "Selon le forfait : chambres partagées (économiques) ou privées (plus de confort et d'intimité). Vous choisissez cela lors de la réservation.",
+      "elderly_suitable": "Les forfaits sont-ils adaptés aux personnes âgées ?",
+      "elderly_suitable_answer": "Oui, nous avons des forfaits \"confort\" avec des itinéraires plus légers, des hôtels plus proches, et un soutien supplémentaire."
     }
   },
   "pages": {
@@ -178,6 +194,8 @@
     "hotels": {
       "title": "Hôtels Premium",
       "subtitle": "Hébergements de luxe pour votre voyage spirituel",
+      "accommodations_title": "Hébergements Premium",
+      "features_title": "Équipements Hôteliers",
       "description1": "Nous collaborons avec les meilleurs hôtels de La Mecque et Médine, garantissant que votre séjour soit confortable et pratique pour votre pèlerinage. Nos hébergements sont stratégiquement situés pour minimiser le temps de trajet vers les Lieux Saints.",
       "description2": "Tous nos hôtels partenaires proposent une cuisine halal, des installations de prière et des équipements modernes tout en maintenant l'atmosphère spirituelle appropriée aux pèlerins.",
       "description3": "Découvrez le confort et la commodité pendant votre pèlerinage avec nos hébergements hôteliers premium.",

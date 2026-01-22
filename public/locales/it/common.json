@@ -164,7 +164,23 @@
       "support_247": "Fornite supporto 24/7?",
       "support_247_answer": "Assolutamente! Il nostro team di supporto dedicato è disponibile 24 ore su 24 durante tutto il vostro viaggio di pellegrinaggio, incluso durante il soggiorno nelle Terre Sante.",
       "customize_package": "Posso personalizzare il mio pacchetto di pellegrinaggio?",
-      "customize_package_answer": "Sì, offriamo pacchetti completamente personalizzabili. Puoi scegliere le tue compagnie aeree preferite, hotel, durata e servizi aggiuntivi per adattarti alle tue esigenze e budget specifici."
+      "customize_package_answer": "Sì, offriamo pacchetti completamente personalizzabili. Puoi scegliere le tue compagnie aeree preferite, hotel, durata e servizi aggiuntivi per adattarti alle tue esigenze e budget specifici.",
+      "required_documents": "Quali documenti mi servono per l'Umrah o l'Hajj?",
+      "required_documents_answer": "Avrai bisogno di un passaporto valido (valido per almeno 6 mesi), un visto, certificati di vaccinazione (meningite e COVID-19), e assicurazione di viaggio. Assistiamo con tutte le pratiche per il visto e i requisiti documentali per garantire un viaggio senza problemi.",
+      "first_time_guidance": "Fornite guida per i pellegrini per la prima volta?",
+      "first_time_guidance_answer": "Assolutamente! Forniamo una guida completa prima della partenza, istruzioni passo-passo per i riti, guide multilingue esperte, e supporto continuo durante tutto il vostro viaggio. La nostra esperienza di realtà virtuale vi aiuta anche a prepararvi mentalmente e spiritualmente.",
+      "health_safety": "Quali sono le vostre misure di salute e sicurezza?",
+      "health_safety_answer": "Manteniamo protocolli sanitari rigorosi, forniamo assicurazione di viaggio, abbiamo supporto medico 24/7, garantiamo che tutti gli alloggi soddisfino gli standard di sicurezza, e seguiamo tutte le linee guida sanitarie governative per i viaggi internazionali.",
+      "visa_processing_time": "Durata dell'elaborazione del visto?",
+      "visa_processing_time_answer": "Varia in base alla stagione e al paese, generalmente da diversi giorni a settimane. Ti informiamo della durata prevista non appena riceviamo il tuo fascicolo completo.",
+      "form_assistance": "Aiutate a compilare i moduli e tradurre i documenti?",
+      "form_assistance_answer": "Sì, assistiamo nella compilazione delle domande, verifica dell'accuratezza dei dati, e traduzione/formattazione dei documenti richiesti secondo il tuo paese.",
+      "package_includes": "Cosa include esattamente il prezzo del pacchetto?",
+      "package_includes_answer": "Include (secondo il pacchetto): biglietti aerei, hotel, trasporti, programma di visita, assicurazione, guida, e servizio di supporto. Ogni pacchetto ha \"dettagli completi\" chiari all'interno della piattaforma.",
+      "room_type": "Le camere sono condivise o private?",
+      "room_type_answer": "Secondo il pacchetto: camere condivise (economiche) o private (più comfort e privacy). Lo scegli durante la prenotazione.",
+      "elderly_suitable": "I pacchetti sono adatti agli anziani?",
+      "elderly_suitable_answer": "Sì, abbiamo pacchetti \"comfort\" con itinerari più leggeri, hotel più vicini, e supporto aggiuntivo."
     }
   },
   "pages": {
@@ -178,6 +194,8 @@
     "hotels": {
       "title": "Hotel Premium",
       "subtitle": "Sistemazioni di lusso per il vostro viaggio spirituale",
+      "accommodations_title": "Sistemazioni Premium",
+      "features_title": "Caratteristiche dell'Hotel",
       "description1": "Collaboriamo con i migliori hotel della Mecca e Medina, garantendo che il vostro soggiorno sia confortevole e conveniente per il pellegrinaggio. Le nostre sistemazioni sono strategicamente posizionate per ridurre al minimo i tempi di viaggio verso i Luoghi Santi.",
       "description2": "Tutti i nostri hotel partner forniscono cucina halal, strutture per la preghiera e comfort moderni mantenendo l'atmosfera spirituale appropriata per i pellegrini.",
       "description3": "Sperimentate comfort e convenienza durante il vostro pellegrinaggio con le nostre sistemazioni alberghiere premium.",

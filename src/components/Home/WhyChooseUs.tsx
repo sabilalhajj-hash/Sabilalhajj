@@ -1,11 +1,31 @@
 // components/WhyChooseUs.tsx
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShieldCheck, Zap, HeartHandshake, Headset, Star, UserCheck } from 'lucide-react';
 import Image from 'next/image';
 
 export default function WhyChooseUs() {
   const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Wait for component to mount (client-side only) to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <section className="bg-white py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Loading...</h3>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   const features = [
     {
