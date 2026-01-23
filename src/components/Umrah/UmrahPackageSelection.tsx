@@ -32,6 +32,14 @@ const UmrahPackageSelection = () => {
   // Check if language is initialized (resolved)
   const isLanguageSetted = !!i18n.resolvedLanguage;
 
+  // Helper function to translate country names
+  const translateCountry = (countryName: string): string => {
+    const translationKey = `countries.${countryName.toLowerCase().replace(/\s+/g, '_').replace(/[()]/g, '')}`;
+    const translated = t(translationKey);
+    // If translation exists and is different from the key, return it; otherwise return original
+    return translated !== translationKey ? translated : countryName;
+  };
+
   // Set client-side flag and load from localStorage
   useEffect(() => {
     setIsClient(true);
@@ -150,7 +158,7 @@ const UmrahPackageSelection = () => {
                       onClick={() => handleCountrySelect(country)}
                       className="flex items-center justify-between p-4 rounded-xl border border-transparent hover:border-emerald-200 hover:bg-emerald-50 transition-all group"
                     >
-                      <span className="font-medium text-slate-700 group-hover:text-emerald-700">{country}</span>
+                      <span className="font-medium text-slate-700 group-hover:text-emerald-700">{translateCountry(country)}</span>
                       <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-emerald-500" />
                     </button>
                   ))}
@@ -177,10 +185,10 @@ const UmrahPackageSelection = () => {
 
               <button
                 onClick={handleChangeCountry}
-                className="flex items-center text-gray-600 border border-blue-100 rounded-lg px-4 py-2 hover:bg-blue-50 transition-colors"
+                className="flex items-center   text-gray-600 border border-blue-100 rounded-lg px-4 py-2 hover:bg-blue-50 transition-colors"
               >
-                <Globe size={16} className="mr-2" />
-                <span className="text-sm">{t('umrah.change_country')}</span>
+                <Globe size={16} className="mr-2 m-4" />
+                <span className="text-sm">{t('umrah.change_country')} ({translateCountry(selectedCountry)})</span>
               </button>
             </div>
 
@@ -190,7 +198,7 @@ const UmrahPackageSelection = () => {
                 {t('umrah.choose_package_title')}
               </h2>
               <p className="text-gray-900 font-bold max-w-3xl mx-auto">
-                {t('umrah.choose_package_subtitle')} {selectedCountry}
+                {t('umrah.choose_package_subtitle')} {translateCountry(selectedCountry)}
               </p>
             </div>
 
@@ -261,7 +269,7 @@ const UmrahPackageSelection = () => {
               </div>
 
               {/* Card 2: Coming Soon */}
-              <div className="bg-gray-50/50 rounded-2xl border border-dashed border-gray-200 overflow-hidden flex flex-col opacity-80 hover:scale-95 transition-transform duration-300">
+              {/* <div className="bg-gray-50/50 rounded-2xl border border-dashed border-gray-200 overflow-hidden flex flex-col opacity-80 hover:scale-95 transition-transform duration-300">
                 <div className="relative h-56 bg-gray-200 flex items-center justify-center">
                   <span className="text-gray-400 font-bold uppercase tracking-widest">{t('umrah.coming_soon')}</span>
                 </div>
@@ -269,7 +277,7 @@ const UmrahPackageSelection = () => {
                   <h3 className="text-xl font-bold text-gray-400 mb-2 uppercase">{t('umrah.more_packages')}</h3>
                   <p className="text-gray-400 text-sm">{t('umrah.stay_tuned')}</p>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </section>

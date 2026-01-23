@@ -53,10 +53,16 @@ const gallery = [
 
 export default function CollectivePlanClient() {
   const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
   const [selectedVisa, setSelectedVisa] = useState<string | null>(null);
   const [toggle, setToggle] = useState(false);
+
+  // Prevent SSR/client translation mismatch (hydration)
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Auto-hide toggle overlay after 4 seconds
   useEffect(() => {
@@ -74,11 +80,7 @@ export default function CollectivePlanClient() {
     name: '',
     lastName: '',
     email: '',
-    phone: '',
-    city: '',
-    address: '',
-    zip: '',
-    gender: ''
+    phone: ''
   });
 
   // Validation state
@@ -86,11 +88,7 @@ export default function CollectivePlanClient() {
     name: '',
     lastName: '',
     email: '',
-    phone: '',
-    city: '',
-    address: '',
-    gender: '',
-    zip: ''
+    phone: ''
   });
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
 
@@ -112,56 +110,35 @@ export default function CollectivePlanClient() {
 
   // Validation functions
   const validateName = (name: string): string => {
-    if (!name.trim()) return t('validation.first_name_required');
-    if (name.trim().length < 2) return t('validation.first_name_min_length');
-    if (!/^[a-zA-Z\s]+$/.test(name.trim())) return t('validation.first_name_letters_only');
+    const trimmed = name.trim();
+    if (!trimmed) return '';
+    if (trimmed.length < 2) return t('validation.first_name_min_length');
+    if (!/^[\p{L}\s'-]+$/u.test(trimmed)) return t('validation.first_name_letters_only');
     return '';
   };
 
   const validateLastName = (lastName: string): string => {
-    if (!lastName.trim()) return t('validation.last_name_required');
-    if (lastName.trim().length < 2) return t('validation.last_name_min_length');
-    if (!/^[a-zA-Z\s]+$/.test(lastName.trim())) return t('validation.last_name_letters_only');
+    const trimmed = lastName.trim();
+    if (!trimmed) return '';
+    if (trimmed.length < 2) return t('validation.last_name_min_length');
+    if (!/^[\p{L}\s'-]+$/u.test(trimmed)) return t('validation.last_name_letters_only');
     return '';
   };
 
   const validateEmail = (email: string): string => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) return t('validation.email_required');
+    if (!email) return '';
     if (!emailRegex.test(email)) return t('validation.email_invalid');
     return '';
   };
 
   const validatePhone = (phone: string): string => {
     const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-    if (!phone) return t('validation.phone_required');
-    if (phone.length < 8) return t('validation.phone_min_digits');
-    if (phone.length > 15) return t('validation.phone_max_digits');
-    if (!phoneRegex.test(phone.replace(/\s+/g, ''))) return t('validation.phone_invalid');
-    return '';
-  };
-
-  const validateCity = (city: string): string => {
-    if (!city.trim()) return t('validation.city_required');
-    if (city.trim().length < 2) return t('validation.city_min_length');
-    return '';
-  };
-
-  const validateAddress = (address: string): string => {
-    if (!address.trim()) return t('validation.address_required');
-    if (address.trim().length < 5) return t('validation.address_min_length');
-    return '';
-  };
-
-  const validateGender = (gender: string): string => {
-    if (!gender) return t('validation.gender_required');
-    return '';
-  };
-
-  const validateZip = (zip: string): string => {
-    const zipRegex = /^[0-9]{4,10}$/;
-    if (!zip) return t('validation.zip_required');
-    if (!zipRegex.test(zip.replace(/\s+/g, ''))) return t('validation.zip_invalid');
+    const normalized = phone.replace(/\s+/g, '').trim();
+    if (!normalized) return '';
+    if (normalized.length < 8) return t('validation.phone_min_digits');
+    if (normalized.length > 15) return t('validation.phone_max_digits');
+    if (!phoneRegex.test(normalized)) return t('validation.phone_invalid');
     return '';
   };
 
@@ -171,11 +148,7 @@ export default function CollectivePlanClient() {
       name: validateName(userData.name),
       lastName: validateLastName(userData.lastName),
       email: validateEmail(userData.email),
-      phone: validatePhone(userData.phone),
-      city: validateCity(userData.city),
-      address: validateAddress(userData.address),
-      gender: validateGender(userData.gender),
-      zip: validateZip(userData.zip)
+      phone: validatePhone(userData.phone)
     };
 
     setValidationErrors(errors);
@@ -189,7 +162,15 @@ export default function CollectivePlanClient() {
     if (hasAttemptedSubmit) {
       validateForm();
     }
-  }, [userData.name, userData.lastName, userData.email, userData.phone, userData.city, userData.address, userData.gender, userData.zip, hasAttemptedSubmit]);
+  }, [userData.name, userData.lastName, userData.email, userData.phone, hasAttemptedSubmit]);
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-[#F8FAFC] font-sans flex items-center justify-center p-8">
+        <div className="animate-pulse text-emerald-700 font-semibold">Loading...</div>
+      </div>
+    );
+  }
 
   // --- Program Data ---
   const programs = [
@@ -802,7 +783,7 @@ export default function CollectivePlanClient() {
                       {/* CTA */}
                       <div className="pt-4">
                         <button className="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 group-hover:shadow-lg">
-                          Select This Visa
+                          {t('visa.select_this_visa')}
                         </button>
                       </div>
                     </div>
@@ -1131,7 +1112,7 @@ export default function CollectivePlanClient() {
                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-black placeholder-gray-400 w-full">
                    <div className="space-y-2">
                      <label className="block text-sm font-medium text-emerald-800">
-                       {t('form.first_name')} <span className="text-red-500">*</span>
+                      {t('form.first_name')}
                      </label>
                      <input
                        type="text"
@@ -1152,7 +1133,7 @@ export default function CollectivePlanClient() {
                    </div>
                    <div className="space-y-2">
                      <label className="block text-sm font-medium text-emerald-800">
-                       {t('form.last_name')} <span className="text-red-500">*</span>
+                      {t('form.last_name')}
                      </label>
                      <input
                        type="text"
@@ -1173,7 +1154,7 @@ export default function CollectivePlanClient() {
                    </div>
                    <div className="space-y-2">
                      <label className="block text-sm font-medium text-emerald-800">
-                       {t('form.email')} <span className="text-red-500">*</span>
+                      {t('form.email')}
                      </label>
                      <input
                        type="email"
@@ -1194,7 +1175,7 @@ export default function CollectivePlanClient() {
                    </div>
                    <div className="space-y-2">
                      <label className="block text-sm font-medium text-emerald-800">
-                       {t('form.phone')} <span className="text-red-500">*</span>
+                      {t('form.phone')}
                      </label>
                      <input
                        type="tel"
@@ -1211,92 +1192,6 @@ export default function CollectivePlanClient() {
                      />
                      {validationErrors.phone && (
                        <p className="text-red-500 text-xs mt-1">{validationErrors.phone}</p>
-                     )}
-                   </div>
-                   <div className="space-y-2">
-                     <label className="block text-sm font-medium text-emerald-800">
-                       {t('form.city')} <span className="text-red-500">*</span>
-                     </label>
-                     <input
-                       type="text"
-                       placeholder={t('form.city_placeholder')}
-                       value={userData.city}
-                       onChange={(e) => handleUserDataChange('city', e.target.value)}
-                       onBlur={() => {
-                         const error = validateCity(userData.city);
-                         setValidationErrors(prev => ({ ...prev, city: error }));
-                       }}
-                       className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-black placeholder-gray-400 ${
-                         validationErrors.city ? 'border-red-500 focus:ring-red-500' : 'border-slate-200'
-                       }`}
-                     />
-                     {validationErrors.city && (
-                       <p className="text-red-500 text-xs mt-1">{validationErrors.city}</p>
-                     )}
-                   </div>
-                   <div className="space-y-2">
-                     <label className="block text-sm font-medium text-emerald-800">
-                       {t('form.address')} <span className="text-red-500">*</span>
-                     </label>
-                     <input
-                       type="text"
-                       placeholder={t('form.address_placeholder')}
-                       value={userData.address}
-                       onChange={(e) => handleUserDataChange('address', e.target.value)}
-                       onBlur={() => {
-                         const error = validateAddress(userData.address);
-                         setValidationErrors(prev => ({ ...prev, address: error }));
-                       }}
-                       className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-black placeholder-gray-400 ${
-                         validationErrors.address ? 'border-red-500 focus:ring-red-500' : 'border-slate-200'
-                       }`}
-                     />
-                     {validationErrors.address && (
-                       <p className="text-red-500 text-xs mt-1">{validationErrors.address}</p>
-                     )}
-                   </div>
-                   <div className="space-y-2 md:col-span-2 lg:col-span-1">
-                     <label className="block text-sm font-medium text-emerald-800">
-                       {t('form.gender')} <span className="text-red-500">*</span>
-                     </label>
-                     <select
-                       value={userData.gender}
-                       onChange={(e) => handleUserDataChange('gender', e.target.value)}
-                       onBlur={() => {
-                         const error = validateGender(userData.gender);
-                         setValidationErrors(prev => ({ ...prev, gender: error }));
-                       }}
-                       className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-black ${
-                         validationErrors.gender ? 'border-red-500 focus:ring-red-500' : 'border-slate-200'
-                       }`}
-                     >
-                       <option value="">{t('form.select_gender')}</option>
-                       <option value="male">{t('form.male')}</option>
-                       <option value="female">{t('form.female')}</option>
-                     </select>
-                     {validationErrors.gender && (
-                       <p className="text-red-500 text-xs mt-1">{validationErrors.gender}</p>
-                     )}
-                   </div>
-                   <div className="space-y-2 md:col-span-2 lg:col-span-1">
-                     <label className="block text-sm font-medium text-emerald-800">
-                       {t('form.zip_code')} <span className="text-red-500">*</span>
-                     </label>
-                     <input
-                       type="text"
-                       placeholder={t('form.zip_code_placeholder')}
-                       value={userData.zip}
-                       onChange={(e) => handleUserDataChange('zip', e.target.value)}
-                       onBlur={() => {
-                         const error = validateZip(userData.zip);
-                         setValidationErrors(prev => ({ ...prev, zip: error }));
-                       }}
-                       className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all placeholder-gray-400 ${
-                         validationErrors.zip ? 'border-red-500 focus:ring-red-500' : 'border-slate-200'
-                       }`}
-                     />
-                     {validationErrors.zip && (
-                       <p className="text-red-500 text-xs mt-1">{validationErrors.zip}</p>
                      )}
                    </div>
                  </div>
@@ -1344,11 +1239,11 @@ export default function CollectivePlanClient() {
                 <button
                   onClick={() => {
                     setHasAttemptedSubmit(true);
-                    setConfirmed(true)
                     // Validate form fields
                     if (!validateForm()) {
                       return;
                     }
+                    setConfirmed(true);
 
                     // Export booking data to Excel automatically
                     const selectedPrograms = selectedProgram ? [programs.find((p: any) => p.name === selectedProgram)].filter(Boolean) : [];

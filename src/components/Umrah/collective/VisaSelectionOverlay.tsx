@@ -104,7 +104,7 @@ export default function VisaSelectionOverlay({
                   {/* CTA */}
                   <div className="pt-4">
                     <button className="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 group-hover:shadow-lg">
-                      Select This Visa
+                      {t('visa.select_this_visa')}
                     </button>
                   </div>
                 </div>

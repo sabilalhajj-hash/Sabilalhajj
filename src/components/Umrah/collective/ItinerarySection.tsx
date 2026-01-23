@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 import { Calendar, MapPin, Star } from 'lucide-react';

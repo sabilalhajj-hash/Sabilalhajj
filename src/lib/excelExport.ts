@@ -30,9 +30,6 @@ interface UserData {
   email?: string;
   phone?: string;
   country?: string;
-  city?: string;
-  address?: string;
-  zip?: string;
 }
 
 // Export booking data to Excel
@@ -55,9 +52,6 @@ export function exportBookingData(
       'Email': userData.email || '',
       'Phone': userData.phone || '',
       'Country': userData.country || '',
-      'City': userData.city || '',
-      'Address': userData.address || '',
-      'Zip': userData.zip || '',
       'ID': '',
       'Selected': ''
     }] : []),
