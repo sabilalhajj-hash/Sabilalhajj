@@ -919,7 +919,8 @@
     "confirm_delete": "Are you sure you want to delete this item?",
     "success": "Operation successful",
     "error": "An error occurred",
-    "logout": "Sign Out"
+    "logout": "Sign Out",
+    "close": "Close"
   },
   "user": {
     "title": "My Account",
@@ -955,7 +956,12 @@
     "privacy_settings": "Privacy Settings",
     "help_support": "Help & Support",
     "contact_support": "Contact Support",
+    "contact_us": "Contact Us",
+    "contact_description": "Need help? Reach out to our support team.",
     "faq": "FAQ",
+    "faq_description": "Find answers to common questions.",
+    "view_faq": "View FAQ →",
+    "quick_links": "Quick Links",
     "logout_confirm": "Are you sure you want to sign out?",
     "confirm": "Confirm",
     "cancel": "Cancel"

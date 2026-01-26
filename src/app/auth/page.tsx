@@ -231,18 +231,18 @@ function AuthPageContent() {
             <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/30" />
             
             {/* Branding content - positioned at top */}
-            <div className="relative z-10 flex flex-col items-center justify-start mt-8 lg:mt-12">
-              <div className="bg-white/95 rounded-xl p-3 md:p-4 flex items-center space-x-2 md:space-x-3 shadow-lg">
+            <div className="relative z-10 flex flex-col items-center justify-start mt-4 lg:mt-12">
+              <div className="bg-white/95 rounded-xl p-3 md:p-4 flex items-center space-x-2  shadow-lg">
                 <Image
-                  src="/sabilalhajj-removebg.png"
+                  src="/sabilalhajj-slogen-removebg.png"
                   alt="Sabil alHajj Logo"
-                  width={50}
-                  height={50}
-                  className="object-contain w-12 h-12 md:w-14 md:h-14 lg:w-[60px] lg:h-[60px]"
-                />
-                <h2 className="text-xl md:text-2xl font-bold text-yellow-500">
+                  width={200}
+                  height={200}
+                  className="object-contain  object-cover"
+                  />
+                {/* <h2 className="text-xl md:text-2xl font-bold text-yellow-500">
                   Sabil alHajj
-                </h2>
+                  </h2> */}
               </div>
             </div>
           </div>
@@ -251,15 +251,14 @@ function AuthPageContent() {
           <div className="lg:hidden flex items-center justify-center pt-6 pb-4 px-6 bg-white border-b border-gray-100">
             <div className="flex items-center space-x-3">
               <Image
-                src="/sabilalhajj-removebg.png"
+                  src="/sabilalhajj-slogen-removebg.png"
+                
                 alt="Sabil alHajj Logo"
-                width={50}
-                height={50}
-                className="object-contain w-12 h-12"
+                width={150}
+                height={150}
+                className="object-contain object-cover"
               />
-              <h2 className="text-xl font-bold text-emerald-600">
-                Sabil alHajj
-              </h2>
+              
             </div>
           </div>
 

@@ -2,7 +2,7 @@
 
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
-
+import Image from 'next/image';
 export const dynamic = 'force-dynamic';
 
 export default function About() {
@@ -19,7 +19,13 @@ export default function About() {
       <div className="h-full bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <div className="text-6xl mb-4">ℹ️</div>
+            <Image
+              src="/sabilalhajj-slogen-removebg.png"
+              alt="Sabil alHajj Logo"
+              width={150}
+              height={150}
+              className="object-contain object-cover"
+            />
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Loading...</h1>
           </div>
         </div>
@@ -30,8 +36,16 @@ export default function About() {
   return (
     <div className="h-full bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <div className="text-6xl mb-4">ℹ️</div>
+        <div className="text-center  mb-12">
+          <div className="flex items-center justify-center">
+        <Image
+              src="/sabilalhajj-slogen-removebg.png"
+              alt="Sabil alHajj Logo"
+                width={250}
+                height={250}
+                className="object-contain object-cover"
+              />
+            </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">{t('pages.about.title')}</h1>
           <p className="text-xl text-gray-600">
             {t('pages.about.subtitle')}

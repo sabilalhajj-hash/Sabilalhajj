@@ -181,6 +181,7 @@ export default function Navbar() {
                 <Link
                   href="/auth"
                   className="inline-flex items-center rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700 transition-colors"
+                  suppressHydrationWarning
                 >
                   {t('common.sign_up')} 
                 </Link>
@@ -266,7 +267,7 @@ export default function Navbar() {
 
                     {/* User Dropdown Menu */}
                     {isUserMenuOpen && (
-                      <div className="absolute   mt-8 w-56 rounded-lg shadow-xl bg-white ring-1 ring-gray-200 focus:outline-none z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                      <div className="absolute  left-0   mt-7 w-56  overflow-y-auto rounded-lg shadow-xl bg-white ring-1 ring-gray-200 focus:outline-none z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                         <div className="py-1">
                           {/* User Info */}
                           <div className="px-4 py-3 border-b border-gray-200">
@@ -352,7 +353,7 @@ export default function Navbar() {
 
                 {/* Mobile User Dropdown Menu */}
                 {isUserMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-56 rounded-lg shadow-xl bg-white ring-1 ring-gray-200 focus:outline-none z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="absolute  left-0  w-60  mt-7   overflow-y-auto rounded-lg shadow-xl bg-white ring-1 ring-gray-200 focus:outline-none z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                     <div className="py-1">
                       {/* User Info */}
                       <div className="px-4 py-3 border-b border-gray-200">
@@ -555,6 +556,7 @@ export default function Navbar() {
                       href="/auth"
                       className="block w-full text-center px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 border border-gray-200 hover:border-green-300 hover:text-green-700 hover:bg-green-50 transition-colors"
                       onClick={() => setIsMenuOpen(false)}
+                      suppressHydrationWarning
                     >
                       {t('common.sign_in')}
                     </Link>
@@ -562,6 +564,7 @@ export default function Navbar() {
                       href="/auth"
                       className="block w-full text-center px-4 py-2 rounded-lg text-sm font-semibold text-white bg-green-600 hover:bg-green-700 transition-colors"
                       onClick={() => setIsMenuOpen(false)}
+                      suppressHydrationWarning
                     >
                       {t('common.sign_up')}
                     </Link>

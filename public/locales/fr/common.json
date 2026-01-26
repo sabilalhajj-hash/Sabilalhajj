@@ -845,7 +845,8 @@
     "confirm_delete": "Êtes-vous sûr de vouloir supprimer cet élément?",
     "success": "Opération réussie",
     "error": "Une erreur s'est produite",
-    "logout": "Se déconnecter"
+    "logout": "Se déconnecter",
+    "close": "Fermer"
   },
   "user": {
     "title": "Mon compte",
@@ -881,7 +882,12 @@
     "privacy_settings": "Paramètres de Confidentialité",
     "help_support": "Aide et Support",
     "contact_support": "Contacter le Support",
+    "contact_us": "Contactez-nous",
+    "contact_description": "Besoin d'aide? Contactez notre équipe de support.",
     "faq": "FAQ",
+    "faq_description": "Trouvez des réponses aux questions courantes.",
+    "view_faq": "Voir la FAQ →",
+    "quick_links": "Liens rapides",
     "logout_confirm": "Êtes-vous sûr de vouloir vous déconnecter?",
     "confirm": "Confirmer",
     "cancel": "Annuler"
