@@ -1006,7 +1006,7 @@ export default function UmrahPersonalized() {
               <div className='mb-6'>
                 <div className='w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4'>
                   <Image
-                    src="/Logo-filtred.png"
+                    src="/sabilalhajj-removebg.png"
                     alt="Sabil Hajj Logo"
                     width={180}
                     height={180}

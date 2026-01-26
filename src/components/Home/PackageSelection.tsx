@@ -121,7 +121,7 @@ export default function PackageSelection() {
               {/* Logo in corner */}
               <div className="absolute top-4 right-4 w-16 h-12  border-1  bg-gray/80 backdrop-blur-sm  rounded-lg flex items-center justify-center p-1">
                  <div className="relative w-full h-full">
-                    <Image src="/Logo-filtred.png" alt="Logo" fill className="object-contain" sizes="64px" />
+                    <Image src="/sabilalhajj-removebg.png" alt="Logo" fill className="object-contain" sizes="64px" />
                  </div>
               </div>
 

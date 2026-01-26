@@ -98,7 +98,7 @@ const UmrahPlan = () => {
               {/* Logo Badge */}
               <div className="absolute top-4 right-4 w-18 h-14  backdrop-blur-sm rounded-lg flex items-center justify-center p-1.5 shadow-lg border border-white/20">
                 <Image
-                  src="/Logo-filtred.png"
+                  src="/sabilalhajj-removebg.png"
                   alt="Sabil Al Hajj"
                   width={50}
                   height={32}

@@ -59,18 +59,18 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <div className="flex  items-center space-x-2">
+            <div className="flex  items-center justify-center space-x-2 ">
 
               <Image
-                src="/Logo-filtred.png"
+                src="/sabilalhajj-slogen-removebg.png"
                 alt="Sabil Al-Hajj"
-                width={90}
-                height={90}
-                className="bg-white rounded-full"
+                width={200}
+                height={100}
+                className="bg-white object-cover  rounded-4xl object-contain"
               />
-              <h3 className="text-xl font-bold">Sabil Al-Hajj</h3>
+              {/* <h3 className="text-xl font-bold">Sabil Al-Hajj</h3> */}
             </div>
-            <p className="text-gray-300 text-sm leading-relaxed">
+            <p className="text-gray-300 text-sm md:text-md leading-relaxed">
               {t('footer.description')}
             </p>
             <div className="flex space-x-4">
@@ -116,7 +116,7 @@ export default function Footer() {
             <ul className="space-y-2">
               {footerLinks.services.map((link, index) => (
                 <li key={index}>
-                  <Link href={link.href} className="text-gray-300 hover:text-white transition-colors text-sm">
+                  <Link href={link.href} className="text-gray-300 hover:text-white transition-colors text-sm md:text-md">
                     {link.name}
                   </Link>
                 </li>
@@ -201,7 +201,7 @@ export default function Footer() {
               ))}
             </div>
             {/* <Image
-            src="/logo-filtred.png"
+            src="/sabilalhajj-removebg.png"
             width={30}
             height={30}
             /> */}

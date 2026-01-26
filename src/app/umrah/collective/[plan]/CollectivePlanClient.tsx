@@ -1295,7 +1295,7 @@ export default function CollectivePlanClient() {
               <div className='w-20 h-20  rounded-full flex items-center justify-center mx-auto mb-4'>
                 
                 <Image
-                  src="/logo-filtred.png"
+                  src="/sabilalhajj-removebg.png"
                   alt="Sabil Hajj Logo"
                   width={180}
                   height={180}

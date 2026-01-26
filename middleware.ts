@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { rateLimit, getClientIP } from './src/lib/rateLimit';
+import { getAuthCookie, verifyToken } from './src/lib/auth/jwt';
 
 // Rate limiting configuration
 const rateLimitConfig = {
@@ -14,9 +15,30 @@ const apiRateLimitConfig = {
   maxRequests: 20, // 20 requests per window
 };
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const response = NextResponse.next();
+
+  // Auth protection for /admin and /user
+  if (pathname.startsWith('/admin') || pathname.startsWith('/user')) {
+    const token = getAuthCookie(request);
+    const payload = token ? await verifyToken(token) : null;
+
+    if (pathname.startsWith('/admin')) {
+      if (!payload || payload.role !== 'admin') {
+        const redirect = new URL('/auth', request.url);
+        redirect.searchParams.set('redirect', '/admin');
+        return NextResponse.redirect(redirect);
+      }
+    } else {
+      // /user
+      if (!payload) {
+        const redirect = new URL('/auth', request.url);
+        redirect.searchParams.set('redirect', '/user');
+        return NextResponse.redirect(redirect);
+      }
+    }
+  }
 
   // Rate limiting for API routes
   if (pathname.startsWith('/api/')) {
