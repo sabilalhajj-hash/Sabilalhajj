@@ -15,6 +15,7 @@ interface UserData {
   name?: string;
   lastName?: string;
   role?: string;
+  avatar?: string | null;
 }
 
 interface UserMenuLinkItem {
@@ -67,6 +68,18 @@ export default function Navbar() {
       fetchUser();
     }
   }, [isClient, pathname]); // Re-fetch when pathname changes (e.g., after login)
+
+  // Re-fetch user when profile is updated (e.g. avatar in admin Settings)
+  useEffect(() => {
+    const onProfileUpdated = () => {
+      fetch('/api/auth/me', { credentials: 'include' })
+        .then((res) => res.ok ? res.json() : null)
+        .then((data) => data?.user != null ? setUser(data.user) : null)
+        .catch(() => {});
+    };
+    window.addEventListener('user-profile-updated', onProfileUpdated);
+    return () => window.removeEventListener('user-profile-updated', onProfileUpdated);
+  }, []);
 
   // Handle scroll effect for sticky navbar
   useEffect(() => {
@@ -261,8 +274,12 @@ export default function Navbar() {
                       aria-expanded={isUserMenuOpen}
                       aria-haspopup="true"
                     >
-                      <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-semibold text-sm">
-                        {user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
+                      <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-semibold text-sm overflow-hidden shrink-0">
+                        {user.avatar ? (
+                          <img src={user.avatar} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()
+                        )}
                       </div>
                       <ChevronDown className={`w-4 h-4 text-gray-600 transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} />
                     </button>
@@ -272,18 +289,27 @@ export default function Navbar() {
                       <div className="absolute  left-0   mt-7 w-56  overflow-y-auto rounded-lg shadow-xl bg-white ring-1 ring-gray-200 focus:outline-none z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                         <div className="py-1">
                           {/* User Info */}
-                          <div className="px-4 py-3 border-b border-gray-200">
-                            <p className="text-sm font-medium text-gray-900 truncate">
-                              {user.name && user.lastName 
-                                ? `${user.name} ${user.lastName}` 
-                                : user.name || user.email}
-                            </p>
-                            <p className="text-xs text-gray-500 truncate mt-0.5">{user.email}</p>
-                            {user.role === 'admin' && (
-                              <span className="inline-block mt-1.5 px-2 py-0.5 text-xs font-semibold text-emerald-700 bg-emerald-100 rounded">
-                                Admin
-                              </span>
-                            )}
+                          <div className="px-4 py-3 border-b border-gray-200 flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-semibold text-sm overflow-hidden shrink-0">
+                              {user.avatar ? (
+                                <img src={user.avatar} alt="" className="w-full h-full object-cover" />
+                              ) : (
+                                user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()
+                              )}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium text-gray-900 truncate">
+                                {user.name && user.lastName 
+                                  ? `${user.name} ${user.lastName}` 
+                                  : user.name || user.email}
+                              </p>
+                              <p className="text-xs text-gray-500 truncate mt-0.5">{user.email}</p>
+                              {user.role === 'admin' && (
+                                <span className="inline-block mt-1.5 px-2 py-0.5 text-xs font-semibold text-emerald-700 bg-emerald-100 rounded">
+                                  Admin
+                                </span>
+                              )}
+                            </div>
                           </div>
 
                           {/* Menu Items – dynamic from userMenuLinks */}
@@ -348,8 +374,12 @@ export default function Navbar() {
                   className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-green-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500"
                   aria-expanded={isUserMenuOpen}
                 >
-                  <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-semibold text-sm">
-                    {user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
+                  <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-semibold text-sm overflow-hidden shrink-0">
+                    {user.avatar ? (
+                      <img src={user.avatar} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()
+                    )}
                   </div>
                 </button>
 
@@ -358,18 +388,27 @@ export default function Navbar() {
                   <div className="absolute  left-0  w-60  mt-7   overflow-y-auto rounded-lg shadow-xl bg-white ring-1 ring-gray-200 focus:outline-none z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                     <div className="py-1">
                       {/* User Info */}
-                      <div className="px-4 py-3 border-b border-gray-200">
-                        <p className="text-sm font-medium text-gray-900 truncate">
-                          {user.name && user.lastName 
-                            ? `${user.name} ${user.lastName}` 
-                            : user.name || user.email}
-                        </p>
-                        <p className="text-xs text-gray-500 truncate mt-0.5">{user.email}</p>
-                        {user.role === 'admin' && (
-                          <span className="inline-block mt-1.5 px-2 py-0.5 text-xs font-semibold text-emerald-700 bg-emerald-100 rounded">
-                            Admin
-                          </span>
-                        )}
+                      <div className="px-4 py-3 border-b border-gray-200 flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-semibold text-sm overflow-hidden shrink-0">
+                          {user.avatar ? (
+                            <img src={user.avatar} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium text-gray-900 truncate">
+                            {user.name && user.lastName 
+                              ? `${user.name} ${user.lastName}` 
+                              : user.name || user.email}
+                          </p>
+                          <p className="text-xs text-gray-500 truncate mt-0.5">{user.email}</p>
+                          {user.role === 'admin' && (
+                            <span className="inline-block mt-1.5 px-2 py-0.5 text-xs font-semibold text-emerald-700 bg-emerald-100 rounded">
+                              Admin
+                            </span>
+                          )}
+                        </div>
                       </div>
 
                       {/* Menu Items – dynamic from userMenuLinks */}
@@ -500,19 +539,27 @@ export default function Navbar() {
                 {user ? (
                   <>
                     {/* User Info */}
-                    <div className="px-3 py-2">
-                      <p className="text-sm font-medium text-gray-900">
-                        {user.name && user.lastName 
-                          ? `${user.name} ${user.lastName}` 
-                          : user.name || user.email}
-                      </p>
-                      
-                      <p className="text-xs text-gray-500 truncate">{user.email}</p>
-                      {user.role === 'admin' && (
-                        <span className="inline-block mt-1 px-2 py-0.5 text-xs font-semibold text-emerald-700 bg-emerald-100 rounded">
-                          Admin
-                        </span>
-                      )}
+                    <div className="px-3 py-2 flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-semibold text-sm overflow-hidden shrink-0">
+                        {user.avatar ? (
+                          <img src={user.avatar} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-gray-900">
+                          {user.name && user.lastName 
+                            ? `${user.name} ${user.lastName}` 
+                            : user.name || user.email}
+                        </p>
+                        <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                        {user.role === 'admin' && (
+                          <span className="inline-block mt-1 px-2 py-0.5 text-xs font-semibold text-emerald-700 bg-emerald-100 rounded">
+                            Admin
+                          </span>
+                        )}
+                      </div>
                     </div>
                     {/* User Menu Links – dynamic from userMenuLinks */}
                     {userMenuLinks.map((item) => {

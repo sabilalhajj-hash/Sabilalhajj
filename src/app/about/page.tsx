@@ -3,11 +3,13 @@
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { useWhatsappUrl } from '@/context/SettingsContext';
 export const dynamic = 'force-dynamic';
 
 export default function About() {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
+  const contactWhatsappUrl = useWhatsappUrl('Hello! I would like to inquire about your services.');
 
   useEffect(() => {
     setMounted(true);
@@ -75,7 +77,7 @@ export default function About() {
 
           <div className="text-center pt-6">
             <a
-              href="https://wa.me/0606420326"
+              href={contactWhatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-green-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 transition-colors"

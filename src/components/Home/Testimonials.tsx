@@ -157,7 +157,7 @@ export default function Testimonials() {
         >
           {testimonialData.map((t, i) => (
             <SwiperSlide key={i}>
-              <div className="flex flex-col border-2 border-green-400 rounded-full shadow-lg items-center text-center h-full px-4 py-8">
+              <div className="flex flex-col border-2 border-green-400 rounded-4xl shadow-lg items-center text-center h-full px-4 py-8">
                 <div className="flex items-center gap-4 mb-6 text-left w-full">
                   <div className="bg-gray-100 p-4 rounded-full flex-shrink-0">
                     <User className="w-8 h-8 text-gray-400" />

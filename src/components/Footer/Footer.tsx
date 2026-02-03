@@ -3,11 +3,13 @@ import Link from 'next/link';
 import Image from "next/image";
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
+import { useWhatsappUrl } from '@/context/SettingsContext';
 
 export default function Footer() {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
   const currentYear = new Date().getFullYear();
+  const contactWhatsappUrl = useWhatsappUrl('Hello! I would like to inquire about Hajj/Umrah services.');
 
   useEffect(() => {
     setMounted(true);
@@ -37,7 +39,9 @@ export default function Footer() {
     company: [
       { name: t('footer.company.about'), href: '/about' },
       { name: t('footer.company.portfolio'), href: '/portfolio' },
-      { name: t('footer.company.contact'), href: 'https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20inquire%20about%20Hajj/Umrah%20services.' },
+      { name: t('footer.company.contact'), href: contactWhatsappUrl },
+      { name: t('footer.company.blog'), href: '/blog' },
+      { name: t('footer.company.policies'), href: '/policies' },
       { name: t('footer.company.blog'), href: '/blog' },
       { name: t('footer.company.policies'), href: '/policies' },
     ],

@@ -17,6 +17,7 @@ import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import StickyCTA from '@/components/Umrah/StickyCTA';
+import { useWhatsappUrl } from '@/context/SettingsContext';
 
 export const dynamic = 'force-dynamic';
 
@@ -85,9 +86,12 @@ const FALLBACK_TEXTS: Record<string, string> = {
   
   
   
+  const VISA_WHATSAPP_MESSAGE = 'Hello! I would like to book a visa service.';
+
   const VisaServiceHero = () => {
     const { t } = useTranslation();
     const [mounted, setMounted] = useState(false);
+    const whatsappVisaUrl = useWhatsappUrl(VISA_WHATSAPP_MESSAGE);
 
     useEffect(() => {
       setMounted(true);
@@ -210,7 +214,7 @@ const FALLBACK_TEXTS: Record<string, string> = {
           {/* Heading and Subtext */}
           <div className="text-center">
             <h2 className="text-5xl font-bold text-emerald-900 mb-6">{mounted ? t('visa.services.title') : FALLBACK_TEXTS['visa.services.title']}</h2>
-            <button className='bg-emerald-600 mb-4 hover:bg-emerald-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-colors shadow-lg hover:shadow-xl' onClick={() => window.open('https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20book%20a%20visa%20service.', '_blank')}>Book Now Via WhatsApp</button>
+            <button className='bg-emerald-600 mb-4 hover:bg-emerald-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-colors shadow-lg hover:shadow-xl' onClick={() => window.open(whatsappVisaUrl, '_blank')}>Book Now Via WhatsApp</button>
             <p className="text-slate-500 text-lg max-w-xl mx-auto leading-relaxed">
               {mounted ? t('visa.services.subtitle') : FALLBACK_TEXTS['visa.services.subtitle']}
             </p>
@@ -313,7 +317,7 @@ const FALLBACK_TEXTS: Record<string, string> = {
         {/* Booking Button */}
         {/* <div className="text-center mt-12">
           <a
-            href="https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20book%20an%20Umrah%20visa."
+            href={whatsappVisaUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-colors shadow-lg hover:shadow-xl"
@@ -387,7 +391,7 @@ const FALLBACK_TEXTS: Record<string, string> = {
         {/* Booking Button */}
         {/* <div className="text-center mt-12">
           <a
-            href="https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20book%20a%20Tourist%20visa."
+            href={whatsappVisaUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-colors shadow-lg hover:shadow-xl"
@@ -403,8 +407,8 @@ const FALLBACK_TEXTS: Record<string, string> = {
 
 <StickyCTA 
   selectedProgram={visa} 
-  whatsappUrl="https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20book%20a%20visa%20service."
-  whatsappMessage="Hello! I would like to book a visa service."
+  whatsappUrl={whatsappVisaUrl}
+  whatsappMessage={VISA_WHATSAPP_MESSAGE}
 />
 
 

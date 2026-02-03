@@ -391,7 +391,20 @@
     "kaaba_view_available": "Kaaba View Available",
     "haram_access_247": "24/7 Haram Access",
     "prayer_call_notification": "Prayer Call Notification",
-    "zamzam_water_service": "Zamzam Water Service"
+    "zamzam_water_service": "Zamzam Water Service",
+    "day_arafah": "Site of the Day of Arafah",
+    "hera_home": "Home to the Cave of Hira",
+    "kaaba_view": "Kaaba View Available",
+    "haram_access": "24/7 Haram Access",
+    "prayer_notification": "Prayer Call Notification",
+    "zamzam_service": "Zamzam Water Service",
+    "badge_1_5": "1/5",
+    "badge_1_4": "1/4",
+    "badge_days_5_9": "Days 5-9",
+    "badge_day_8": "Day 8",
+    "badge_days_7_9": "Days 7 & 9",
+    "badge_day_6": "Day 6",
+    "hotel_alt": "Hotel"
   },
   "policies": {
     "title": "Price Policy, Payment Methods & Cancellation Policy",
@@ -670,7 +683,11 @@
         "Transportation",
         "Guide",
         "Visa"
-      ]
+      ],
+      "departure": "March 1, 2024",
+      "return": "March 15, 2024",
+      "from": "Casablanca",
+      "to": "Mecca & Medina"
     },
     "ramadan_last_ten": {
       "name": "Ramadan Last Ten",
@@ -688,7 +705,11 @@
         "Transportation",
         "Guide",
         "Visa"
-      ]
+      ],
+      "departure": "April 1, 2024",
+      "return": "April 12, 2024",
+      "from": "Casablanca",
+      "to": "Mecca & Medina"
     },
     "long_stay": {
       "name": "Long Stay Umrah",
@@ -707,7 +728,11 @@
         "Guide",
         "Visa",
         "Study Materials"
-      ]
+      ],
+      "departure": "May 1, 2024",
+      "return": "May 30, 2024",
+      "from": "Casablanca",
+      "to": "Mecca & Medina"
     }
   },
   "rooms": {
@@ -841,7 +866,7 @@
       },
       "processing": {
         "title": "Processing Time",
-        "time": "2-4 Weeks",
+        "time": "24h - 7 days max",
         "note": "Processing times may vary depending on your location and current demand."
       }
     },
@@ -854,7 +879,7 @@
       },
       "processing": {
         "title": "Processing Time",
-        "time": "1-2 Weeks",
+        "time": "24h - 7 days max",
         "note": "Faster processing available for urgent applications."
       }
     },
@@ -891,6 +916,9 @@
     "cancel": "Cancel",
     "back": "Back",
     "confirm": "Confirm"
+  },
+  "errors": {
+    "failed_to_save_booking": "Failed to save booking"
   },
   "auth": {
     "title": "Account",
@@ -1010,6 +1038,9 @@
     "export_report": "Export Report",
     "admin_settings": "Admin Settings",
     "system_settings": "System Settings",
+    "whatsapp_contact": "WhatsApp contact number",
+    "whatsapp_contact_help": "This number is used when users click \"Book via WhatsApp\" on the site. Include country code (e.g. 212 for Morocco), no + or spaces required.",
+    "settings_saved": "Settings saved.",
     "email_settings": "Email Settings",
     "payment_settings": "Payment Settings",
     "user_management": "User Management",
@@ -1029,6 +1060,17 @@
     "actions": "Actions",
     "view": "View",
     "edit": "Edit",
+    "save": "Save",
+    "my_profile": "My profile",
+    "upload_photo": "Upload photo",
+    "change_password": "Change password",
+    "current_password": "Current password",
+    "new_password": "New password",
+    "confirm_password": "Confirm new password",
+    "password_changed": "Password changed.",
+    "password_mismatch": "New password and confirmation do not match.",
+    "email_verified": "Verified",
+    "email_not_verified": "Not verified",
     "delete": "Delete",
     "export": "Export",
     "import": "Import",
@@ -1250,6 +1292,11 @@
     "receipt_info_entered_by_user": "Information entered by the user",
     "receipt_thank_you": "Thank you. We will contact you via WhatsApp."
   },
+  "terms": {
+    "agree_to_terms": "I agree to the terms and conditions",
+    "read_full_terms": "Read full terms",
+    "must_agree": "You must agree to the terms to continue"
+  },
   "responsibility": {
     "title": "Responsibility and Organization Policy",
     "subtitle": "SabilHajj Platform — SabilHajj",
@@ -1324,6 +1371,10 @@
   },
   "gallery": {
     "title": "Gallery",
-    "subtitle": "Explore our collection of spiritual moments and sacred sites"
+    "subtitle": "Explore our collection of spiritual moments and sacred sites",
+    "hajj_image_1": "Gallery For Hajj image 1",
+    "hajj_image_2": "Gallery For Hajj image 2",
+    "hajj_image_3": "Gallery For Hajj image 3",
+    "hajj_image_4": "Gallery For Hajj image 4"
   }
 }

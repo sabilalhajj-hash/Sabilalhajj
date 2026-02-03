@@ -382,7 +382,20 @@
     "cave_of_hira_desc": "Située sur le côté nord-ouest du Mont Nur, la Grotte de Hira est l'endroit où le Prophète Muhammad (PBSL) a reçu la première révélation d'Allah par l'intermédiaire de l'Ange Gabriel. Cette grotte marque le début de l'islam et est un lieu de profonde réflexion spirituelle. La grotte est à environ 4 km du centre-ville de La Mecque.",
     "mount_noor": "Jabal Al-Noor – Montagne de Lumière",
     "home_to_cave": "Maison de la Grotte de Hira",
-    "mount_noor_desc": "Le Mont Noor, également connu sous le nom de Jabal Al-Noor, est la montagne où se trouve la Grotte de Hira. Cette montagne revêt une grande signification car c'était l'endroit où le Prophète Muhammad (PBSL) se retirait pour la méditation et l'adoration. La montagne offre des vues spectaculaires et un environnement paisible pour la contemplation."
+    "mount_noor_desc": "Le Mont Noor, également connu sous le nom de Jabal Al-Noor, est la montagne où se trouve la Grotte de Hira. Cette montagne revêt une grande signification car c'était l'endroit où le Prophète Muhammad (PBSL) se retirait pour la méditation et l'adoration. La montagne offre des vues spectaculaires et un environnement paisible pour la contemplation.",
+    "day_arafah": "Site du jour d'Arafat",
+    "hera_home": "Maison de la Grotte de Hira",
+    "kaaba_view": "Vue sur la Kaaba disponible",
+    "haram_access": "Accès 24h/24 au Haram",
+    "prayer_notification": "Notification de l'appel à la prière",
+    "zamzam_service": "Service d'eau Zamzam",
+    "badge_1_5": "1/5",
+    "badge_1_4": "1/4",
+    "badge_days_5_9": "Jours 5-9",
+    "badge_day_8": "Jour 8",
+    "badge_days_7_9": "Jours 7 et 9",
+    "badge_day_6": "Jour 6",
+    "hotel_alt": "Hôtel"
   },
   "umrah": {
     "round_trip_flights": "Vols Aller-Retour",
@@ -603,7 +616,11 @@
         "Transport",
         "Guide",
         "Visa"
-      ]
+      ],
+      "departure": "1er mars 2024",
+      "return": "15 mars 2024",
+      "from": "Casablanca",
+      "to": "La Mecque et Médine"
     },
     "ramadan_last_ten": {
       "name": "Les Dix Derniers Jours de Ramadan",
@@ -621,7 +638,11 @@
         "Transport",
         "Guide",
         "Visa"
-      ]
+      ],
+      "departure": "1er avril 2024",
+      "return": "12 avril 2024",
+      "from": "Casablanca",
+      "to": "La Mecque et Médine"
     },
     "long_stay": {
       "name": "Omra Séjour Long",
@@ -640,7 +661,11 @@
         "Guide",
         "Visa",
         "Matériels d'Étude"
-      ]
+      ],
+      "departure": "1er mai 2024",
+      "return": "30 mai 2024",
+      "from": "Casablanca",
+      "to": "La Mecque et Médine"
     }
   },
   "rooms": {
@@ -774,7 +799,7 @@
       },
       "processing": {
         "title": "Délai de traitement",
-        "time": "2-4 semaines",
+        "time": "24h - 7 jours max",
         "note": "Les délais de traitement peuvent varier selon votre localisation et la demande actuelle."
       }
     },
@@ -787,7 +812,7 @@
       },
       "processing": {
         "title": "Délai de traitement",
-        "time": "1-2 semaines",
+        "time": "24h - 7 jours max",
         "note": "Traitement plus rapide disponible pour les demandes urgentes."
       }
     },
@@ -824,6 +849,9 @@
     "cancel": "Annuler",
     "back": "Retour",
     "confirm": "Confirmer"
+  },
+  "errors": {
+    "failed_to_save_booking": "Échec de l'enregistrement de la réservation"
   },
   "auth": {
     "title": "Compte",
@@ -1179,6 +1207,11 @@
     "receipt_info_entered_by_user": "Informations saisies par l'utilisateur",
     "receipt_thank_you": "Merci. Nous vous contacterons via WhatsApp."
   },
+  "terms": {
+    "agree_to_terms": "J'accepte les conditions générales",
+    "read_full_terms": "Lire les conditions complètes",
+    "must_agree": "Vous devez accepter les conditions pour continuer"
+  },
   "policies": {
     "title": "Politique de Prix, Méthodes de Paiement & Politique d'Annulation",
     "subtitle": "Plateforme SabilHajj — Tarification Transparente & Conditions Claires",
@@ -1315,6 +1348,10 @@
   },
   "gallery": {
     "title": "Galerie",
-    "subtitle": "Explorez notre collection de moments spirituels et de sites sacrés"
+    "subtitle": "Explorez notre collection de moments spirituels et de sites sacrés",
+    "hajj_image_1": "Galerie Hajj image 1",
+    "hajj_image_2": "Galerie Hajj image 2",
+    "hajj_image_3": "Galerie Hajj image 3",
+    "hajj_image_4": "Galerie Hajj image 4"
   }
 }

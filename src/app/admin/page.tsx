@@ -27,6 +27,8 @@ import {
   Clock,
   ShieldPlus,
   Compass,
+  User,
+  Lock,
 } from 'lucide-react';
 import {
   BarChart,
@@ -307,6 +309,28 @@ export default function AdminPage() {
   const editPackageImageInputRef = useRef<HTMLInputElement>(null);
   const [seedRamadanLoading, setSeedRamadanLoading] = useState(false);
   const [seedRamadanError, setSeedRamadanError] = useState<string | null>(null);
+
+  // Site settings (e.g. WhatsApp number)
+  const [settingsWhatsappNumber, setSettingsWhatsappNumber] = useState('');
+  const [settingsLoading, setSettingsLoading] = useState(false);
+  const [settingsSaving, setSettingsSaving] = useState(false);
+  const [settingsError, setSettingsError] = useState<string | null>(null);
+  const [settingsSuccess, setSettingsSuccess] = useState(false);
+
+  // Current user profile (Settings tab)
+  const [currentUser, setCurrentUser] = useState<{ id: string; email: string; name?: string | null; lastName?: string | null; phone?: string | null; avatar?: string | null; emailVerified?: boolean } | null>(null);
+  const [profileForm, setProfileForm] = useState({ name: '', lastName: '', phone: '', avatar: '' });
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [profileSaving, setProfileSaving] = useState(false);
+  const [profileError, setProfileError] = useState<string | null>(null);
+  const [profileSuccess, setProfileSuccess] = useState(false);
+  const [profileImageUploading, setProfileImageUploading] = useState(false);
+  const profileImageInputRef = useRef<HTMLInputElement>(null);
+
+  const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [passwordSuccess, setPasswordSuccess] = useState(false);
 
   const fetchUsers = useCallback(async () => {
     setUsersLoading(true);
@@ -980,6 +1004,144 @@ export default function AdminPage() {
     if (mounted && activeTab === 'packages') fetchPackages();
   }, [mounted, activeTab, fetchPackages]);
 
+  const fetchSettings = useCallback(async () => {
+    setSettingsLoading(true);
+    setSettingsError(null);
+    try {
+      const res = await fetch('/api/admin/settings', {
+        credentials: 'include',
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' },
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to fetch settings');
+      const number = typeof data.whatsappNumber === 'string' ? data.whatsappNumber : '2120606420326';
+      setSettingsWhatsappNumber(number);
+    } catch (e) {
+      setSettingsError(e instanceof Error ? e.message : 'Failed to fetch settings');
+      setSettingsWhatsappNumber('2120606420326');
+    } finally {
+      setSettingsLoading(false);
+    }
+  }, []);
+
+  const fetchCurrentUser = useCallback(async () => {
+    try {
+      const res = await fetch('/api/auth/me', { credentials: 'include' });
+      const data = await res.json();
+      if (res.ok && data?.user) {
+        const u = data.user;
+        setCurrentUser({ id: u.id, email: u.email, name: u.name, lastName: u.lastName, phone: u.phone, avatar: u.avatar, emailVerified: u.emailVerified });
+        setProfileForm({
+          name: u.name ?? '',
+          lastName: u.lastName ?? '',
+          phone: u.phone ?? '',
+          avatar: u.avatar ?? '',
+        });
+      }
+    } catch {
+      setCurrentUser(null);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (mounted && activeTab === 'settings') {
+      fetchSettings();
+      fetchCurrentUser();
+    }
+  }, [mounted, activeTab, fetchSettings, fetchCurrentUser]);
+
+  const saveProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setProfileSaving(true);
+    setProfileError(null);
+    setProfileSuccess(false);
+    try {
+      const res = await fetch('/api/user/profile', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          name: profileForm.name || null,
+          lastName: profileForm.lastName || null,
+          phone: profileForm.phone || null,
+          avatar: profileForm.avatar || null,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to update profile');
+      if (data.user) {
+        setCurrentUser({ id: data.user.id, email: data.user.email, name: data.user.name, lastName: data.user.lastName, phone: data.user.phone, avatar: data.user.avatar, emailVerified: data.user.emailVerified });
+      }
+      setProfileSuccess(true);
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('user-profile-updated'));
+      }
+      setTimeout(() => setProfileSuccess(false), 3000);
+    } catch (e) {
+      setProfileError(e instanceof Error ? e.message : 'Failed to update profile');
+    } finally {
+      setProfileSaving(false);
+    }
+  };
+
+  const changePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordError(null);
+    setPasswordSuccess(false);
+    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      setPasswordError(t('admin.password_mismatch') || 'New password and confirmation do not match.');
+      return;
+    }
+    setPasswordSaving(true);
+    try {
+      const res = await fetch('/api/user/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          currentPassword: passwordForm.currentPassword,
+          newPassword: passwordForm.newPassword,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to change password');
+      setPasswordSuccess(true);
+      setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      setTimeout(() => setPasswordSuccess(false), 3000);
+    } catch (e) {
+      setPasswordError(e instanceof Error ? e.message : 'Failed to change password');
+    } finally {
+      setPasswordSaving(false);
+    }
+  };
+
+  const saveWhatsappNumber = async () => {
+    setSettingsSaving(true);
+    setSettingsError(null);
+    setSettingsSuccess(false);
+    try {
+      const res = await fetch('/api/admin/settings', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        cache: 'no-store',
+        body: JSON.stringify({ whatsappNumber: settingsWhatsappNumber }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to update');
+      // Always sync form with DB response (normalized digits)
+      const updated = typeof data.whatsappNumber === 'string' ? data.whatsappNumber : settingsWhatsappNumber;
+      setSettingsWhatsappNumber(updated);
+      setSettingsSuccess(true);
+      setTimeout(() => setSettingsSuccess(false), 3000);
+    } catch (e) {
+      setSettingsError(e instanceof Error ? e.message : 'Failed to update settings');
+    } finally {
+      setSettingsSaving(false);
+    }
+  };
+
   const filteredUsers = useMemo(() => {
     const q = userSearchQuery.trim().toLowerCase();
     if (!q) return apiUsers;
@@ -1128,11 +1290,11 @@ export default function AdminPage() {
                   value={stats?.totalBookings || 0}
                   icon={<BookOpen className="h-8 w-8" />}
                 />
-                <StatCard
+                {/* <StatCard
                   label={t('admin.total_revenue')}
                   value={`$${stats?.totalRevenue || 0}`}
                   icon={<TrendingUp className="h-8 w-8" />}
-                />
+                /> */}
                 <StatCard
                   label={t('admin.pending_bookings')}
                   value={stats?.pendingBookings || 0}
@@ -1431,7 +1593,7 @@ export default function AdminPage() {
                         <th className="text-left py-3 px-4 font-semibold text-slate-700">{t('form.last_name')}</th>
                         <th className="text-left py-3 px-4 font-semibold text-slate-700">{t('admin.user_email')}</th>
                         <th className="text-left py-3 px-4 font-semibold text-slate-700">{t('user.phone')}</th>
-                        <th className="text-left py-3 px-4 font-semibold text-slate-700">{t('admin.revenue')}</th>
+                        {/* <th className="text-left py-3 px-4 font-semibold text-slate-700">{t('admin.revenue')}</th> */}
                         <th className="text-left py-3 px-4 font-semibold text-slate-700">{t('user.booking_date')}</th>
                         <th className="text-left py-3 px-4 font-semibold text-slate-700">{t('admin.actions')}</th>
                       </tr>
@@ -2564,7 +2726,7 @@ export default function AdminPage() {
           )}
 
           {/* Reports Tab */}
-          {activeTab === 'reports' && (
+          {/* {activeTab === 'reports' && (
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-slate-900">{t('admin.view_reports')}</h2>
 
@@ -2588,18 +2750,213 @@ export default function AdminPage() {
                 })}
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Settings Tab */}
           {activeTab === 'settings' && (
-            <div className="space-y-6">
+            <div className="space-y-6 flex flex-rows gap-2 justify-between">
               <h2 className="text-2xl font-bold text-slate-900">{t('admin.admin_settings')}</h2>
 
-              <div className="grid lg:grid-cols-2 gap-6">
+              {/* My profile – name, phone, avatar */}
+              <div className="bg-white rounded-xl  shadow border border-slate-100 p-6 max-w-xl">
+                <div className="flex items-center gap-3 mb-4">
+                  <User className="h-8 w-8 text-emerald-600" />
+                  <h3 className="text-lg font-bold text-slate-900">{t('admin.my_profile') || 'My profile'}</h3>
+                </div>
+                {profileLoading && !currentUser ? (
+                  <p className="text-slate-500">{t('common.loading') || 'Loading...'}</p>
+                ) : (
+                  <form onSubmit={saveProfile} className="space-y-4">
+                    <div className="flex items-start gap-4">
+                      <div className="shrink-0">
+                        <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-slate-200 bg-slate-100 flex items-center justify-center">
+                          {profileForm.avatar ? (
+                            <img src={profileForm.avatar} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <User className="h-10 w-10 text-slate-400" />
+                          )}
+                        </div>
+                        <input
+                          ref={profileImageInputRef}
+                          type="file"
+                          accept="image/jpeg,image/png,image/webp,image/gif"
+                          className="hidden "
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            setProfileImageUploading(true);
+                            setProfileError(null);
+                            try {
+                              const formData = new FormData();
+                              formData.append('file', file);
+                              const res = await fetch('/api/upload', { method: 'POST', credentials: 'include', body: formData });
+                              const data = await res.json();
+                              if (!res.ok) throw new Error(data.error || 'Upload failed');
+                              setProfileForm((p) => ({ ...p, avatar: data.url }));
+                            } catch (err) {
+                              setProfileError(err instanceof Error ? err.message : 'Upload failed');
+                            } finally {
+                              setProfileImageUploading(false);
+                              e.target.value = '';
+                            }
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => profileImageInputRef.current?.click()}
+                          disabled={profileImageUploading}
+                          className="mt-2 text-sm text-emerald-600 font-medium hover:underline disabled:opacity-50"
+                        >
+                          {profileImageUploading ? t('common.loading') : (t('admin.upload_photo') || 'Upload photo')}
+                        </button>
+                      </div>
+                      <div className="flex-1 min-w-0 space-y-3">
+                        <div>
+                          <label className="block text-sm font-medium text-slate-700 mb-1">{t('user.email')}</label>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <input type="text" value={currentUser?.email ?? ''} readOnly className="flex-1 min-w-[200px] px-4 py-2 border text-black border-slate-200 rounded-xl bg-slate-50 text-slate-600" />
+                            <span
+                              className={`inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-semibold shrink-0 ${
+                                currentUser?.emailVerified
+                                  ? 'bg-emerald-100 text-emerald-800'
+                                  : 'bg-orange-100 text-orange-800'
+                              }`}
+                            >
+                              {currentUser?.emailVerified
+                                ? (t('admin.email_verified') || 'Verified')
+                                : (t('admin.email_not_verified') || 'Not verified')}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">{t('user.name')}</label>
+                            <input
+                              type="text"
+                              value={profileForm.name}
+                              onChange={(e) => setProfileForm((p) => ({ ...p, name: e.target.value }))}
+                              className="w-full text-black  px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                              placeholder={t('user.name') || 'First name'}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">{t('user.last_name') || 'Last name'}</label>
+                            <input
+                              type="text"
+                              value={profileForm.lastName}
+                              onChange={(e) => setProfileForm((p) => ({ ...p, lastName: e.target.value }))}
+                              className="w-full px-4  text-black py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                              placeholder={t('user.last_name') || 'Last name'}
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-slate-700 mb-1">{t('user.phone')}</label>
+                          <input
+                            type="text"
+                            value={profileForm.phone}
+                            onChange={(e) => setProfileForm((p) => ({ ...p, phone: e.target.value }))}
+                            className="w-full px-4 py-2  text-black border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            placeholder={t('user.phone') || 'Phone'}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    {profileError && <p className="text-red-600 text-sm">{profileError}</p>}
+                    {profileSuccess && <p className="text-emerald-600 text-sm">{t('admin.settings_saved') || 'Settings saved.'}</p>}
+                    <button type="submit" disabled={profileSaving} className="px-4 py-2 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 disabled:opacity-50 transition-colors">
+                      {profileSaving ? t('common.loading') : (t('admin.save') || 'Save')}
+                    </button>
+                  </form>
+                )}
+              </div>
+
+              {/* Change password */}
+              <div className="bg-white rounded-xl shadow border border-slate-100 p-6 max-w-xl">
+                <div className="flex items-center gap-3 mb-4">
+                  <Lock className="h-8 w-8 text-emerald-600" />
+                  <h3 className="text-lg font-bold text-slate-900">{t('admin.change_password') || 'Change password'}</h3>
+                </div>
+                <form onSubmit={changePassword} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">{t('admin.current_password') || 'Current password'}</label>
+                    <input
+                      type="password"
+                      value={passwordForm.currentPassword}
+                      onChange={(e) => setPasswordForm((p) => ({ ...p, currentPassword: e.target.value }))}
+                      className="w-full px-4 py-2 border text-black border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                      placeholder="••••••••"
+                      autoComplete="current-password"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">{t('admin.new_password') || 'New password'}</label>
+                    <input
+                      type="password"
+                      value={passwordForm.newPassword}
+                      onChange={(e) => setPasswordForm((p) => ({ ...p, newPassword: e.target.value }))}
+                      className="w-full px-4 py-2 border text-black border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                      placeholder="••••••••"
+                      autoComplete="new-password"
+                      minLength={6}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">{t('admin.confirm_password') || 'Confirm new password'}</label>
+                    <input
+                      type="password"
+                      value={passwordForm.confirmPassword}
+                      onChange={(e) => setPasswordForm((p) => ({ ...p, confirmPassword: e.target.value }))}
+                      className="w-full px-4 py-2 border text-black border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                      placeholder="••••••••"
+                      autoComplete="new-password"
+                    />
+                  </div>
+                  {passwordError && <p className="text-red-600 text-sm">{passwordError}</p>}
+                  {passwordSuccess && <p className="text-emerald-600 text-sm">{t('admin.password_changed') || 'Password changed.'}</p>}
+                  <button type="submit" disabled={passwordSaving} className="px-4 py-2 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 disabled:opacity-50 transition-colors">
+                    {passwordSaving ? t('common.loading') : (t('admin.change_password') || 'Change password')}
+                  </button>
+                </form>
+              </div>
+
+              {/* WhatsApp contact number – used by StickyCTA, Footer, visa/hajj pages, etc. */}
+              <div className="bg-white rounded-xl shadow border border-slate-100 p-6 max-w-xl">
+                <div className="flex items-center gap-3 mb-4">
+                  <Settings className="h-8 w-8 text-emerald-600" />
+                  <h3 className="text-lg font-bold text-slate-900">{t('admin.whatsapp_contact') || 'WhatsApp contact number'}</h3>
+                </div>
+                <p className="text-sm text-slate-600 mb-4">
+                  {t('admin.whatsapp_contact_help') || 'This number is used when users click "Book via WhatsApp" on the site. Include country code (e.g. 212 for Morocco), no + or spaces required.'}
+                </p>
+                {settingsLoading ? (
+                  <p className="text-slate-500">{t('common.loading') || 'Loading...'}</p>
+                ) : (
+                  <>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <input
+                        type="text"
+                        value={settingsWhatsappNumber}
+                        onChange={(e) => setSettingsWhatsappNumber(e.target.value)}
+                        placeholder="2120606420326"
+                        className="flex-1 min-w-[200px] text-black px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                      />
+                      <button
+                        onClick={saveWhatsappNumber}
+                        disabled={settingsSaving}
+                        className="px-4 py-2 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 disabled:opacity-50 transition-colors"
+                      >
+                        {settingsSaving ? (t('common.loading') || 'Saving...') : (t('admin.save') || 'Save')}
+                      </button>
+                    </div>
+                    {settingsError && <p className="mt-2 text-red-600 text-sm">{settingsError}</p>}
+                    {settingsSuccess && <p className="mt-2 text-emerald-600 text-sm">{t('admin.settings_saved') || 'Settings saved.'}</p>}
+                  </>
+                )}
+              </div>
+
+              {/* <div className="grid lg:grid-cols-2 gap-6">
                 {[
-                  { title: t('admin.system_settings'), icon: Settings },
-                  { title: t('admin.email_settings'), icon: MoreVertical },
-                  { title: t('admin.payment_settings'), icon: MoreVertical },
                   { title: t('admin.user_management'), icon: Users, action: () => setActiveTab('users') },
                 ].map((setting, idx) => {
                   const Icon = setting.icon;
@@ -2618,7 +2975,7 @@ export default function AdminPage() {
                     </div>
                   );
                 })}
-              </div>
+              </div> */}
             </div>
           )}
         </main>

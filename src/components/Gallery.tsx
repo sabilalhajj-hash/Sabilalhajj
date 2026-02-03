@@ -48,7 +48,7 @@ export default function BentoGallery() {
       </div>
 
       {/* Mobile Grid Layout (sm and below) */}
-      <div className="block md:hidden">
+     <div className="block md:hidden">
         <div className="grid grid-cols-1 gap-4">
           {galleryImages.map((image) => (
             <div
@@ -88,7 +88,7 @@ export default function BentoGallery() {
           loop={true}
           autoplay={{
             delay: 0,
-            disableOnInteraction: false,
+             disableOnInteraction: false,
           }}
           speed={5000}
           // pagination={{

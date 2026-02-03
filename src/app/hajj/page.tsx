@@ -6,15 +6,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Compass, Star, ArrowRight } from 'lucide-react';
 import StickyCTA from '@/components/Umrah/StickyCTA';
+import { useWhatsappUrl } from '@/context/SettingsContext';
 
 export const dynamic = 'force-dynamic';
 
-const WHATSAPP_HAJJ_URL = 'https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20book%20a%20hajj%20service.';
 const WHATSAPP_HAJJ_MESSAGE = 'Hello! I would like to book a Hajj service.';
 
 export default function Hajj() {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
+  const whatsappHajjUrl = useWhatsappUrl(WHATSAPP_HAJJ_MESSAGE);
 
   const hajjProgram = {
     name: t('pages.hajj.title'),
@@ -143,7 +144,7 @@ export default function Hajj() {
           {/* Book Now CTA */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <Link
-              href={WHATSAPP_HAJJ_URL}
+              href={whatsappHajjUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 rounded-full font-semibold text-white bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 shadow-lg shadow-emerald-600/25 hover:shadow-emerald-600/30 transition-all duration-300 hover:-translate-y-0.5"
@@ -166,7 +167,7 @@ export default function Hajj() {
 
       <StickyCTA
         selectedProgram={hajjProgram}
-        whatsappUrl={WHATSAPP_HAJJ_URL}
+        whatsappUrl={whatsappHajjUrl}
         whatsappMessage={WHATSAPP_HAJJ_MESSAGE}
         alwaysVisible
         showNusukButton

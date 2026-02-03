@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -47,10 +48,10 @@ const toStringArray = (value: unknown): string[] => {
 };
 
 const gallery = [
-  { id: '1', image: '/hajj1.jpg', alt: 'Gallery For Hajj images1' },
-  { id: '2', image: '/hajj2.jpg', alt: 'Gallery For Hajj images2' },
-  { id: '3', image: '/hajj3.jpg', alt: 'Gallery For Hajj images3' },
-  { id: '4', image: '/hajj4.jpg', alt: 'Gallery For Hajj images4' }
+  { id: '1', image: '/hajj1.jpg', altKey: 'gallery.hajj_image_1' },
+  { id: '2', image: '/hajj2.jpg', altKey: 'gallery.hajj_image_2' },
+  { id: '3', image: '/hajj3.jpg', altKey: 'gallery.hajj_image_3' },
+  { id: '4', image: '/hajj4.jpg', altKey: 'gallery.hajj_image_4' }
 ];
 
 export default function CollectivePlanClient() {
@@ -110,6 +111,7 @@ export default function CollectivePlanClient() {
   // Validation state for each passenger
   const [validationErrors, setValidationErrors] = useState<Record<number, Record<string, string>>>({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const isConfigured = selectedProgram && selectedRoom && selectedVisa;
 
@@ -288,10 +290,10 @@ export default function CollectivePlanClient() {
       id: 'ramadan-journey',
       name: t('programs.ramadan_journey.name'),
       ApproximateDuration: '15 Days',
-      departure: 'March 1, 2024',
-      return: 'March 15, 2024',
-      from: 'Casablanca',
-      to: 'Mecca & Medina',
+      departure: t('programs.ramadan_journey.departure'),
+      return: t('programs.ramadan_journey.return'),
+      from: t('programs.ramadan_journey.from'),
+      to: t('programs.ramadan_journey.to'),
       description: t('programs.ramadan_journey.description'),
       highlights: toStringArray(t('programs.ramadan_journey.highlights', { returnObjects: true })),
       includes: toStringArray(t('programs.ramadan_journey.includes', { returnObjects: true }))
@@ -300,10 +302,10 @@ export default function CollectivePlanClient() {
       id: 'ramadan-last-ten',
       name: t('programs.ramadan_last_ten.name'),
       ApproximateDuration: '12 Days',
-      departure: 'April 1, 2024',
-      return: 'April 12, 2024',
-      from: 'Casablanca',
-      to: 'Mecca & Medina',
+      departure: t('programs.ramadan_last_ten.departure'),
+      return: t('programs.ramadan_last_ten.return'),
+      from: t('programs.ramadan_last_ten.from'),
+      to: t('programs.ramadan_last_ten.to'),
       description: t('programs.ramadan_last_ten.description'),
       highlights: toStringArray(t('programs.ramadan_last_ten.highlights', { returnObjects: true })),
       includes: toStringArray(t('programs.ramadan_last_ten.includes', { returnObjects: true }))
@@ -312,10 +314,10 @@ export default function CollectivePlanClient() {
       id: 'long-stay',
       name: t('programs.long_stay.name'),
       ApproximateDuration: '30 Days',
-      departure: 'May 1, 2024',
-      return: 'May 30, 2024',
-      from: 'Casablanca',
-      to: 'Mecca & Medina',
+      departure: t('programs.long_stay.departure'),
+      return: t('programs.long_stay.return'),
+      from: t('programs.long_stay.from'),
+      to: t('programs.long_stay.to'),
       description: t('programs.long_stay.description'),
       highlights: toStringArray(t('programs.long_stay.highlights', { returnObjects: true })),
       includes: toStringArray(t('programs.long_stay.includes', { returnObjects: true }))
@@ -431,21 +433,21 @@ export default function CollectivePlanClient() {
         title: t('itinerary.madinah_masjid'),
         description: t('itinerary.madinah_masjid_desc'),
         imageSrc: "/hajj1.jpg",
-        badge: "1/5"
+        badge: t('itinerary.badge_1_5')
       },
       {
         title: t('itinerary.quba_mosque'),
         subtitle: t('itinerary.first_mosque'),
         description: t('itinerary.quba_mosque_desc'),
         imageSrc: "/hajj1.jpg",
-        badge: "1/4"
+        badge: t('itinerary.badge_1_4')
       },
       {
         title: t('itinerary.qiblatain_mosque'),
         subtitle: t('itinerary.two_qiblahs'),
         description: t('itinerary.qiblatain_desc'),
         imageSrc: "/hajj1.jpg",
-        badge: "1/4"
+        badge: t('itinerary.badge_1_4')
       }
     ];
 
@@ -466,7 +468,7 @@ export default function CollectivePlanClient() {
 
             <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 bg-white p-4 sm:p-6 rounded-xl shadow-sm">
               <div className="w-full lg:w-1/3">
-                <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt="Hotel" className="rounded-full object-cover w-full h-40 sm:h-48 lg:h-56" />
+                <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt={t('itinerary.hotel_alt')} className="rounded-full object-cover w-full h-40 sm:h-48 lg:h-56" />
               </div>
               <div className="w-full lg:w-2/3">
                 <div className="flex text-yellow-400 mb-2"><Star size={16} fill="currentColor"/><Star size={16} fill="currentColor"/><Star size={16} fill="currentColor"/></div>
@@ -484,7 +486,7 @@ export default function CollectivePlanClient() {
         <section className="p-4 sm:p-6 lg:p-8">
           <div className="max-w-6xl mx-auto">
             <div className="py-4 sm:py-6 text-center">
-              <h2 className="text-emerald-900 text-xl sm:text-2xl lg:text-3xl font-bold">{t('itinerary.your_program')} Madinah</h2>
+              <h2 className="text-emerald-900 text-xl sm:text-2xl lg:text-3xl font-bold">{t('itinerary.your_program')}</h2>
               <p className="text-emerald-600 text-sm sm:text-base mt-2 font-medium">{t('itinerary.spiritual_journey')}</p>
             </div>
 
@@ -504,35 +506,35 @@ export default function CollectivePlanClient() {
         subtitle: t('itinerary.holy_kaaba'),
         description: t('itinerary.sacred_mosque_desc'),
         imageSrc: "/hajj2.jpg",
-        badge: "Days 5-9"
+        badge: t('itinerary.badge_days_5_9')
       },
       {
         title: t('itinerary.mount_arafat'),
         subtitle: t('itinerary.day_arafah'),
         description: t('itinerary.mount_arafat_desc'),
         imageSrc: "/hajj3.jpg",
-        badge: "Day 8"
+        badge: t('itinerary.badge_day_8')
       },
       {
         title: t('itinerary.mina_valley'),
         subtitle: t('itinerary.stoning_devil'),
         description: t('itinerary.mina_valley_desc'),
         imageSrc: "/hajj4.jpg",
-        badge: "Days 7 & 9"
+        badge: t('itinerary.badge_days_7_9')
       },
       {
         title: t('itinerary.cave_of_hira'),
         subtitle: t('itinerary.first_revelation'),
         description: t('itinerary.cave_of_hira_desc'),
         imageSrc: "/hajj1.jpg",
-        badge: "Day 6"
+        badge: t('itinerary.badge_day_6')
       },
       {
         title: t('itinerary.mount_noor'),
         subtitle: t('itinerary.hera_home'),
         description: t('itinerary.mount_noor_desc'),
         imageSrc: "/hajj2.jpg",
-        badge: "Day 6"
+        badge: t('itinerary.badge_day_6')
       }
     ];
 
@@ -553,7 +555,7 @@ export default function CollectivePlanClient() {
 
             <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 bg-white p-4 sm:p-6 rounded-xl shadow-sm">
               <div className="w-full lg:w-1/3">
-                <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt="Hotel" className="rounded-full object-cover w-full h-40 sm:h-48 lg:h-56" />
+                <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt={t('itinerary.hotel_alt')} className="rounded-full object-cover w-full h-40 sm:h-48 lg:h-56" />
               </div>
               <div className="w-full lg:w-2/3">
                 <div className="flex text-yellow-400 mb-2">
@@ -597,7 +599,7 @@ export default function CollectivePlanClient() {
         <section className="p-4 sm:p-6 lg:p-8">
           <div className="max-w-6xl mx-auto">
             <div className="py-4 sm:py-6 text-center">
-              <h2 className="text-emerald-900 text-xl sm:text-2xl lg:text-3xl font-bold">{t('itinerary.your_program')} Makkah</h2>
+              <h2 className="text-emerald-900 text-xl sm:text-2xl lg:text-3xl font-bold">{t('itinerary.your_program_makkah')}</h2>
               <p className="text-emerald-600 text-sm sm:text-base mt-2 font-medium">{t('itinerary.sacred_journey')}</p>
             </div>
 
@@ -1090,7 +1092,7 @@ export default function CollectivePlanClient() {
             <SwiperSlide key={index} className="relative">
               <Image
                 src={image.image}
-                alt={image.alt}
+                alt={t(image.altKey)}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -1607,6 +1609,26 @@ export default function CollectivePlanClient() {
             </button>
           </div>
 
+          
+          <div className={`flex flex-wrap items-center text-black flex-start w-full border-2 rounded-xl p-4 justify-center gap-2 ${hasAttemptedSubmit && !termsAccepted ? 'border-red-400 bg-red-50' : 'border-emerald-200'}`}>
+            <input
+              type="checkbox"
+              id="terms"
+              checked={termsAccepted}
+              onChange={(e) => setTermsAccepted(e.target.checked)}
+              className="rounded border-emerald-600 text-emerald-600 focus:ring-emerald-500"
+            />
+            <label htmlFor="terms" className="text-sm font-medium text-emerald-800">
+              {t('terms.agree_to_terms')}{' '}
+              <Link href="/global-infos" className="underline text-emerald-700 hover:text-emerald-900 font-semibold" target="_blank" rel="noopener noreferrer">
+                {t('terms.read_full_terms')}
+              </Link>
+            </label>
+            {hasAttemptedSubmit && !termsAccepted && (
+              <span className="text-red-600 text-sm ml-1" role="alert">{t('terms.must_agree')}</span>
+            )}
+          </div>
+
           {/* Itinerary big section: Madinah or Makkah program */}
           {itineraryView && (
             <section id="itinerary" className="w-full mt-8 mx-auto relative z-20">
@@ -1638,6 +1660,7 @@ export default function CollectivePlanClient() {
                   onClick={async () => {
                     if (confirmed) return;
                     setHasAttemptedSubmit(true);
+                    if (!termsAccepted) return;
                     if (!validateForm()) return;
 
                     setSavingBooking(true);
@@ -1663,7 +1686,7 @@ export default function CollectivePlanClient() {
 
                       if (!res.ok) {
                         const err = await res.json();
-                        throw new Error(err.error || 'Failed to save booking');
+                        throw new Error(err.error || t('errors.failed_to_save_booking'));
                       }
 
                       const data = await res.json();
@@ -1707,13 +1730,13 @@ export default function CollectivePlanClient() {
                       // Booking is saved to DB and appended to Google Sheet (online spreadsheet) by the API
                       setToggle(true);
                     } catch (e) {
-                      alert(e instanceof Error ? e.message : 'Failed to save booking');
+                      alert(e instanceof Error ? e.message : t('errors.failed_to_save_booking'));
                     } finally {
                       setSavingBooking(false);
                     }
                   }}
                   disabled={savingBooking || confirmed}
-                  className={`w-full py-6 rounded-[2rem] font-black text-xl transition-all shadow-2xl flex items-center justify-center gap-3 disabled:cursor-not-allowed ${
+                  className={`w-full py-6 rounded-4xl p-4 md:rounded-full font-black text-xl transition-all shadow-2xl flex items-center justify-center gap-3 disabled:cursor-not-allowed ${
                     confirmed
                       ? 'bg-slate-400 text-white shadow-slate-400/20 cursor-default'
                       : 'bg-[#1B3C33] text-white hover:bg-emerald-800 shadow-emerald-900/20 disabled:opacity-70'

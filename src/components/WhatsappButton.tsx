@@ -2,21 +2,20 @@
 
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
+import { useWhatsappUrl } from '@/context/SettingsContext';
+
+const DEFAULT_MESSAGE = 'Hello! I would like to inquire about Hajj/Umrah services.';
 
 export default function WhatsappButton() {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
+  const whatsappUrl = useWhatsappUrl(DEFAULT_MESSAGE);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const handleWhatsappClick = () => {
-    // Direct WhatsApp URL - this is the most reliable approach
-    const whatsappUrl = 'https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20inquire%20about%20Hajj/Umrah%20services.';
-
-    // Most reliable approach: redirect current page to WhatsApp
-    // This works 100% of the time and doesn't get blocked by popup blockers
     window.location.href = whatsappUrl;
   };
 

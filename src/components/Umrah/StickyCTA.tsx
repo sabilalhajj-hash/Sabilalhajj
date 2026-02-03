@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSettings } from '@/context/SettingsContext';
 
 interface Program {
   id?: string;
@@ -33,6 +34,7 @@ const StickyCTA = ({ selectedProgram, whatsappUrl, whatsappMessage, alwaysVisibl
   const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(alwaysVisible);
   const [mounted, setMounted] = useState(false);
+  const { whatsappUrl: siteWhatsappUrl } = useSettings();
 
   useEffect(() => {
     setMounted(true);
@@ -45,14 +47,14 @@ const StickyCTA = ({ selectedProgram, whatsappUrl, whatsappMessage, alwaysVisibl
     ? `${selectedProgram.departure} - ${selectedProgram.return}`
     : packageDuration;
 
-  // Default WhatsApp URL if not provided
-  const defaultWhatsappUrl = 'https://wa.me/2120606420326';
+  // Use prop (page-specific) > dashboard setting from context
+  const baseWhatsappUrl = whatsappUrl || siteWhatsappUrl;
   const defaultWhatsappMessage =
     whatsappMessage ||
     (selectedProgram?.name
       ? `Hello! I would like to book ${selectedProgram.name}.`
       : 'Hello! I would like to inquire about your services.');
-  const finalWhatsappUrl = whatsappUrl || `${defaultWhatsappUrl}?text=${encodeURIComponent(defaultWhatsappMessage)}`;
+  const finalWhatsappUrl = whatsappUrl || `${baseWhatsappUrl}?text=${encodeURIComponent(defaultWhatsappMessage)}`;
 
   const handleBookClick = () => {
     if (finalWhatsappUrl) {
@@ -85,7 +87,7 @@ const StickyCTA = ({ selectedProgram, whatsappUrl, whatsappMessage, alwaysVisibl
           : 'translate-y-full opacity-0 pointer-events-none'
       }`}
     >
-      <div className="md:w-200 rounded-full opacity-90  mb-5 bg-green-900 shadow-lg  text-white shadow-[0_-4px_20px_rgba(0,0,0,0.15)] border-t border-gray-700/50">
+      <div className="md:w-200 md:rounded-full rounded-4xl opacity-90  mb-5 bg-green-900 shadow-lg  text-white shadow-[0_-4px_20px_rgba(0,0,0,0.15)] border-t border-gray-700/50">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             {/* Left: Package info */}

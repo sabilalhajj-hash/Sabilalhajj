@@ -2,12 +2,16 @@
 
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
+import { useWhatsappUrl } from '@/context/SettingsContext';
 
 export const dynamic = 'force-dynamic';
+
+const HOTELS_WHATSAPP_MESSAGE = 'Hello! I would like to inquire about hotel accommodations.';
 
 export default function Hotels() {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
+  const whatsappHotelsUrl = useWhatsappUrl(HOTELS_WHATSAPP_MESSAGE);
 
   useEffect(() => {
     setMounted(true);
@@ -83,7 +87,7 @@ export default function Hotels() {
 
         <div className="text-center mt-8">
           <button 
-            onClick={() => window.open('https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20inquire%20about%20hotel%20accommodations.', '_blank')}
+            onClick={() => window.open(whatsappHotelsUrl, '_blank')}
             className="bg-green-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-green-700 transition-colors"
           >
             {t('common.view_details')}

@@ -11,6 +11,7 @@ export const users = pgTable(
     name: varchar('name', { length: 255 }),
     lastName: varchar('last_name', { length: 255 }),
     phone: varchar('phone', { length: 50 }),
+    avatar: varchar('avatar', { length: 500 }),
     role: varchar('role', { length: 50 }).default('user').notNull(), // 'user' or 'admin'
     emailVerified: boolean('email_verified').default(false).notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -130,3 +131,13 @@ export const hajjReservations = pgTable(
 
 export type HajjReservation = typeof hajjReservations.$inferSelect;
 export type NewHajjReservation = typeof hajjReservations.$inferInsert;
+
+// Site-wide settings (e.g. WhatsApp number for contact) – editable from admin dashboard
+export const siteSettings = pgTable('site_settings', {
+  key: varchar('key', { length: 100 }).primaryKey(),
+  value: text('value').notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type SiteSetting = typeof siteSettings.$inferSelect;
+export type NewSiteSetting = typeof siteSettings.$inferInsert;

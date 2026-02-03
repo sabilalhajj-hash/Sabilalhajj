@@ -1,7 +1,5 @@
 import { google } from 'googleapis';
 
-const MAX_PASSENGERS = 10;
-
 export interface PassengerRow {
   name?: string;
   lastName?: string;
@@ -38,10 +36,28 @@ function getAuthClient() {
   return auth;
 }
 
+/** Header: one row per passenger, so columns are booking info + one passenger's details. */
+function getHeaderRow(): string[] {
+  return [
+    'Booking ID',
+    'Date',
+    'Package',
+    'Program',
+    'Room',
+    'Visa',
+    'Passenger #',
+    'Name',
+    'Last Name',
+    'Email',
+    'Phone',
+    'Health',
+  ];
+}
+
 /**
- * Build one row for the sheet: [Booking ID, Date, Package, Program, Room, Visa, P1 Name, P1 Email, P1 Phone, P1 Health, P2 ...]
+ * Build one row per passenger. Number of rows = number of passengers entered (e.g. 2 passengers → 2 rows).
  */
-function bookingToRow(data: BookingRowInput): string[] {
+function bookingToRows(data: BookingRowInput): string[][] {
   const base = [
     data.bookingId,
     data.bookingDate,
@@ -50,30 +66,21 @@ function bookingToRow(data: BookingRowInput): string[] {
     data.roomName,
     data.visaName,
   ];
-  const passengerCells: string[] = [];
-  for (let i = 0; i < MAX_PASSENGERS; i++) {
-    const p = data.passengers[i];
-    if (p) {
-      passengerCells.push(
-        [p.name, p.lastName].filter(Boolean).join(' ').trim() || '',
-        p.email ?? '',
-        p.phone ?? '',
-        p.healthCondition ?? ''
-      );
-    } else {
-      passengerCells.push('', '', '', '');
-    }
+  const rows: string[][] = [];
+  const passengers = data.passengers ?? [];
+  for (let i = 0; i < passengers.length; i++) {
+    const p = passengers[i];
+    rows.push([
+      ...base,
+      String(i + 1),
+      String(p?.name ?? ''),
+      String(p?.lastName ?? ''),
+      String(p?.email ?? ''),
+      String(p?.phone ?? ''),
+      String(p?.healthCondition ?? ''),
+    ]);
   }
-  return [...base, ...passengerCells];
-}
-
-function getHeaderRow(): string[] {
-  const base = ['Booking ID', 'Date', 'Package', 'Program', 'Room', 'Visa'];
-  const passengerHeaders: string[] = [];
-  for (let i = 1; i <= MAX_PASSENGERS; i++) {
-    passengerHeaders.push(`P${i} Name`, `P${i} Email`, `P${i} Phone`, `P${i} Health`);
-  }
-  return [...base, ...passengerHeaders];
+  return rows;
 }
 
 /**
@@ -111,14 +118,16 @@ export async function appendBookingToSheet(data: BookingRowInput): Promise<void>
       });
     }
 
-    const row = bookingToRow(data);
+    const rows = bookingToRows(data);
+    if (rows.length === 0) return;
+
     await sheets.spreadsheets.values.append({
       spreadsheetId: sheetId,
-      range: `${sheetName}!A:A`,
+      range: `${sheetName}!A:L`,
       valueInputOption: 'USER_ENTERED',
       insertDataOption: 'INSERT_ROWS',
       requestBody: {
-        values: [row],
+        values: rows,
       },
     });
   } catch (err) {

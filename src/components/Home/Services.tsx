@@ -75,10 +75,10 @@ export default function Services() {
         </h2>
         <Swiper
           modules={[Autoplay, Pagination]}
-          spaceBetween={20}
-          slidesPerView={3}
+          spaceBetween={30}
+          slidesPerView={1}
           loop={true}
-          speed={9000}
+          speed={5000}
           autoplay={{
             delay: 0,
             disableOnInteraction: false,
@@ -86,11 +86,11 @@ export default function Services() {
           }}
           breakpoints={{
             640: {
-              slidesPerView: 2,
+              slidesPerView: 3,
               spaceBetween: 20,
             },
             1024: {
-              slidesPerView: 3,
+              slidesPerView: 4,
               spaceBetween: 30,
             },
           }}
@@ -99,7 +99,7 @@ export default function Services() {
         >
           {services.map((service, index) => (
             <SwiperSlide key={index}>
-              <div className="text-center p-6 border-2 border-green-600 bg-white neon-glow rounded-full shadow-lg h-full">
+              <div className=" text-center p-6 border-2 border-green-600  bg-white neon-glow rounded-lg md:rounded-4xl shadow-lg h-full">
                 <div className="text-4xl mb-4">{service.icon}</div>
                 <h3 className="text-xl font-semibold text-green-600 mb-2">{service.title}</h3>
                 <p className="text-gray-600">{service.description}</p>
