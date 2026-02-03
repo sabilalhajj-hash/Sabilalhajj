@@ -1400,7 +1400,7 @@ export default function AdminPage() {
                         <div className="flex h-full flex-col items-center justify-center gap-3 rounded-xl bg-white/60 text-slate-500">
                           <Package className="h-12 w-12 text-slate-300" />
                           <p className="text-sm font-medium">{t('admin.no_packages') || 'No Umrah bookings yet'}</p>
-                          <p className="text-xs text-slate-400">Bookings will appear here by package</p>
+                          <p className="text-xs text-slate-400">{t('admin.bookings_by_package_placeholder')}</p>
                         </div>
                       )}
                     </div>
@@ -1487,12 +1487,12 @@ export default function AdminPage() {
                             {[booking.userFirstName, booking.userLastName].filter(Boolean).join(' ') || booking.userName || booking.userEmail || '—'}
                             {booking.isGuest && (
                               <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-200 text-slate-700">
-                                Guest
+                                {t('admin.guest')}
                               </span>
                             )}
                           </p>
                           <p className="text-sm text-slate-600">
-                            {booking.umrahType === 'collective' ? 'Umrah Collective' : booking.umrahType === 'personalized' ? 'Umrah Personalized' : ''}
+                            {booking.umrahType === 'collective' ? t('admin.umrah_collective') : booking.umrahType === 'personalized' ? t('admin.umrah_personalized') : ''}
                             {booking.umrahType && (booking.packageName || booking.packageSlug) ? ' · ' : ''}
                             {booking.packageName || booking.packageSlug || booking.packageType || '—'}
                             {booking.program?.name ? ` · ${booking.program.name}` : ''}
@@ -1584,11 +1584,11 @@ export default function AdminPage() {
                     <thead className="border-b-2 border-slate-200">
                       <tr>
                         <th className="text-left py-3 px-4 font-semibold text-slate-700">{t('admin.booking_status')}</th>
-                        <th className="text-left py-3 px-4 font-semibold text-slate-700">Umrah type</th>
+                        <th className="text-left py-3 px-4 font-semibold text-slate-700">{t('admin.umrah_type')}</th>
                         <th className="text-left py-3 px-4 font-semibold text-slate-700">{t('admin.package_name')}</th>
-                        <th className="text-left py-3 px-4 font-semibold text-slate-700">Program</th>
-                        <th className="text-left py-3 px-4 font-semibold text-slate-700">Room</th>
-                        <th className="text-left py-3 px-4 font-semibold text-slate-700">Visa</th>
+                        <th className="text-left py-3 px-4 font-semibold text-slate-700">{t('admin.program')}</th>
+                        <th className="text-left py-3 px-4 font-semibold text-slate-700">{t('admin.room')}</th>
+                        <th className="text-left py-3 px-4 font-semibold text-slate-700">{t('admin.visa')}</th>
                         <th className="text-left py-3 px-4 font-semibold text-slate-700">{t('form.first_name')}</th>
                         <th className="text-left py-3 px-4 font-semibold text-slate-700">{t('form.last_name')}</th>
                         <th className="text-left py-3 px-4 font-semibold text-slate-700">{t('admin.user_email')}</th>
@@ -1607,11 +1607,11 @@ export default function AdminPage() {
                               {t(`admin.${booking.status}`)}
                             </span>
                             {booking.isGuest && (
-                              <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-200 text-slate-700">Guest</span>
+                              <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-200 text-slate-700">{t('admin.guest')}</span>
                             )}
                           </td>
                           <td className="py-4 px-4 text-slate-700">
-                            {booking.umrahType === 'collective' ? 'Collective' : booking.umrahType === 'personalized' ? 'Personalized' : '—'}
+                            {booking.umrahType === 'collective' ? t('admin.collective') : booking.umrahType === 'personalized' ? t('admin.personalized') : '—'}
                           </td>
                           <td className="py-4 px-4 text-slate-700">{booking.packageName || booking.packageSlug || booking.packageType || '—'}</td>
                           <td className="py-4 px-4 text-slate-700">{booking.program?.name ?? '—'}</td>
@@ -2187,7 +2187,7 @@ export default function AdminPage() {
 
                 {!usersLoading && filteredUsers.length === 0 && (
                   <p className="py-8 text-center text-slate-500">
-                    {apiUsers.length === 0 ? 'No users yet.' : 'No users match your search.'}
+                    {apiUsers.length === 0 ? t('admin.no_users_yet') : t('admin.no_users_match_search')}
                   </p>
                 )}
               </div>
@@ -2399,7 +2399,7 @@ export default function AdminPage() {
                             onClick={() => setPackageAddStep(2)}
                             className="px-4 py-2 border border-slate-200 rounded-full font-semibold text-slate-700 hover:bg-slate-50"
                           >
-                            ← Back
+                            {t('admin.back')}
                           </button>
                           <button
                             type="button"
@@ -2535,7 +2535,7 @@ export default function AdminPage() {
                             {editPackageForm.programs.map((pr, idx) => (
                               <div key={idx} className="p-4 border border-slate-200 rounded-lg bg-slate-50/50 space-y-3">
                                 <div className="flex items-center justify-between">
-                                  <span className="font-medium text-slate-700">Program {idx + 1}</span>
+                                  <span className="font-medium text-slate-700">{t('admin.program_n', { n: idx + 1 })}</span>
                                   {editPackageForm.programs.length > 1 && (
                                     <button type="button" onClick={() => removeEditProgram(idx)} className="text-red-600 text-sm font-semibold hover:bg-red-50 px-2 py-1 rounded">
                                       {t('admin.remove')}
@@ -2543,15 +2543,15 @@ export default function AdminPage() {
                                   )}
                                 </div>
                                 <div className="grid gap-2 sm:grid-cols-2">
-                                  <input placeholder="ID (e.g. ramadan-journey)" value={pr.id} onChange={(e) => updateEditProgram(idx, 'id', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
-                                  <input placeholder="Name" value={pr.name} onChange={(e) => updateEditProgram(idx, 'name', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
-                                  <input placeholder="Duration (e.g. 15 Days)" value={pr.ApproximateDuration} onChange={(e) => updateEditProgram(idx, 'ApproximateDuration', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
-                                  <input placeholder="Departure date" value={pr.departure} onChange={(e) => updateEditProgram(idx, 'departure', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
-                                  <input placeholder="Return date" value={pr.return} onChange={(e) => updateEditProgram(idx, 'return', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
-                                  <input placeholder="From (city)" value={pr.from} onChange={(e) => updateEditProgram(idx, 'from', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
-                                  <input placeholder="To (destination)" value={pr.to} onChange={(e) => updateEditProgram(idx, 'to', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
+                                  <input placeholder={t('admin.placeholder_id')} value={pr.id} onChange={(e) => updateEditProgram(idx, 'id', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
+                                  <input placeholder={t('admin.placeholder_name')} value={pr.name} onChange={(e) => updateEditProgram(idx, 'name', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
+                                  <input placeholder={t('admin.placeholder_duration')} value={pr.ApproximateDuration} onChange={(e) => updateEditProgram(idx, 'ApproximateDuration', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
+                                  <input placeholder={t('admin.placeholder_departure_date')} value={pr.departure} onChange={(e) => updateEditProgram(idx, 'departure', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
+                                  <input placeholder={t('admin.placeholder_return_date')} value={pr.return} onChange={(e) => updateEditProgram(idx, 'return', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
+                                  <input placeholder={t('admin.placeholder_from_city')} value={pr.from} onChange={(e) => updateEditProgram(idx, 'from', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
+                                  <input placeholder={t('admin.placeholder_to_destination')} value={pr.to} onChange={(e) => updateEditProgram(idx, 'to', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
                                 </div>
-                                <textarea placeholder="Description" value={pr.description} onChange={(e) => updateEditProgram(idx, 'description', e.target.value)} rows={2} className="w-full  text-black px-3 py-2 border border-slate-200 rounded-lg text-sm resize-none" />
+                                <textarea placeholder={t('admin.placeholder_description')} value={pr.description} onChange={(e) => updateEditProgram(idx, 'description', e.target.value)} rows={2} className="w-full  text-black px-3 py-2 border border-slate-200 rounded-lg text-sm resize-none" />
                                 <div>
                                   <label className="block text-xs font-medium text-slate-600 mb-1">Highlights (one per line)</label>
                                   <textarea
@@ -2586,19 +2586,19 @@ export default function AdminPage() {
                             {editPackageForm.rooms.map((room, idx) => (
                               <div key={idx} className="p-4 border border-slate-200 rounded-lg bg-slate-50/50 space-y-3">
                                 <div className="flex items-center justify-between">
-                                  <span className="font-medium text-slate-700">Room {idx + 1}</span>
+                                  <span className="font-medium text-slate-700">{t('admin.room_n', { n: idx + 1 })}</span>
                                   {editPackageForm.rooms.length > 1 && (
                                     <button type="button" onClick={() => removeEditRoom(idx)} className="text-red-600 text-sm font-semibold hover:bg-red-50 px-2 py-1 rounded">{t('admin.remove')}</button>
                                   )}
                                 </div>
                                 <div className="grid gap-2 sm:grid-cols-2">
-                                  <input placeholder="ID (e.g. twin)" value={room.id} onChange={(e) => updateEditRoom(idx, 'id', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
-                                  <input placeholder="Name" value={room.name} onChange={(e) => updateEditRoom(idx, 'name', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
-                                  <input placeholder="Size" value={room.size} onChange={(e) => updateEditRoom(idx, 'size', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
-                                  <input placeholder="Capacity" value={room.capacity} onChange={(e) => updateEditRoom(idx, 'capacity', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
-                                  <input placeholder="View" value={room.view} onChange={(e) => updateEditRoom(idx, 'view', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
+                                  <input placeholder={t('admin.placeholder_id')} value={room.id} onChange={(e) => updateEditRoom(idx, 'id', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
+                                  <input placeholder={t('admin.placeholder_name')} value={room.name} onChange={(e) => updateEditRoom(idx, 'name', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
+                                  <input placeholder={t('admin.placeholder_size')} value={room.size} onChange={(e) => updateEditRoom(idx, 'size', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
+                                  <input placeholder={t('admin.placeholder_capacity')} value={room.capacity} onChange={(e) => updateEditRoom(idx, 'capacity', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
+                                  <input placeholder={t('admin.placeholder_view')} value={room.view} onChange={(e) => updateEditRoom(idx, 'view', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
                                 </div>
-                                <textarea placeholder="Description" value={room.description} onChange={(e) => updateEditRoom(idx, 'description', e.target.value)} rows={2} className="w-full text-black px-3 py-2 border border-slate-200 rounded-lg text-sm resize-none" />
+                                <textarea placeholder={t('admin.placeholder_description')} value={room.description} onChange={(e) => updateEditRoom(idx, 'description', e.target.value)} rows={2} className="w-full text-black px-3 py-2 border border-slate-200 rounded-lg text-sm resize-none" />
                                 <div>
                                   <label className="block text-xs font-medium text-slate-600 mb-1">Features (one per line)</label>
                                   <textarea value={room.features.join('\n')} onChange={(e) => updateEditRoom(idx, 'features', e.target.value.split('\n').map((s) => s.trim()).filter(Boolean))} rows={2} className="w-full text-black px-3 py-2 border border-slate-200 rounded-lg text-sm resize-none" />
@@ -2623,20 +2623,20 @@ export default function AdminPage() {
                             {editPackageForm.visas.map((visa, idx) => (
                               <div key={idx} className="p-4 border border-slate-200 rounded-lg bg-slate-50/50 space-y-3">
                                 <div className="flex items-center justify-between">
-                                  <span className="font-medium text-slate-700">Visa {idx + 1}</span>
+                                  <span className="font-medium text-slate-700">{t('admin.visa_n', { n: idx + 1 })}</span>
                                   {editPackageForm.visas.length > 1 && (
                                     <button type="button" onClick={() => removeEditVisa(idx)} className="text-red-600 text-sm font-semibold hover:bg-red-50 px-2 py-1 rounded">{t('admin.remove')}</button>
                                   )}
                                 </div>
                                 <div className="grid gap-2 sm:grid-cols-2">
-                                  <input placeholder="ID (e.g. umrah)" value={visa.id} onChange={(e) => updateEditVisa(idx, 'id', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
-                                  <input placeholder="Name" value={visa.name} onChange={(e) => updateEditVisa(idx, 'name', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
-                                  <input placeholder="Detail" value={visa.detail} onChange={(e) => updateEditVisa(idx, 'detail', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
-                                  <input placeholder="Validity" value={visa.validity} onChange={(e) => updateEditVisa(idx, 'validity', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
-                                  <input placeholder="Stay duration" value={visa.stay_duration} onChange={(e) => updateEditVisa(idx, 'stay_duration', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
-                                  <input placeholder="Processing time" value={visa.processing_time} onChange={(e) => updateEditVisa(idx, 'processing_time', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm sm:col-span-2" />
+                                  <input placeholder={t('admin.placeholder_id')} value={visa.id} onChange={(e) => updateEditVisa(idx, 'id', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
+                                  <input placeholder={t('admin.placeholder_name')} value={visa.name} onChange={(e) => updateEditVisa(idx, 'name', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
+                                  <input placeholder={t('admin.placeholder_detail')} value={visa.detail} onChange={(e) => updateEditVisa(idx, 'detail', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
+                                  <input placeholder={t('admin.placeholder_validity')} value={visa.validity} onChange={(e) => updateEditVisa(idx, 'validity', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
+                                  <input placeholder={t('admin.placeholder_stay_duration')} value={visa.stay_duration} onChange={(e) => updateEditVisa(idx, 'stay_duration', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" />
+                                  <input placeholder={t('admin.placeholder_processing_time')} value={visa.processing_time} onChange={(e) => updateEditVisa(idx, 'processing_time', e.target.value)} className="text-black w-full px-3 py-2 border border-slate-200 rounded-lg text-sm sm:col-span-2" />
                                 </div>
-                                <textarea placeholder="Description" value={visa.description} onChange={(e) => updateEditVisa(idx, 'description', e.target.value)} rows={2} className="w-full text-black px-3 py-2 border border-slate-200 rounded-lg text-sm resize-none" />
+                                <textarea placeholder={t('admin.placeholder_description')} value={visa.description} onChange={(e) => updateEditVisa(idx, 'description', e.target.value)} rows={2} className="w-full text-black px-3 py-2 border border-slate-200 rounded-lg text-sm resize-none" />
                                 <div>
                                   <label className="block text-xs font-medium text-slate-600 mb-1">Requirements (one per line)</label>
                                   <textarea value={visa.requirements.join('\n')} onChange={(e) => updateEditVisa(idx, 'requirements', e.target.value.split('\n').map((s) => s.trim()).filter(Boolean))} rows={2} className="w-full text-black px-3 py-2 border border-slate-200 rounded-lg text-sm resize-none" />
@@ -2946,7 +2946,7 @@ export default function AdminPage() {
                         disabled={settingsSaving}
                         className="px-4 py-2 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 disabled:opacity-50 transition-colors"
                       >
-                        {settingsSaving ? (t('common.loading') || 'Saving...') : (t('admin.save') || 'Save')}
+                        {settingsSaving ? (t('common.saving') || t('common.loading')) : (t('admin.save') || 'Save')}
                       </button>
                     </div>
                     {settingsError && <p className="mt-2 text-red-600 text-sm">{settingsError}</p>}
