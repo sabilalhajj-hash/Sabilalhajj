@@ -9,15 +9,30 @@ import {
   Plane,
   Bus,
   MapPin,
-  Users,
   Eye,
   Share2,
-  Check,
   Search,
   Globe,
-  ChevronRight
+  ChevronRight,
+  Package
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
+
+interface UmrahPackage {
+  id: string;
+  slug: string;
+  name: string;
+  image: string | null;
+  description: string | null;
+  isActive: boolean;
+}
+
+const getValidImageUrl = (imageUrl: string | null | undefined): string => {
+  if (!imageUrl || typeof imageUrl !== 'string' || imageUrl.trim() === '') return '/hajj1.jpg';
+  const trimmed = imageUrl.trim();
+  if (trimmed.startsWith('/') || trimmed.startsWith('http://') || trimmed.startsWith('https://')) return trimmed;
+  return trimmed.length > 0 ? `/${trimmed}` : '/hajj1.jpg';
+};
 
 const UmrahPackageSelection = () => {
   const router = useRouter();
@@ -28,6 +43,9 @@ const UmrahPackageSelection = () => {
   const [searchValue, setSearchValue] = useState('');
   const [showModal, setShowModal] = useState(true);
   const [isClient, setIsClient] = useState(false);
+  const [packages, setPackages] = useState<UmrahPackage[]>([]);
+  const [packagesLoading, setPackagesLoading] = useState(false);
+  const [sharedSlug, setSharedSlug] = useState<string | null>(null);
 
   // Check if language is initialized (resolved)
   const isLanguageSetted = !!i18n.resolvedLanguage;
@@ -55,6 +73,17 @@ const UmrahPackageSelection = () => {
       console.warn('Unable to access localStorage:', error);
     }
   }, []);
+
+  // Fetch packages when country is selected (collective page: only collective packages)
+  useEffect(() => {
+    if (!selectedCountry) return;
+    setPackagesLoading(true);
+    fetch('/api/packages?type=collective')
+      .then((res) => res.json())
+      .then((data) => setPackages(data.packages ?? []))
+      .catch(() => setPackages([]))
+      .finally(() => setPackagesLoading(false));
+  }, [selectedCountry]);
 
   const countries = [
     "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", 
@@ -119,6 +148,43 @@ const UmrahPackageSelection = () => {
     }
   };
 
+  const getPackageUrl = (slug: string) => {
+    if (typeof window === 'undefined') return '';
+    return `${window.location.origin}/umrah/collective/${slug}`;
+  };
+
+  const handleShare = async (pkg: UmrahPackage) => {
+    const url = getPackageUrl(pkg.slug);
+    const title = pkg.name;
+    const text = pkg.description || t('umrah.share_package_text', { name: pkg.name });
+
+    try {
+      if (typeof navigator !== 'undefined' && navigator.share) {
+        await navigator.share({
+          title,
+          text: text.slice(0, 200),
+          url,
+        });
+        setSharedSlug(pkg.slug);
+        setTimeout(() => setSharedSlug(null), 2000);
+      } else {
+        await navigator.clipboard.writeText(url);
+        setSharedSlug(pkg.slug);
+        setTimeout(() => setSharedSlug(null), 2000);
+      }
+    } catch (err) {
+      if ((err as Error).name === 'AbortError') return;
+      try {
+        await navigator.clipboard.writeText(url);
+        setSharedSlug(pkg.slug);
+        setTimeout(() => setSharedSlug(null), 2000);
+      } catch {
+        // fallback: open in new window so user can copy from address bar
+        window.open(url, '_blank');
+      }
+    }
+  };
+
   // Prevent rendering if language isn't ready or not on client side
   if (!isLanguageSetted || !isClient) return null;
 
@@ -177,7 +243,7 @@ const UmrahPackageSelection = () => {
             <div className="flex flex-col sm:flex-row gap-3 mb-12">
               <button
                 onClick={() => router.push("/umrah")}
-                className="flex items-center text-gray-600 border border-emerald-100 rounded-lg px-4 py-2 hover:bg-emerald-50 transition-colors"
+                className="flex items-center text-gray-600 border border-emerald-100 rounded-full px-4 py-2 hover:bg-emerald-50 transition-colors"
               >
                 <ArrowLeft size={16} className="mr-2" />
                 <span className="text-sm">{t('umrah.back_to_umrah')}</span>
@@ -185,7 +251,7 @@ const UmrahPackageSelection = () => {
 
               <button
                 onClick={handleChangeCountry}
-                className="flex items-center   text-gray-600 border border-blue-100 rounded-lg px-4 py-2 hover:bg-blue-50 transition-colors"
+                className="flex items-center   text-gray-600 border border-blue-100 rounded-full px-4 py-2 hover:bg-blue-50 transition-colors"
               >
                 <Globe size={16} className="mr-2 m-4" />
                 <span className="text-sm">{t('umrah.change_country')} ({translateCountry(selectedCountry)})</span>
@@ -204,80 +270,90 @@ const UmrahPackageSelection = () => {
 
             {/* Package Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {/* Card 1: Ramadan Umrah 2026 */}
-              <div  onClick={() => router.push('/umrah/collective/ramadan-umrah-2026')}  className="bg-white rounded-2xl border border-gray-100 shadow-xl overflow-hidden flex flex-col cursor-pointer hover:scale-95 transition-transform duration-300" >
-                <div className="relative h-56">
-                  <Image
-                    src="/hajj1.jpg"
-                    alt="Ramadan Umrah"
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute top-3 left-3 flex gap-2">
-                    <span className="bg-amber-800/80 text-white text-[10px] px-3 py-1 rounded-md font-bold backdrop-blur-sm">
-                      {t('umrah.premium')}
-                    </span>
-                    <span className="bg-white/80 text-gray-800 text-[10px] px-3 py-1 rounded-md font-bold backdrop-blur-sm">
-                      {t('umrah.ramadan_package_title')}
-                    </span>
-                  </div>
+              {packagesLoading ? (
+                <div className="col-span-full py-12 text-center text-gray-500">{t('common.loading')}</div>
+              ) : packages.length === 0 ? (
+                <div className="col-span-full text-center py-12">
+                  <Package className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-600">{t('umrah.no_packages')}</p>
                 </div>
+              ) : (
+                packages.map((pkg) => (
+                  <div
+                    key={pkg.id}
+                    className="bg-white rounded-2xl border border-gray-100 shadow-xl overflow-hidden flex flex-col cursor-pointer hover:scale-95 transition-transform duration-300"
+                  >
+                    <div className="relative h-56">
+                      <Image
+                        src={getValidImageUrl(pkg.image)}
+                        alt={pkg.name}
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute top-3 left-3 flex gap-2">
+                        <span className="bg-amber-800/80 text-white text-[10px] px-3 py-1 rounded-md font-bold backdrop-blur-sm">
+                          {t('umrah.premium')}
+                        </span>
+                        <span className="bg-white/80 text-gray-800 text-[10px] px-3 py-1 rounded-md font-bold backdrop-blur-sm line-clamp-1 max-w-[140px]">
+                          {pkg.name}
+                        </span>
+                      </div>
+                    </div>
 
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-1 uppercase">{t('umrah.ramadan_package_title')}</h3>
-                  <p className="text-emerald-600 font-bold text-sm mb-6">{t('umrah.select_program')}</p>
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-gray-900 mb-1 uppercase">{pkg.name}</h3>
+                      <p className="text-emerald-600 font-bold text-sm mb-2">{t('umrah.select_program')}</p>
+                      {pkg.description && (
+                        <p className="text-gray-600 text-sm mb-4 line-clamp-2">{pkg.description}</p>
+                      )}
 
-                  <div className="space-y-4 mb-8 text-gray-600">
-                    <div className="flex items-center text-xs font-medium">
-                      <Hotel className="text-emerald-500 mr-3" size={16} />
-                      <span>{t('umrah.makkah_hotels')}</span>
-                    </div>
-                    <div className="flex items-center text-xs font-medium">
-                      <Plane className="text-emerald-500 mr-3" size={16} />
-                      <span>{t('umrah.direct_flights')}</span>
-                    </div>
-                    <div className="flex items-center text-xs font-medium">
-                      <Bus className="text-emerald-500 mr-3" size={16} />
-                      <span>{t('umrah.comfortable_transfers')}</span>
-                    </div>
-                    <div className="flex items-center text-xs font-medium">
-                      <MapPin className="text-emerald-500 mr-3" size={16} />
-                      <span>{t('umrah.guided_visits')}</span>
+                      {/* Static features - same for all packages */}
+                      <div className="space-y-4 mb-8 text-gray-600">
+                        <div className="flex items-center text-xs font-medium">
+                          <Hotel className="text-emerald-500 mr-3" size={16} />
+                          <span>{t('umrah.makkah_hotels')}</span>
+                        </div>
+                        <div className="flex items-center text-xs font-medium">
+                          <Plane className="text-emerald-500 mr-3" size={16} />
+                          <span>{t('umrah.direct_flights')}</span>
+                        </div>
+                        <div className="flex items-center text-xs font-medium">
+                          <Bus className="text-emerald-500 mr-3" size={16} />
+                          <span>{t('umrah.comfortable_transfers')}</span>
+                        </div>
+                        <div className="flex items-center text-xs font-medium">
+                          <MapPin className="text-emerald-500 mr-3" size={16} />
+                          <span>{t('umrah.guided_visits')}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => router.push(`/umrah/collective/${pkg.slug}`)}
+                          className="flex-1 bg-emerald-800 cursor-pointer text-white flex items-center justify-center gap-2 border-2 hover:border-black py-2.5 rounded-full text-xs font-bold transition-all"
+                        >
+                          {t('umrah.inscription')}
+                        </button>
+                        <button
+                          onClick={() => router.push(`/umrah/collective/${pkg.slug}/details`)}
+                          className="flex-1 flex cursor-pointer items-center justify-center gap-2 border border-gray-200 text-gray-700 py-2.5 rounded-full text-xs font-bold hover:bg-gray-50 transition-all"
+                        >
+                          <Eye size={14} /> {t('umrah.view_details')}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); handleShare(pkg); }}
+                          className="bg-emerald-800 text-white p-2.5 rounded-full hover:bg-emerald-900 transition-all shrink-0"
+                          title={t('umrah.share_package')}
+                          aria-label={t('umrah.share_package')}
+                        >
+                          <Share2 size={16} />
+                        </button>
+                      </div>
                     </div>
                   </div>
-
-                  {/* Social Proof */}
-                  <div className="bg-emerald-50/50 rounded-lg py-2 flex items-center justify-center mb-4">
-                    <Users size={14} className="text-gray-400 mr-2" />
-                    <span className="text-[10px] text-gray-500 font-medium">
-                      {t('umrah.registering_now', { count: 190 })}
-                    </span>
-                  </div>
-
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => router.push('/umrah/collective/ramadan-umrah-2026')}
-                      className="flex-1 flex items-center justify-center gap-2 border border-gray-200 text-gray-700 py-2.5 rounded-lg text-xs font-bold hover:bg-gray-50 transition-all"
-                    >
-                      <Eye size={14} /> {t('umrah.view_details')}
-                    </button>
-                    <button className="bg-emerald-800 text-white p-2.5 rounded-lg hover:bg-emerald-900 transition-all">
-                      <Share2 size={16} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card 2: Coming Soon */}
-              {/* <div className="bg-gray-50/50 rounded-2xl border border-dashed border-gray-200 overflow-hidden flex flex-col opacity-80 hover:scale-95 transition-transform duration-300">
-                <div className="relative h-56 bg-gray-200 flex items-center justify-center">
-                  <span className="text-gray-400 font-bold uppercase tracking-widest">{t('umrah.coming_soon')}</span>
-                </div>
-                <div className="p-6 flex-1 flex flex-col justify-center text-center">
-                  <h3 className="text-xl font-bold text-gray-400 mb-2 uppercase">{t('umrah.more_packages')}</h3>
-                  <p className="text-gray-400 text-sm">{t('umrah.stay_tuned')}</p>
-                </div>
-              </div> */}
+                ))
+              )}
             </div>
           </div>
         </section>

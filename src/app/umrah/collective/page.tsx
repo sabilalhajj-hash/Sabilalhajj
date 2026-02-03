@@ -81,8 +81,6 @@ export default function UmrahCollective() {
       
       <UmrahPackageSelection/>
 
-      
-      
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 5px;

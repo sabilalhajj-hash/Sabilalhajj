@@ -107,7 +107,7 @@ export default function Testimonials() {
     return (
       <section className="py-24 px-4 w-full mx-auto border-t border-gray-50">
         <div className="text-center mb-20">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Loading...</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('Loading...')}</h2>
         </div>
       </section>
     );
@@ -157,7 +157,7 @@ export default function Testimonials() {
         >
           {testimonialData.map((t, i) => (
             <SwiperSlide key={i}>
-              <div className="flex flex-col border-2 border-green-400 rounded-lg shadow-lg items-center text-center h-full px-4 py-8">
+              <div className="flex flex-col border-2 border-green-400 rounded-full shadow-lg items-center text-center h-full px-4 py-8">
                 <div className="flex items-center gap-4 mb-6 text-left w-full">
                   <div className="bg-gray-100 p-4 rounded-full flex-shrink-0">
                     <User className="w-8 h-8 text-gray-400" />

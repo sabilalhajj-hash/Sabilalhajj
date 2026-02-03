@@ -19,7 +19,7 @@ export default function Footer() {
       <footer className="bg-green-900/90 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
-            <p className="text-gray-300 text-sm">Loading...</p>
+            <p className="text-gray-300 text-sm">{t('Loading...')}</p>
           </div>
         </div>
       </footer>
@@ -39,6 +39,7 @@ export default function Footer() {
       { name: t('footer.company.portfolio'), href: '/portfolio' },
       { name: t('footer.company.contact'), href: 'https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20inquire%20about%20Hajj/Umrah%20services.' },
       { name: t('footer.company.blog'), href: '/blog' },
+      { name: t('footer.company.policies'), href: '/policies' },
     ],
     legal: [
       { name: t('footer.legal.privacy'), href: '#' },
@@ -46,8 +47,8 @@ export default function Footer() {
       { name: t('footer.legal.cookies'), href: '#' },
     ],
     contact: [
-      { text: '24/7 support', icon: '🕒' },
-      { text: '+966 12 345 6789', icon: '📞' },
+      { text: t('footer.contact.support_24_7'), icon: '🕒' },
+      { text: '+000000000', icon: '📞' },
       { text: 'sabilalhajj@gmail.com', icon: '✉️' },
     ]
   };
@@ -174,9 +175,9 @@ export default function Footer() {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-full text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
-              <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+              <button className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors font-medium">
                 Subscribe
               </button>
             </div>

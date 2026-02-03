@@ -127,17 +127,19 @@ export default function Navbar() {
   // Dynamic navigation items based on user state and other conditions
   // This makes the menu fully controlled and reactive to state changes
   const navItems = useMemo(() => {
+    const isAdmin = user?.role === 'admin';
     const baseItems: Array<{ name: string; href: string; show: boolean }> = [
       { name: t('nav.umrah'), href: '/umrah', show: true },
       { name: t('nav.hajj'), href: '/hajj', show: true },
       { name: t('nav.flights'), href: '/flights', show: true },
       { name: t('nav.hotels'), href: '/hotels', show: true },
       { name: t('nav.visa'), href: '/visa', show: true },
+      { name: t('nav.global_infos'), href: '/global-infos', show: !isAdmin },
       { name: t('nav.about'), href: '/about', show: true },
     ];
 
     // Add admin items if user is admin
-    if (user?.role === 'admin') {
+    if (isAdmin) {
       baseItems.push(
         { name: t('admin.dashboard') || 'Admin', href: '/admin', show: true }
       );
@@ -180,7 +182,7 @@ export default function Navbar() {
               <div className="flex items-center space-x-3">
                 <Link
                   href="/auth"
-                  className="inline-flex items-center rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700 transition-colors"
+                  className="inline-flex items-center rounded-full bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700 transition-colors"
                   suppressHydrationWarning
                 >
                   {t('common.sign_up')} 
@@ -255,7 +257,7 @@ export default function Navbar() {
                   <div className="relative" ref={userMenuDesktopRef}>
                     <button
                       onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                      className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      className="flex items-center space-x-2 px-3 py-2 rounded-full hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
                       aria-expanded={isUserMenuOpen}
                       aria-haspopup="true"
                     >
@@ -326,7 +328,7 @@ export default function Navbar() {
                   /* Sign Up Button */
                   <Link
                     href="/auth"
-                    className="inline-flex items-center rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700 transition-colors"
+                    className="inline-flex items-center rounded-full bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700 transition-colors"
                     suppressHydrationWarning
                   >
                     {t('common.sign_in')}
@@ -519,7 +521,7 @@ export default function Navbar() {
                         <Link
                           key={item.href}
                           href={item.href}
-                          className="flex items-center px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
+                          className="flex items-center px-4 py-2 rounded-full text-sm font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           <Icon className="w-4 h-4 mr-3" />
@@ -533,7 +535,7 @@ export default function Navbar() {
                         setShowHelpModal(true);
                         setIsMenuOpen(false);
                       }}
-                      className="w-full flex items-center px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
+                      className="w-full flex items-center px-4 py-2 rounded-full text-sm font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
                     >
                       <HelpCircle className="w-4 h-4 mr-3" />
                       {t('user.help_support') || 'Help & Support'}
@@ -544,7 +546,7 @@ export default function Navbar() {
                         handleLogout();
                         setIsMenuOpen(false);
                       }}
-                      className="w-full flex items-center px-4 py-2 rounded-lg text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors"
+                      className="w-full flex items-center px-4 py-2 rounded-full text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors"
                     >
                       <LogOut className="w-4 h-4 mr-3" />
                       {t('user.logout')}
@@ -554,7 +556,7 @@ export default function Navbar() {
                   <>
                     <Link
                       href="/auth"
-                      className="block w-full text-center px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 border border-gray-200 hover:border-green-300 hover:text-green-700 hover:bg-green-50 transition-colors"
+                      className="block w-full text-center px-4 py-2 rounded-full text-sm font-semibold text-gray-700 border border-gray-200 hover:border-green-300 hover:text-green-700 hover:bg-green-50 transition-colors"
                       onClick={() => setIsMenuOpen(false)}
                       suppressHydrationWarning
                     >
@@ -562,7 +564,7 @@ export default function Navbar() {
                     </Link>
                     <Link
                       href="/auth"
-                      className="block w-full text-center px-4 py-2 rounded-lg text-sm font-semibold text-white bg-green-600 hover:bg-green-700 transition-colors"
+                      className="block w-full text-center px-4 py-2 rounded-full text-sm font-semibold text-white bg-green-600 hover:bg-green-700 transition-colors"
                       onClick={() => setIsMenuOpen(false)}
                       suppressHydrationWarning
                     >
@@ -657,7 +659,7 @@ export default function Navbar() {
             <div className="mt-6 pt-6 border-t border-gray-200">
               <button
                 onClick={() => setShowHelpModal(false)}
-                className="w-full px-4 py-2 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors"
+                className="w-full px-4 py-2 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition-colors"
               >
                 {t('common.close') || 'Close'}
               </button>

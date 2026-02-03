@@ -26,7 +26,7 @@ export default function Flights() {
       <div className="min-h-screen bg-gray-50">
         <div className="py-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Loading...</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">{t('Loading...')}</h1>
           </div>
         </div>
       </div>
@@ -34,10 +34,10 @@ export default function Flights() {
   }
 
   const popularDestinations = [
-    { city: 'Mecca', country: 'Saudi Arabia', code: 'JED', image: '/hajj1.jpg', price: `${t('flight.price_from')} $450`, badge: t('flight.badge_popular') },
-    { city: 'Medina', country: 'Saudi Arabia', code: 'MED', image: '/hajj2.jpg', price: `${t('flight.price_from')} $480`, badge: t('flight.badge_best_value') },
-    { city: 'Riyadh', country: 'Saudi Arabia', code: 'RUH', image: '/hajj3.jpg', price: `${t('flight.price_from')} $520`, badge: t('flight.badge_trending') },
-    { city: 'Dubai', country: 'UAE', code: 'DXB', image: '/hajj4.jpg', price: `${t('flight.price_from')} $380`, badge: t('flight.badge_hot_deal') },
+    { city: 'Mecca', country: 'Saudi Arabia', code: 'JED', image: '/hajj1.jpg', badge: t('flight.badge_popular') },
+    { city: 'Medina', country: 'Saudi Arabia', code: 'MED', image: '/hajj2.jpg', badge: t('flight.badge_best_value') },
+    { city: 'Riyadh', country: 'Saudi Arabia', code: 'RUH', image: '/hajj3.jpg', badge: t('flight.badge_trending') },
+    { city: 'Dubai', country: 'UAE', code: 'DXB', image: '/hajj4.jpg', badge: t('flight.badge_hot_deal') },
   ];
 
   const specialOffers = [
@@ -172,8 +172,7 @@ export default function Flights() {
                   </div>
                   <h3 className="text-xl font-bold mb-1">{destination.city}</h3>
                   <p className="text-sm text-gray-300 mb-3">{destination.country}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-lg font-bold text-emerald-400">{destination.price}</span>
+                  <div className="flex items-center justify-end">
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>

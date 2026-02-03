@@ -20,7 +20,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <SectionIndicator pageType="home" />
+      {/* <SectionIndicator pageType="home" /> */}
 
       {/* Hero Section */}
       <section id="hero">

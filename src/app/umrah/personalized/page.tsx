@@ -189,7 +189,6 @@ export default function UmrahPersonalized() {
       id: 'essential',
       name: t('umrah.essential_package'),
       duration: "7 Days",
-      price: `${t('umrah.starting_from')} $2,500`,
       features: [t('packages.flight'), t('packages.hotels'), t('packages.visa'), t('packages.guide')],
       recommended: false
     },
@@ -197,7 +196,6 @@ export default function UmrahPersonalized() {
       id: 'premium',
       name: t('umrah.premium_package'),
       duration: "10 Days",
-      price: `${t('umrah.starting_from')} $3,200`,
       features: [t('packages.flight'), t('packages.hotels'), t('packages.visa'), t('packages.guide')],
       recommended: true
     },
@@ -205,7 +203,6 @@ export default function UmrahPersonalized() {
       id: 'luxury',
       name: t('umrah.luxury_package'),
       duration: "14 Days",
-      price: `${t('umrah.starting_from')} $4,500`,
       features: [t('packages.flight'), t('packages.hotels'), t('packages.visa'), t('packages.guide')],
       recommended: false
     }
@@ -216,7 +213,6 @@ export default function UmrahPersonalized() {
       id: 'twin',
       name: t('rooms.twin.name'),
       size: t('rooms.twin.size'),
-      price: t('rooms.twin.price'),
       description: t('rooms.twin.description'),
       features: t('rooms.twin.features', { returnObjects: true }),
       capacity: t('rooms.twin.capacity'),
@@ -227,7 +223,6 @@ export default function UmrahPersonalized() {
       id: 'triple',
       name: t('rooms.triple.name'),
       size: t('rooms.triple.size'),
-      price: t('rooms.triple.price'),
       description: t('rooms.triple.description'),
       features: t('rooms.triple.features', { returnObjects: true }),
       capacity: t('rooms.triple.capacity'),
@@ -238,7 +233,6 @@ export default function UmrahPersonalized() {
       id: 'quad',
       name: t('rooms.quad.name'),
       size: t('rooms.quad.size'),
-      price: t('rooms.quad.price'),
       description: t('rooms.quad.description'),
       features: t('rooms.quad.features', { returnObjects: true }),
       capacity: t('rooms.quad.capacity'),
@@ -249,7 +243,6 @@ export default function UmrahPersonalized() {
       id: 'penta',
       name: t('rooms.penta.name'),
       size: t('rooms.penta.size'),
-      price: t('rooms.penta.price'),
       description: t('rooms.penta.description'),
       features: t('rooms.penta.features', { returnObjects: true }),
       capacity: t('rooms.penta.capacity'),
@@ -269,7 +262,6 @@ export default function UmrahPersonalized() {
       processing_time: '3-5 Business Days',
       requirements: ['Valid Passport', 'Application Form', 'Medical Certificate', 'Hotel Booking', 'Flight Tickets'],
       benefits: ['Religious Activities', 'Extended Stay', 'Group Activities', 'Guided Tours'],
-      price: '$150'
     },
     {
       id: 'tourist',
@@ -281,7 +273,6 @@ export default function UmrahPersonalized() {
       processing_time: '2-3 Business Days',
       requirements: ['Valid Passport', 'Application Form', 'Hotel Booking', 'Bank Statements', 'Employment Letter'],
       benefits: ['Flexible Travel', 'Sightseeing', 'Cultural Experience', 'Modern Amenities'],
-      price: '$120'
     }
   ];
 
@@ -347,7 +338,7 @@ export default function UmrahPersonalized() {
             <p className="text-emerald-600 text-xs sm:text-sm mb-4 sm:mb-6">{t('itinerary.included_in_package')}</p>
             <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 bg-white p-4 sm:p-6 rounded-xl shadow-sm">
               <div className="w-full lg:w-1/3">
-                <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt="Hotel" className="rounded-lg object-cover w-full h-40 sm:h-48 lg:h-56" />
+                <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt="Hotel" className="rounded-full object-cover w-full h-40 sm:h-48 lg:h-56" />
               </div>
               <div className="w-full lg:w-2/3">
                 <div className="flex text-yellow-400 mb-2"><Star size={16} fill="currentColor"/><Star size={16} fill="currentColor"/><Star size={16} fill="currentColor"/></div>
@@ -427,7 +418,7 @@ export default function UmrahPersonalized() {
             <p className="text-emerald-600 text-xs sm:text-sm mb-4 sm:mb-6">{t('itinerary.premium_hotels')}</p>
             <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 bg-white p-4 sm:p-6 rounded-xl shadow-sm">
               <div className="w-full lg:w-1/3">
-                <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt="Hotel" className="rounded-lg object-cover w-full h-40 sm:h-48 lg:h-56" />
+                <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt="Hotel" className="rounded-full object-cover w-full h-40 sm:h-48 lg:h-56" />
               </div>
               <div className="w-full lg:w-2/3">
                 <div className="flex text-yellow-400 mb-2">
@@ -512,7 +503,7 @@ export default function UmrahPersonalized() {
           {/* Back Button */}
           <button
             onClick={() => router.back()}
-            className="flex items-center px-4 py-2 bg-white/90 backdrop-blur-sm border border-emerald-200 rounded-lg text-emerald-600 hover:text-emerald-700 hover:bg-white/95 mb-8 transition-all duration-300 shadow-sm hover:shadow-md"
+            className="flex items-center px-4 py-2 bg-white/90 backdrop-blur-sm border border-emerald-200 rounded-full text-emerald-600 hover:text-emerald-700 hover:bg-white/95 mb-8 transition-all duration-300 shadow-sm hover:shadow-md"
           >
             <ArrowLeft size={20} className="mr-2" />
             {t('umrah.back_to_umrah_plans')}
@@ -615,7 +606,6 @@ export default function UmrahPersonalized() {
                 <div className="text-center mb-6">
                   <h4 className="text-2xl font-bold text-gray-900 mb-2">{pkg.name}</h4>
                   <p className="text-emerald-600 font-semibold">{pkg.duration}</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-2">{pkg.price}</p>
                 </div>
 
                 <ul className="space-y-3 mb-8">
@@ -629,7 +619,7 @@ export default function UmrahPersonalized() {
 
                 <button
                   onClick={() => setSelectedPackage(pkg.name)}
-                  className={`w-full py-3 rounded-lg font-bold transition-colors ${
+                  className={`w-full py-3 rounded-full font-bold transition-colors ${
                     pkg.recommended
                       ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
                       : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
@@ -655,7 +645,7 @@ export default function UmrahPersonalized() {
               <div className={`p-8 rounded-[2rem] border-2 transition-all ${selectedRoom ? 'border-emerald-500 bg-emerald-50' : 'border-slate-100 bg-slate-50'}`}>
                 <div className="flex justify-between items-center mb-6">
                   <span className="flex items-center gap-2 text-emerald-700 font-bold text-sm"><Hotel size={18}/> {t('selection.selected_room')}</span>
-                  {selectedRoom && <button onClick={() => setSelectedRoom(null)} className="text-[10px] uppercase font-black bg-emerald-600 text-white px-3 py-1 rounded-lg">{t('selection.change')}</button>}
+                  {selectedRoom && <button onClick={() => setSelectedRoom(null)} className="text-[10px] uppercase font-black bg-emerald-600 text-white px-3 py-1 rounded-full">{t('selection.change')}</button>}
                 </div>
                 {!selectedRoom ? (
                   <div className="space-y-3">
@@ -688,12 +678,6 @@ export default function UmrahPersonalized() {
                                 <span className="font-semibold">Size:</span> {room.size}
                               </div>
                             </div>
-                            <div className="space-y-2">
-                              <div className="flex items-center gap-2 text-emerald-600 font-bold">
-                                <Euro size={16} />
-                                <span>{room.price}</span>
-                              </div>
-                            </div>
                           </div>
                         </div>
                       ) : null;
@@ -706,7 +690,7 @@ export default function UmrahPersonalized() {
               <div className={`p-8 rounded-[2rem] border-2 transition-all ${selectedVisa ? 'border-emerald-500 bg-emerald-50' : 'border-slate-100 bg-slate-50'}`}>
                 <div className="flex justify-between items-center mb-6">
                   <span className="flex items-center gap-2 text-emerald-700 font-bold text-sm"><FileText size={18}/> {t('selection.selected_visa')}</span>
-                  {selectedVisa && <button onClick={() => setSelectedVisa(null)} className="text-[10px] uppercase font-black bg-emerald-600 text-white px-3 py-1 rounded-lg">{t('selection.change')}</button>}
+                  {selectedVisa && <button onClick={() => setSelectedVisa(null)} className="text-[10px] uppercase font-black bg-emerald-600 text-white px-3 py-1 rounded-full">{t('selection.change')}</button>}
                 </div>
                 {!selectedVisa ? (
                   <div className="space-y-3">
@@ -739,12 +723,6 @@ export default function UmrahPersonalized() {
                                 <span className="font-semibold">Processing:</span> {visa.processing_time}
                               </div>
                             </div>
-                            <div className="space-y-2">
-                              <div className="flex items-center gap-2 text-emerald-600 font-bold">
-                                <Euro size={16} />
-                                <span>{visa.price}</span>
-                              </div>
-                            </div>
                           </div>
                         </div>
                       ) : null;
@@ -757,7 +735,7 @@ export default function UmrahPersonalized() {
               <div className="p-8 rounded-[2rem] border-2 border-emerald-500 bg-emerald-50">
                 <div className="mb-6">
                   <span className="flex items-center gap-2 text-emerald-700 font-bold text-sm mb-4"><Clock size={18}/> {t('selection.selected_program')}</span>
-                  {selectedPackage && <button onClick={() => setSelectedPackage(null)} className="text-[10px] uppercase font-black bg-emerald-600 text-white px-3 py-1 rounded-lg">{t('selection.change')}</button>}
+                  {selectedPackage && <button onClick={() => setSelectedPackage(null)} className="text-[10px] uppercase font-black bg-emerald-600 text-white px-3 py-1 rounded-full">{t('selection.change')}</button>}
                 </div>
                 {(() => {
                   const pkg = packages.find(p => p.name === selectedPackage);
@@ -765,7 +743,6 @@ export default function UmrahPersonalized() {
                     <div className="space-y-4">
                       <div className="font-black text-xl text-slate-900">{pkg.name}</div>
                       <div className="text-emerald-600 font-semibold">{pkg.duration}</div>
-                      <div className="text-2xl font-bold text-slate-900">{pkg.price}</div>
                       <ul className="space-y-2">
                         {pkg.features.map((feature, idx) => (
                           <li key={idx} className="flex items-center gap-2 text-slate-600 text-sm">

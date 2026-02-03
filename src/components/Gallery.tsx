@@ -34,7 +34,7 @@ export default function BentoGallery() {
     return (
       <section className="w-full mx-auto px-6 py-12">
         <div className="mb-10 text-center">
-          <h2 className="text-3xl font-black text-[#1B3C33] tracking-tight">Loading...</h2>
+          <h2 className="text-3xl font-black text-[#1B3C33] tracking-tight">{t('Loading...')}</h2>
         </div>
       </section>
     );

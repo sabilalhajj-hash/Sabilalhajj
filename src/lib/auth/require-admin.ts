@@ -1,13 +1,16 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getAuthCookie, verifyToken, type TokenPayload } from './jwt';
+import { getUserById } from '@/lib/db/users';
 
 /**
  * Verify the request has a valid JWT and the user has role 'admin'.
- * Returns { payload } on success, or a NextResponse (401/403) to return.
+ * Checks the current role in the database so promoting a user to admin
+ * in the DB takes effect immediately (no re-login required).
+ * Returns { payload, user } on success, or a NextResponse (401/403) to return.
  */
 export async function requireAdmin(request: NextRequest): Promise<
-  | { payload: TokenPayload }
+  | { payload: TokenPayload; user: Awaited<ReturnType<typeof getUserById>> }
   | NextResponse
 > {
   const token = getAuthCookie(request);
@@ -20,9 +23,11 @@ export async function requireAdmin(request: NextRequest): Promise<
     return NextResponse.json({ error: 'Invalid or expired session' }, { status: 401 });
   }
 
-  if (payload.role !== 'admin') {
+  // Check current role in DB so DB promotions (e.g. first admin) apply without re-login
+  const user = await getUserById(payload.sub);
+  if (!user || user.role !== 'admin') {
     return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
   }
 
-  return { payload };
+  return { payload, user };
 }

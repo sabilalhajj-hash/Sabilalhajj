@@ -77,10 +77,10 @@ function AuthPageContent() {
           .then(data => {
             if (data.user) {
               const isAdmin = data.user.role === 'admin';
-              const allowedRedirects = ['/admin', '/user'];
-              const target = allowedRedirects.includes(redirectTo)
-                ? (redirectTo === '/admin' && !isAdmin ? '/user' : redirectTo)
-                : (isAdmin ? '/admin' : '/user');
+              
+              // Admins always go to /admin, regular users go to /user
+              // Ignore redirectTo for admins to ensure they always see admin dashboard
+              const target = isAdmin ? '/admin' : '/user';
               router.push(target);
             } else {
               router.push('/');
@@ -118,10 +118,10 @@ function AuthPageContent() {
       
       const user = data.user as { role?: string };
       const isAdmin = user?.role === 'admin';
-      const allowedRedirects = ['/admin', '/user'];
-      const target = allowedRedirects.includes(redirectTo)
-        ? (redirectTo === '/admin' && !isAdmin ? '/user' : redirectTo)
-        : (isAdmin ? '/admin' : '/user');
+      
+      // Admins always go to /admin, regular users go to /user
+      // Ignore redirectTo for admins to ensure they always see admin dashboard
+      const target = isAdmin ? '/admin' : '/user';
       router.push(target);
     } catch (err) {
       setError(t('auth.error_occurred'));
@@ -200,7 +200,7 @@ function AuthPageContent() {
   if (!mounted) {
     return (
       <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-8">
-        <div className="animate-pulse text-emerald-700 font-semibold" suppressHydrationWarning>Loading...</div>
+        <div className="animate-pulse text-emerald-700 font-semibold" suppressHydrationWarning>{t('Loading...')}</div>
       </div>
     );
   }
@@ -280,12 +280,12 @@ function AuthPageContent() {
 
             {/* Error/Success Messages */}
             {error && (
-              <div className="mb-3 sm:mb-4 p-2.5 sm:p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs sm:text-sm">
+              <div className="mb-3 sm:mb-4 p-2.5 sm:p-3 rounded-full bg-red-50 border border-red-200 text-red-700 text-xs sm:text-sm">
                 {error}
               </div>
             )}
             {success && (
-              <div className="mb-3 sm:mb-4 p-2.5 sm:p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs sm:text-sm">
+              <div className="mb-3 sm:mb-4 p-2.5 sm:p-3 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs sm:text-sm">
                 {success}
               </div>
             )}
@@ -314,7 +314,7 @@ function AuthPageContent() {
                     onChange={(e) => setEmailOrUsername(e.target.value)}
                     placeholder={t('auth.email_or_username_placeholder') || 'Enter your email'}
                     required
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-sm border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all text-black placeholder-gray-400"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-full text-sm border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all text-black placeholder-gray-400"
                   />
                 </div>
 
@@ -339,7 +339,7 @@ function AuthPageContent() {
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder={t('common.password_placeholder') || 'Enter password'}
                       required
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-sm border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all text-black placeholder-gray-400 pr-10 sm:pr-12"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-full text-sm border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all text-black placeholder-gray-400 pr-10 sm:pr-12"
                     />
                     <button
                       type="button"
@@ -356,7 +356,7 @@ function AuthPageContent() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full inline-flex items-center justify-center px-4 py-2.5 sm:py-3 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
+                  className="w-full inline-flex items-center justify-center px-4 py-2.5 sm:py-3 rounded-full text-sm font-semibold text-white bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
                 >
                   {isLoading ? (
                     <span className="flex items-center gap-2">
@@ -384,7 +384,7 @@ function AuthPageContent() {
                 <button
                   type="button"
                   onClick={handleGoogleSignIn}
-                  className="w-full inline-flex items-center justify-center px-4 py-2.5 sm:py-3 rounded-lg text-sm font-medium text-black border border-gray-300 bg-white hover:bg-gray-50 transition-colors shadow-sm"
+                  className="w-full inline-flex items-center justify-center px-4 py-2.5 sm:py-3 rounded-full text-sm font-medium text-black border border-gray-300 bg-white hover:bg-gray-50 transition-colors shadow-sm"
                 >
                   <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" viewBox="0 0 24 24">
                     <path
@@ -459,7 +459,7 @@ function AuthPageContent() {
                     onChange={(e) => setSignUpData({ ...signUpData, firstName: e.target.value })}
                     placeholder={t('form.first_name_placeholder')}
                     required
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-sm border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all text-black placeholder-gray-400"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-full text-sm border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all text-black placeholder-gray-400"
                   />
                 </div>
 
@@ -475,7 +475,7 @@ function AuthPageContent() {
                     onChange={(e) => setSignUpData({ ...signUpData, lastName: e.target.value })}
                     placeholder={t('form.last_name_placeholder')}
                     required
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-sm border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all text-black placeholder-gray-400"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-full text-sm border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all text-black placeholder-gray-400"
                   />
                 </div>
 
@@ -491,7 +491,7 @@ function AuthPageContent() {
                     onChange={(e) => setSignUpData({ ...signUpData, email: e.target.value })}
                     placeholder={t('form.email_placeholder')}
                     required
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-sm border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all text-black placeholder-gray-400"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-full text-sm border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all text-black placeholder-gray-400"
                   />
                 </div>
 
@@ -509,7 +509,7 @@ function AuthPageContent() {
                       placeholder={t('common.password_placeholder')}
                       required
                       minLength={8}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-sm border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all text-black placeholder-gray-400 pr-10 sm:pr-12"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-full text-sm border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all text-black placeholder-gray-400 pr-10 sm:pr-12"
                     />
                     <button
                       type="button"
@@ -536,7 +536,7 @@ function AuthPageContent() {
                       placeholder={t('auth.confirm_password_placeholder')}
                       required
                       minLength={8}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-sm border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all text-black placeholder-gray-400 pr-10 sm:pr-12"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-full text-sm border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all text-black placeholder-gray-400 pr-10 sm:pr-12"
                     />
                     <button
                       type="button"
@@ -570,7 +570,7 @@ function AuthPageContent() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full inline-flex items-center justify-center px-4 py-3 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
+                  className="w-full inline-flex items-center justify-center px-4 py-3 rounded-full text-sm font-semibold text-white bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
                 >
                   {isLoading ? (
                     <span className="flex items-center gap-2">
@@ -598,7 +598,7 @@ function AuthPageContent() {
                 <button
                   type="button"
                   onClick={handleGoogleSignIn}
-                  className="w-full inline-flex items-center justify-center px-4 py-2.5 sm:py-3 rounded-lg text-sm font-medium text-black border border-gray-300 bg-white hover:bg-gray-50 transition-colors shadow-sm"
+                  className="w-full inline-flex items-center justify-center px-4 py-2.5 sm:py-3 rounded-full text-sm font-medium text-black border border-gray-300 bg-white hover:bg-gray-50 transition-colors shadow-sm"
                 >
                   <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" viewBox="0 0 24 24">
                     <path

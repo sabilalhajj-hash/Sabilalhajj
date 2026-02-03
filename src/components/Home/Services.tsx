@@ -61,7 +61,7 @@ export default function Services() {
     return (
       <div className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="w-full mx-auto">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Loading...</h2>
+          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">{t('Loading...')}</h2>
         </div>
       </div>
     );
@@ -99,7 +99,7 @@ export default function Services() {
         >
           {services.map((service, index) => (
             <SwiperSlide key={index}>
-              <div className="text-center p-6 border-2 border-green-600 bg-white neon-glow rounded-lg shadow-lg h-full">
+              <div className="text-center p-6 border-2 border-green-600 bg-white neon-glow rounded-full shadow-lg h-full">
                 <div className="text-4xl mb-4">{service.icon}</div>
                 <h3 className="text-xl font-semibold text-green-600 mb-2">{service.title}</h3>
                 <p className="text-gray-600">{service.description}</p>

@@ -27,7 +27,7 @@ export default function TrustedPartners() {
       <section className="bg-white w-full py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="w-full mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Loading...</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t('Loading...')}</h2>
           </div>
         </div>
       </section>
@@ -90,7 +90,7 @@ export default function TrustedPartners() {
         >
           {partners.map((partner, index) => (
             <SwiperSlide key={index}>
-              <div className="flex items-center justify-center  p-4 rounded-lg  w-full h-full">
+              <div className="flex items-center justify-center  p-4 rounded-full  w-full h-full">
                 <Image
                   src={partner.logo}
                   alt={partner.alt}

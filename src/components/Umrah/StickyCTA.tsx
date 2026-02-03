@@ -15,7 +15,6 @@ interface Program {
   description?: string;
   highlights?: string[];
   features?: string[];
-  price: string;
   includes?: string[];
   recommended?: boolean;
 }
@@ -26,9 +25,11 @@ interface StickyCTAProps {
   whatsappMessage?: string;
   /** When true, CTA is always visible (e.g. on Hajj page). When false, hidden at top until user scrolls. */
   alwaysVisible?: boolean;
+  /** When true, shows the Nusuk booking button (only for Hajj page) */
+  showNusukButton?: boolean;
 }
 
-const StickyCTA = ({ selectedProgram, whatsappUrl, whatsappMessage, alwaysVisible = false }: StickyCTAProps) => {
+const StickyCTA = ({ selectedProgram, whatsappUrl, whatsappMessage, alwaysVisible = false, showNusukButton = false }: StickyCTAProps) => {
   const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(alwaysVisible);
   const [mounted, setMounted] = useState(false);
@@ -43,13 +44,6 @@ const StickyCTA = ({ selectedProgram, whatsappUrl, whatsappMessage, alwaysVisibl
   const packageDates = selectedProgram?.departure && selectedProgram?.return
     ? `${selectedProgram.departure} - ${selectedProgram.return}`
     : packageDuration;
-
-  // Handle price - check if it's a numeric price or text like "Contact us"
-  const hasNumericPrice = selectedProgram?.price && /[\d.,]/.test(selectedProgram.price);
-  const packagePrice = hasNumericPrice
-    ? selectedProgram.price.replace(/[^\d.,]/g, '') || '0'
-    : selectedProgram?.price || '';
-  const packageCurrency = hasNumericPrice && selectedProgram?.price?.includes('€') ? '€' : hasNumericPrice ? '$' : '';
 
   // Default WhatsApp URL if not provided
   const defaultWhatsappUrl = 'https://wa.me/2120606420326';
@@ -85,13 +79,13 @@ const StickyCTA = ({ selectedProgram, whatsappUrl, whatsappMessage, alwaysVisibl
 
   return (
     <div
-      className={`fixed inset-x-0 bottom-0 z-[100] w-full transition-all duration-500 ease-out ${
+      className={`fixed flex items-center  justify-center inset-x-0 bottom-0 z-[100] w-full transition-all duration-500 ease-out ${
         effectiveVisible
           ? 'translate-y-0 opacity-100'
           : 'translate-y-full opacity-0 pointer-events-none'
       }`}
     >
-      <div className="w-full bg-green-900 shadow-lg  text-white shadow-[0_-4px_20px_rgba(0,0,0,0.15)] border-t border-gray-700/50">
+      <div className="md:w-200 rounded-full opacity-90  mb-5 bg-green-900 shadow-lg  text-white shadow-[0_-4px_20px_rgba(0,0,0,0.15)] border-t border-gray-700/50">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             {/* Left: Package info */}
@@ -106,7 +100,7 @@ const StickyCTA = ({ selectedProgram, whatsappUrl, whatsappMessage, alwaysVisibl
                   </p>
                 )}
               </div>
-              {(hasNumericPrice || packagePrice) && (
+              {/* {(hasNumericPrice || packagePrice) && (
                 <div className="flex items-baseline gap-2">
                   {hasNumericPrice ? (
                     <>
@@ -122,25 +116,49 @@ const StickyCTA = ({ selectedProgram, whatsappUrl, whatsappMessage, alwaysVisibl
                     <span className="text-sm text-gray-300">{packagePrice}</span>
                   )}
                 </div>
-              )}
+              )} */}
             </div>
 
-            {/* Right: CTA button */}
-            <button
-              onClick={handleBookClick}
-              className="w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-gray-900 bg-white hover:bg-emerald-50 border-2 border-emerald-500 text-emerald-700 hover:border-emerald-500 hover:text-emerald-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
-            >
-              {mounted ? (t('sticky_cta.book_package') || 'Book Package') : 'Book Package'}
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden
+            {/* Right: CTA buttons */}
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+              {/* WhatsApp Button */}
+              <button
+                onClick={handleBookClick}
+                className="w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-bold text-gray-900 bg-white hover:bg-emerald-50 border-2 border-emerald-500 text-emerald-700 hover:border-emerald-500 hover:text-emerald-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </button>
+                {mounted ? (t('sticky_cta.book_package') || 'Book Package') : 'Book Package'}
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </button>
+
+              {/* Nusuk Booking Button - Only visible on Hajj page */}
+              {showNusukButton && (
+                <a
+                  href="https://hajj.nusuk.sa/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  {mounted ? (t('common.book_via_nusuk') || 'Book via Nusuk') : 'Book via Nusuk'}
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </div>

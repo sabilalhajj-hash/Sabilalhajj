@@ -74,7 +74,7 @@ export default function ExcelExportButton({
   return (
     <button
       onClick={handleExport}
-      className={`inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors ${className}`}
+      className={`inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors ${className}`}
     >
       <Download size={16} />
       {displayButtonText}
@@ -118,7 +118,7 @@ export function ExcelExportExample() {
         />
       </div>
 
-      <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+      <div className="mt-6 p-4 bg-gray-50 rounded-full">
         <h3 className="font-semibold mb-2">How to use:</h3>
         <pre className="text-sm text-gray-700">
 {`// Basic usage

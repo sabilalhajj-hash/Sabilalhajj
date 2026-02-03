@@ -24,12 +24,13 @@ export function exportToExcel<T extends Record<string, any>>(
   XLSX.writeFile(wb, filename);
 }
 
-// User data interface
-interface UserData {
+// Passenger data interface
+interface PassengerData {
   name?: string;
+  lastName?: string;
   email?: string;
   phone?: string;
-  country?: string;
+  healthCondition?: string;
 }
 
 // Export booking data to Excel
@@ -42,19 +43,21 @@ export function exportBookingData(
     room?: string;
     visa?: string;
   },
-  userData?: UserData
+  passengersData?: PassengerData | PassengerData[]
 ): void {
+  const passengers = Array.isArray(passengersData) ? passengersData : passengersData ? [passengersData] : [];
   const exportData = [
-    // User Data (if provided)
-    ...(userData ? [{
-      'Type': 'User Information',
-      'Name': userData.name || '',
-      'Email': userData.email || '',
-      'Phone': userData.phone || '',
-      'Country': userData.country || '',
+    // Passengers (if provided)
+    ...passengers.map((p, i) => ({
+      'Type': 'Passenger',
+      'Passenger #': i + 1,
+      'Name': [p.name, p.lastName].filter(Boolean).join(' ') || '',
+      'Email': p.email || '',
+      'Phone': p.phone || '',
+      'Health Condition': p.healthCondition || '',
       'ID': '',
       'Selected': ''
-    }] : []),
+    })),
 
     // Programs Sheet Data
     ...programs.map(program => ({
@@ -66,7 +69,6 @@ export function exportBookingData(
       'Return': program.return,
       'From': program.from,
       'To': program.to,
-      'Price': program.price,
       'Description': program.description,
       'Selected': selectedOptions?.program === program.id ? 'Yes' : 'No'
     })),
@@ -77,7 +79,6 @@ export function exportBookingData(
       'ID': room.id,
       'Name': room.name,
       'Size': room.size,
-      'Price': room.price,
       'Capacity': room.capacity,
       'View': room.view,
       'Description': room.description,
@@ -89,8 +90,7 @@ export function exportBookingData(
       'Type': 'Visa',
       'ID': visa.id,
       'Name': visa.name,
-      'Price': visa.price,
-      'Processing Time': visa.processingTime,
+      'Processing Time': visa.processing_time ?? visa.processingTime ?? '',
       'Description': visa.description,
       'Selected': selectedOptions?.visa === visa.id ? 'Yes' : 'No'
     }))

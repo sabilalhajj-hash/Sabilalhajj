@@ -27,7 +27,7 @@ export default function FormField({
   options,
 }: FormFieldProps) {
   const baseInputClasses = `
-    w-full px-4 py-3 rounded-lg border transition-colors
+    w-full px-4 py-3 rounded-full border transition-colors
     focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent
     ${error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'}
     ${className}

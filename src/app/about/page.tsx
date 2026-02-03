@@ -26,7 +26,7 @@ export default function About() {
               height={150}
               className="object-contain object-cover"
             />
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Loading...</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">{t('Loading...')}</h1>
           </div>
         </div>
       </div>
@@ -67,7 +67,7 @@ export default function About() {
             </p>
           </div>
 
-          {/* <div className="bg-blue-50 p-6 rounded-lg">
+          {/* <div className="bg-blue-50 p-6 rounded-full">
             <p className="text-lg text-blue-800 leading-relaxed">
               {t('pages.about.contact_message')}
             </p>
@@ -78,7 +78,7 @@ export default function About() {
               href="https://wa.me/0606420326"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              className="inline-block bg-green-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 transition-colors"
             >
               {t('common.contact_us')}
             </a>

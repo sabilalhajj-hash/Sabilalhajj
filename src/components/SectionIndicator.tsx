@@ -112,7 +112,7 @@ export default function SectionIndicator({ sections: propSections, className, pa
                 <button
                   key={section.id}
                   onClick={() => scrollToSection(section.id)}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-lg whitespace-nowrap transition-all duration-300 text-xs font-medium ${
+                  className={`flex items-center gap-2 px-3 py-2 rounded-full whitespace-nowrap transition-all duration-300 text-xs font-medium ${
                     isActive
                       ? 'bg-emerald-100 text-emerald-800 shadow-sm'
                       : 'hover:bg-emerald-50 text-slate-700 hover:text-emerald-700'

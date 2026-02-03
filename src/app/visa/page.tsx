@@ -12,6 +12,10 @@ import { ChevronLeft, ChevronRight, Landmark, BookOpenCheck,  Plane,
   Globe,
   MessageCircle  } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
 import StickyCTA from '@/components/Umrah/StickyCTA';
 
 export const dynamic = 'force-dynamic';
@@ -42,7 +46,7 @@ const FALLBACK_TEXTS: Record<string, string> = {
   'visa.umrah_section.documents.passport_title': 'European Passport Holders',
   'visa.umrah_section.documents.additional_note': 'Additional documents may be required based on your nationality and specific circumstances.',
   'visa.umrah_section.processing.title': 'Processing Time',
-  'visa.umrah_section.processing.time': '2-4 weeks',
+  'visa.umrah_section.processing.time': '24Hours - 1week',
   'visa.umrah_section.processing.note': 'Processing times may vary depending on the embassy workload.',
   'visa.booking_button': 'Book Now via WhatsApp',
   'visa.tourist_section.title': 'Tourist Visa Requirements',
@@ -50,7 +54,7 @@ const FALLBACK_TEXTS: Record<string, string> = {
   'visa.tourist_section.documents.title': 'Required Documents',
   'visa.tourist_section.documents.subtitle': 'Please prepare the following documents for your tourist visa application.',
   'visa.tourist_section.processing.title': 'Processing Time',
-  'visa.tourist_section.processing.time': '1-2 weeks',
+  'visa.tourist_section.processing.time': '24Hours - 1week',
   'visa.tourist_section.processing.note': 'Processing times may vary depending on the embassy workload.',
 };
 
@@ -94,16 +98,18 @@ const FALLBACK_TEXTS: Record<string, string> = {
       id: 'visa-service',
       name: mounted ? t('visa.hero.title') : FALLBACK_TEXTS['visa.hero.title'],
       duration: mounted ? t('visa.umrah_section.processing.time') : FALLBACK_TEXTS['visa.umrah_section.processing.time'],
-      price: 'Contact us',
       description: mounted ? t('visa.hero.description') : FALLBACK_TEXTS['visa.hero.description'],
     }), [mounted, t]);
 
     const inclusiveServices = useMemo(() => [
-      { icon: <Plane className="text-emerald-700" size={24} />, title: mounted ? t('visa.umrah_section.services.flights') : FALLBACK_TEXTS['visa.umrah_section.services.flights'] },
-      { icon: <Hotel className="text-emerald-700" size={24} />, title: mounted ? t('visa.umrah_section.services.accommodation') : FALLBACK_TEXTS['visa.umrah_section.services.accommodation'] },
-      { icon: <Bus className="text-emerald-700" size={24} />, title: mounted ? t('visa.umrah_section.services.transportation') : FALLBACK_TEXTS['visa.umrah_section.services.transportation'] },
-      { icon: <Users className="text-emerald-700" size={24} />, title: mounted ? t('visa.umrah_section.services.coordination') : FALLBACK_TEXTS['visa.umrah_section.services.coordination'] },
+      { image: '/hajj1.jpg', icon: <Plane className="text-green-700" size={40} />, title: mounted ? t('visa.umrah_section.services.flights') : FALLBACK_TEXTS['visa.umrah_section.services.flights'] },
+      { image: '/hajj1.jpg', icon: <Hotel className="text-green-700" size={40} />, title: mounted ? t('visa.umrah_section.services.accommodation') : FALLBACK_TEXTS['visa.umrah_section.services.accommodation'] },
+      { image: '/hajj1.jpg', icon: <Bus className="text-green-700" size={40} />, title: mounted ? t('visa.umrah_section.services.transportation') : FALLBACK_TEXTS['visa.umrah_section.services.transportation'] },
+      { image: '/hajj1.jpg', icon: <Users className="text-green-700" size={40} />, title: mounted ? t('visa.umrah_section.services.coordination') : FALLBACK_TEXTS['visa.umrah_section.services.coordination'] },
+      { image: '/hajj1.jpg', icon: <Users className="text-green-700" size={40} />, title: mounted ? t('visa.umrah_section.services.coordination') : FALLBACK_TEXTS['visa.umrah_section.services.coordination'] },
+      { image: '/hajj1.jpg', icon: <Users className="text-green-700" size={40} />, title: mounted ? t('visa.umrah_section.services.coordination') : FALLBACK_TEXTS['visa.umrah_section.services.coordination'] }
     ], [mounted, t]);
+      
 
     const requiredDocs = useMemo(() => [
       mounted ? t('visa.umrah_section.documents.passport') : FALLBACK_TEXTS['visa.umrah_section.documents.passport'],
@@ -121,17 +127,35 @@ const FALLBACK_TEXTS: Record<string, string> = {
       mounted ? t('visa.umrah_section.documents.passport') : FALLBACK_TEXTS['visa.umrah_section.documents.passport'],
       mounted ? t('visa.umrah_section.documents.personal_photo') : FALLBACK_TEXTS['visa.umrah_section.documents.personal_photo']
     ], [mounted, t]);
+
+
+    const scrollToSection = (id: string) => {
+      const element = document.getElementById(id);
+      if (element) {
+        // Offset is useful if you have a fixed header
+        const headerOffset = 80; 
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    };
+
+
   return (
     <div className="w-full font-sans">
       {/* --- HERO SLIDER SECTION --- */}
       <div className="relative w-full h-[400px] bg-gradient-to-br from-emerald-800 to-emerald-600 flex items-center justify-center text-center px-4 overflow-hidden">
         {/* Navigation Arrows */}
-        <button className="absolute left-4 p-2 rounded-full border border-white/30 text-white hover:bg-white/10 transition-colors">
+        {/* <button className="absolute left-4 p-2 rounded-full border border-white/30 text-white hover:bg-white/10 transition-colors">
           <ChevronLeft size={24} />
         </button>
         <button className="absolute right-4 p-2 rounded-full border border-white/30 text-white hover:bg-white/10 transition-colors">
           <ChevronRight size={24} />
-        </button>
+        </button> */}
 
         {/* Hero Content */}
         <div className="max-w-2xl text-white">
@@ -156,27 +180,37 @@ const FALLBACK_TEXTS: Record<string, string> = {
           {/* Service Cards Container */}
           <div className="flex flex-col md:flex-row gap-6 mb-12 -mt-24 md:-mt-28 relative z-10">
             {/* Umrah Visa Card */}
-            <div className="bg-white p-8 rounded-2xl shadow-xl flex flex-col items-center w-64 border border-gray-100 transform hover:-translate-y-2 transition-transform duration-300">
-              <div className="w-20 h-20 bg-emerald-50 rounded-xl flex items-center justify-center mb-4">
-                <Landmark className="text-emerald-800" size={40} />
-              </div>
-              <span className="text-emerald-900 font-bold text-lg">{mounted ? t('visa.services.umrah') : FALLBACK_TEXTS['visa.services.umrah']}</span>
-              
-            </div>
+            {/* Umrah Visa Card */}
+<button 
+  onClick={() => scrollToSection('umrah-section')}
+  className="bg-white p-8 rounded-2xl shadow-xl flex flex-col items-center w-64 border border-gray-100 transform hover:-translate-y-2 transition-transform duration-300 cursor-pointer active:scale-95"
+>
+  <div className="w-20 h-20 bg-emerald-50 rounded-xl flex items-center justify-center mb-4">
+    <Landmark className="text-emerald-800" size={40} />
+  </div>
+  <span className="text-emerald-900 font-bold text-lg">
+    {mounted ? t('visa.services.umrah') : FALLBACK_TEXTS['visa.services.umrah']}
+  </span>
+</button>
 
-            {/* Tourist Visa Card */}
-            <div className="bg-white p-8 rounded-2xl shadow-xl flex flex-col items-center w-64 border border-gray-100 transform hover:-translate-y-2 transition-transform duration-300">
-              <div className="w-20 h-20 bg-emerald-50 rounded-xl flex items-center justify-center mb-4">
-                <BookOpenCheck className="text-emerald-800" size={40} />
-              </div>
-              <span className="text-emerald-900 font-bold text-lg">{mounted ? t('visa.services.tourist') : FALLBACK_TEXTS['visa.services.tourist']}</span>
-            </div>
+{/* Tourist Visa Card */}
+<button 
+  onClick={() => scrollToSection('tourist-section')}
+  className="bg-white p-8 rounded-2xl shadow-xl flex flex-col items-center w-64 border border-gray-100 transform hover:-translate-y-2 transition-transform duration-300 cursor-pointer active:scale-95"
+>
+  <div className="w-20 h-20 bg-emerald-50 rounded-xl flex items-center justify-center mb-4">
+    <BookOpenCheck className="text-emerald-800" size={40} />
+  </div>
+  <span className="text-emerald-900 font-bold text-lg">
+    {mounted ? t('visa.services.tourist') : FALLBACK_TEXTS['visa.services.tourist']}
+  </span>
+</button>
           </div>
 
           {/* Heading and Subtext */}
           <div className="text-center">
             <h2 className="text-5xl font-bold text-emerald-900 mb-6">{mounted ? t('visa.services.title') : FALLBACK_TEXTS['visa.services.title']}</h2>
-            <button className='bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors shadow-lg hover:shadow-xl' onClick={() => window.open('https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20book%20a%20visa%20service.', '_blank')}>Book Now</button>
+            <button className='bg-emerald-600 mb-4 hover:bg-emerald-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-colors shadow-lg hover:shadow-xl' onClick={() => window.open('https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20book%20a%20visa%20service.', '_blank')}>Book Now Via WhatsApp</button>
             <p className="text-slate-500 text-lg max-w-xl mx-auto leading-relaxed">
               {mounted ? t('visa.services.subtitle') : FALLBACK_TEXTS['visa.services.subtitle']}
             </p>
@@ -190,7 +224,7 @@ const FALLBACK_TEXTS: Record<string, string> = {
         
         {/* Header Section */}
         <div className="flex items-center gap-3 mb-8">
-          <div className="bg-emerald-50 p-2 rounded-lg">
+          <div className="bg-emerald-50 p-2 rounded-full">
             <Hotel className="text-emerald-700" size={28} />
           </div>
           <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
@@ -209,19 +243,23 @@ const FALLBACK_TEXTS: Record<string, string> = {
         </div>
 
         {/* Inclusive Services Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
+        {/* <div className="grid grid-cols-1 sm:grid-cols-2 border-2  lg:grid-cols-4 gap-4 mb-16">
           {inclusiveServices.map((service, idx) => (
-            <div key={idx} className="flex flex-col items-center text-center p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:shadow-md transition-shadow">
-              <div className="mb-4 bg-white p-3 rounded-xl shadow-sm italic">
+            <div key={idx} className="flex flex-col  items-center text-center p-6 bg-slate-50 rounded-2xl  hover:shadow-md transition-shadow w-full h-full">
+              <div className=" flex items-center justify-center w-full h-full bg-white  rounded-xl shadow-sm italic">
                 {service.icon}
               </div>
               <span className="text-sm font-semibold text-slate-700">{service.title}</span>
             </div>
           ))}
-        </div>
+        </div> */}
+
+
+
+
 
         {/* Requirements Section */}
-        <div className="space-y-12 mb-16">
+        <div className="space-y-12 mb-16" id="umrah-section">
           <div>
             <h2 className="text-xl font-bold text-slate-900 mb-2">{mounted ? t('visa.umrah_section.documents.title') : FALLBACK_TEXTS['visa.umrah_section.documents.title']}</h2>
             <p className="text-sm text-slate-500 mb-6">{mounted ? t('visa.umrah_section.documents.subtitle') : FALLBACK_TEXTS['visa.umrah_section.documents.subtitle']}</p>
@@ -273,17 +311,17 @@ const FALLBACK_TEXTS: Record<string, string> = {
         </div>
 
         {/* Booking Button */}
-        <div className="text-center mt-12">
+        {/* <div className="text-center mt-12">
           <a
             href="https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20book%20an%20Umrah%20visa."
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors shadow-lg hover:shadow-xl"
+            className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-colors shadow-lg hover:shadow-xl"
           >
             <MessageCircle className="text-white" size={24} />
             {mounted ? t('visa.booking_button') : FALLBACK_TEXTS['visa.booking_button']}
           </a>
-        </div>
+        </div> */}
 
       </div>
     </div>
@@ -293,12 +331,12 @@ const FALLBACK_TEXTS: Record<string, string> = {
 
   
 
-    <div className="w-full bg-white font-sans text-slate-800 py-12 px-4 md:px-8 relative">
+    <div className="w-full bg-white font-sans text-slate-800 py-12 px-4 md:px-8 relative" id="tourist-section">
       <div className="max-w-6xl mx-auto">
 
         {/* Header Section */}
         <div className="flex items-center gap-3 mb-8">
-          <div className="bg-emerald-50 p-2 rounded-lg">
+          <div className="bg-emerald-50 p-2 rounded-full">
             <Globe className="text-emerald-700" size={28} />
           </div>
           <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
@@ -347,18 +385,17 @@ const FALLBACK_TEXTS: Record<string, string> = {
         </div>
 
         {/* Booking Button */}
-        <div className="text-center mt-12">
+        {/* <div className="text-center mt-12">
           <a
             href="https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20book%20a%20Tourist%20visa."
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors shadow-lg hover:shadow-xl"
+            className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-colors shadow-lg hover:shadow-xl"
           >
             <MessageCircle className="text-white" size={24} />
             {mounted ? t('visa.booking_button') : FALLBACK_TEXTS['visa.booking_button']}
           </a>
-        </div>
-
+        </div> */}
       </div>
     </div>
 

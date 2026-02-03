@@ -7,7 +7,6 @@ interface Room {
   id: string;
   name: string;
   capacity: string;
-  price: string;
   view: string;
   features: string[];
 }
@@ -72,11 +71,6 @@ export default function RoomSelectionOverlay({
                   <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
                     <span>👥</span>
                     {room.capacity}
-                  </div>
-
-                  {/* Price */}
-                  <div className="text-2xl font-black text-blue-600">
-                    {room.price}
                   </div>
 
                   {/* View */}

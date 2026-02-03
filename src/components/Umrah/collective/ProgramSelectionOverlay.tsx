@@ -7,7 +7,6 @@ interface Program {
   id: string;
   name: string;
   ApproximateDuration: string;
-  price: string;
   highlights: string[];
 }
 
@@ -69,11 +68,6 @@ export default function ProgramSelectionOverlay({
                   <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-sm font-medium">
                     <span>⏱️</span>
                     {program.ApproximateDuration}
-                  </div>
-
-                  {/* Price */}
-                  <div className="text-2xl font-black text-emerald-600">
-                    {program.price}
                   </div>
 
                   {/* Highlights */}

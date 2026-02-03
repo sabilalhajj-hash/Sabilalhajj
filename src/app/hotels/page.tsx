@@ -20,7 +20,7 @@ export default function Hotels() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <div className="text-6xl mb-4">🏨</div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Loading...</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">{t('Loading...')}</h1>
           </div>
         </div>
       </div>
@@ -75,7 +75,7 @@ export default function Hotels() {
           </div>
         </div>
 
-        <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+        <div className="bg-green-50 border border-green-200 rounded-full p-6">
           <p className="text-lg text-green-800 leading-relaxed">
             {t('pages.hotels.description3')}
           </p>
@@ -84,7 +84,7 @@ export default function Hotels() {
         <div className="text-center mt-8">
           <button 
             onClick={() => window.open('https://wa.me/2120606420326?text=Hello!%20I%20would%20like%20to%20inquire%20about%20hotel%20accommodations.', '_blank')}
-            className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+            className="bg-green-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-green-700 transition-colors"
           >
             {t('common.view_details')}
           </button>

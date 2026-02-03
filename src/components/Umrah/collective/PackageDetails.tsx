@@ -52,7 +52,7 @@ const MadinahItinerary = () => {
     return (
       <div className="w-full w-full mx-auto my-5 bg-white shadow-lg rounded-2xl overflow-hidden my-8 font-sans">
         <div className="bg-emerald-50 py-4 px-4 sm:px-6 lg:px-8 flex justify-center items-center border-b border-emerald-100">
-          <h1 className="text-emerald-800 font-bold flex items-center gap-2 text-lg sm:text-xl">Loading...</h1>
+          <h1 className="text-emerald-800 font-bold flex items-center gap-2 text-lg sm:text-xl">{t('Loading...')}</h1>
         </div>
       </div>
     );
@@ -139,7 +139,7 @@ const MadinahItinerary = () => {
 
           <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 bg-white p-4 sm:p-6 rounded-xl shadow-sm">
             <div className="w-full lg:w-1/3">
-              <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt="Hotel" className="rounded-lg object-cover w-full h-40 sm:h-48 lg:h-56" />
+              <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt="Hotel" className="rounded-full object-cover w-full h-40 sm:h-48 lg:h-56" />
             </div>
             <div className="w-full lg:w-2/3">
               <div className="flex text-yellow-400 mb-2"><Star size={16} fill="currentColor"/><Star size={16} fill="currentColor"/><Star size={16} fill="currentColor"/></div>
@@ -187,7 +187,7 @@ const MadinahItinerary = () => {
 
           <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 bg-white p-4 sm:p-6 rounded-xl shadow-sm">
             <div className="w-full lg:w-1/3">
-              <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt="Hotel" className="rounded-lg object-cover w-full h-40 sm:h-48 lg:h-56" />
+              <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt="Hotel" className="rounded-full object-cover w-full h-40 sm:h-48 lg:h-56" />
             </div>
             <div className="w-full lg:w-2/3">
               <div className="flex text-yellow-400 mb-2">

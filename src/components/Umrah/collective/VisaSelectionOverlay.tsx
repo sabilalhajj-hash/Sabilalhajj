@@ -7,7 +7,6 @@ interface Visa {
   id: string;
   name: string;
   detail: string;
-  price: string;
   validity: string;
   benefits: string[];
 }
@@ -71,11 +70,6 @@ export default function VisaSelectionOverlay({
                   {/* Detail */}
                   <div className="text-sm text-gray-600 font-medium">
                     {visa.detail}
-                  </div>
-
-                  {/* Price */}
-                  <div className="text-2xl font-black text-purple-600">
-                    {visa.price}
                   </div>
 
                   {/* Validity */}

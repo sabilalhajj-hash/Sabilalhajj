@@ -18,11 +18,12 @@ interface UserProfile {
 
 interface Booking {
   id: string;
-  packageType: string;
+  packageType?: string;
+  packageSlug?: string;
   bookingDate: string;
-  travelDate: string;
-  status: 'active' | 'completed' | 'cancelled';
-  totalPrice: number;
+  travelDate?: string | null;
+  status: string;
+  amount?: string | null;
 }
 
 export default function UserPage() {
@@ -35,39 +36,48 @@ export default function UserPage() {
   const [loading, setLoading] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
+  const fetchUserAndBookings = async () => {
+    try {
+      const [userRes, bookingsRes] = await Promise.all([
+        fetch('/api/auth/me', { credentials: 'include' }),
+        fetch('/api/user/bookings', { credentials: 'include' }),
+      ]);
+
+      const userData = await userRes.json();
+      const bookingsData = await bookingsRes.json();
+
+      if (userRes.ok && userData.user) {
+        const u = userData.user;
+        setUserProfile({
+          id: u.id,
+          email: u.email,
+          name: u.name ?? '',
+          lastName: u.lastName ?? '',
+          phone: u.phone ?? '',
+          createdAt: u.createdAt ?? new Date().toISOString(),
+          role: u.role ?? 'user',
+        });
+      } else {
+        // Not logged in – redirect to sign-in (client-side safeguard)
+        router.replace(`/auth?redirect=${encodeURIComponent('/user')}`);
+        return;
+      }
+
+      if (bookingsRes.ok && Array.isArray(bookingsData.bookings)) {
+        setBookings(bookingsData.bookings);
+      }
+    } catch {
+      router.replace(`/auth?redirect=${encodeURIComponent('/user')}`);
+    }
+  };
+
   useEffect(() => {
     setMounted(true);
-    // Mock user data - Replace with actual API call
-    setUserProfile({
-      id: '1',
-      email: 'user@example.com',
-      name: 'John',
-      lastName: 'Doe',
-      phone: '+1234567890',
-      createdAt: new Date().toISOString(),
-      role: 'user',
-    });
-
-    // Mock bookings data - Replace with actual API call
-    setBookings([
-      {
-        id: 'BK001',
-        packageType: 'Umrah (7 Days)',
-        bookingDate: new Date().toISOString(),
-        travelDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-        status: 'active',
-        totalPrice: 1200,
-      },
-      {
-        id: 'BK002',
-        packageType: 'Hajj Package',
-        bookingDate: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
-        travelDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-        status: 'completed',
-        totalPrice: 3500,
-      },
-    ]);
   }, []);
+
+  useEffect(() => {
+    if (mounted) fetchUserAndBookings();
+  }, [mounted]);
 
   const handleLogout = async () => {
     setLoading(true);
@@ -79,11 +89,15 @@ export default function UserPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-700';
+      case 'approved':
       case 'active':
         return 'bg-emerald-100 text-emerald-700';
       case 'completed':
         return 'bg-blue-100 text-blue-700';
       case 'cancelled':
+      case 'rejected':
         return 'bg-red-100 text-red-700';
       default:
         return 'bg-slate-100 text-slate-700';
@@ -101,7 +115,7 @@ export default function UserPage() {
   if (!mounted) {
     return (
       <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-8">
-        <div className="animate-pulse text-emerald-700 font-semibold" suppressHydrationWarning>Loading...</div>
+        <div className="animate-pulse text-emerald-700 font-semibold" suppressHydrationWarning>{t('Loading...')}</div>
       </div>
     );
   }
@@ -126,7 +140,7 @@ export default function UserPage() {
 
         {/* Logout Confirmation Modal */}
         {showLogoutConfirm && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 rounded-lg">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 rounded-full">
             <div className="bg-white rounded-2xl shadow-xl p-8 max-w-sm w-full">
               <h2 className="text-2xl font-bold text-slate-900 mb-4">{t('user.logout_confirm')}</h2>
               <div className="flex gap-3">
@@ -196,16 +210,16 @@ export default function UserPage() {
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-2">
-                            <h3 className="text-lg font-bold text-slate-900">{booking.packageType}</h3>
+                            <h3 className="text-lg font-bold text-slate-900">
+                              {booking.packageType || booking.packageSlug || t('user.package_selected')}
+                            </h3>
                             <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(booking.status)}`}>
-                              {t(`user.${booking.status}`)}
+                              {t(`user.${booking.status}`) || booking.status}
                             </span>
                           </div>
                           <p className="text-slate-600 text-sm">{t('user.booking_id')}: {booking.id}</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-2xl font-bold text-emerald-700">${booking.totalPrice}</p>
-                          <p className="text-xs text-slate-500">{t('user.total_price')}</p>
                         </div>
                       </div>
 
@@ -216,29 +230,25 @@ export default function UserPage() {
                         </div>
                         <div>
                           <p className="text-xs text-slate-500 mb-1">{t('user.travel_date')}</p>
-                          <p className="text-sm font-semibold text-slate-900">{formatDate(booking.travelDate)}</p>
+                          <p className="text-sm font-semibold text-slate-900">{booking.travelDate ? formatDate(booking.travelDate) : '—'}</p>
                         </div>
                         <div>
                           <p className="text-xs text-slate-500 mb-1">{t('user.status')}</p>
                           <p className="text-sm font-semibold text-slate-900 capitalize">{t(`user.${booking.status}`)}</p>
                         </div>
-                        <div>
-                          <p className="text-xs text-slate-500 mb-1">{t('user.total_price')}</p>
-                          <p className="text-sm font-semibold text-emerald-700">${booking.totalPrice}</p>
-                        </div>
                       </div>
 
                       <div className="flex gap-3">
-                        <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-emerald-50 text-emerald-700 font-semibold hover:bg-emerald-100 transition-colors">
+                        <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-emerald-50 text-emerald-700 font-semibold hover:bg-emerald-100 transition-colors">
                           <Eye className="h-4 w-4" />
                           {t('user.view_booking')}
                         </button>
-                        <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-blue-50 text-blue-700 font-semibold hover:bg-blue-100 transition-colors">
+                        <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-blue-700 font-semibold hover:bg-blue-100 transition-colors">
                           <Download className="h-4 w-4" />
                           {t('user.download_receipt')}
                         </button>
                         {booking.status === 'active' && (
-                          <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-red-50 text-red-700 font-semibold hover:bg-red-100 transition-colors">
+                          <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-red-50 text-red-700 font-semibold hover:bg-red-100 transition-colors">
                             <Trash2 className="h-4 w-4" />
                             {t('user.cancel_booking')}
                           </button>
@@ -310,17 +320,17 @@ export default function UserPage() {
               <h2 className="text-xl font-bold text-slate-900 mb-6">{t('user.account_settings')}</h2>
 
               <div className="space-y-3">
-                <button className="w-full px-4 py-3 rounded-lg border border-slate-200 text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors flex items-center gap-2">
+                <button className="w-full px-4 py-3 rounded-full border border-slate-200 text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors flex items-center gap-2">
                   <Settings className="h-5 w-5" />
                   {t('user.change_password')}
                 </button>
 
-                <button className="w-full px-4 py-3 rounded-lg border border-slate-200 text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors flex items-center gap-2">
+                <button className="w-full px-4 py-3 rounded-full border border-slate-200 text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors flex items-center gap-2">
                   <Settings className="h-5 w-5" />
                   {t('user.notification_preferences')}
                 </button>
 
-                <button className="w-full px-4 py-3 rounded-lg border border-slate-200 text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors flex items-center gap-2">
+                <button className="w-full px-4 py-3 rounded-full border border-slate-200 text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors flex items-center gap-2">
                   <Settings className="h-5 w-5" />
                   {t('user.privacy_settings')}
                 </button>
@@ -336,15 +346,15 @@ export default function UserPage() {
               <h2 className="text-xl font-bold text-slate-900 mb-6">{t('user.account_settings')}</h2>
 
               <div className="space-y-4">
-                <button className="w-full px-4 py-3 rounded-lg border border-slate-200 text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
+                <button className="w-full px-4 py-3 rounded-full border border-slate-200 text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
                   {t('user.change_password')}
                 </button>
 
-                <button className="w-full px-4 py-3 rounded-lg border border-slate-200 text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
+                <button className="w-full px-4 py-3 rounded-full border border-slate-200 text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
                   {t('user.notification_preferences')}
                 </button>
 
-                <button className="w-full px-4 py-3 rounded-lg border border-slate-200 text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
+                <button className="w-full px-4 py-3 rounded-full border border-slate-200 text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
                   {t('user.privacy_settings')}
                 </button>
               </div>
@@ -354,17 +364,17 @@ export default function UserPage() {
               <h2 className="text-xl font-bold text-slate-900 mb-6">{t('user.help_support')}</h2>
 
               <div className="space-y-4">
-                <button className="w-full px-4 py-3 rounded-lg border border-slate-200 text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
+                <button className="w-full px-4 py-3 rounded-full border border-slate-200 text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
                   {t('user.contact_support')}
                 </button>
 
-                <button className="w-full px-4 py-3 rounded-lg border border-slate-200 text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
+                <button className="w-full px-4 py-3 rounded-full border border-slate-200 text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
                   {t('user.faq')}
                 </button>
 
                 <Link
                   href="/"
-                  className="block px-4 py-3 rounded-lg border border-slate-200 text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+                  className="block px-4 py-3 rounded-full border border-slate-200 text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
                 >
                   {t('common.back_to_home')}
                 </Link>

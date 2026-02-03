@@ -62,7 +62,7 @@ export default function PackageSelection() {
       <section className="bg-white py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Loading...</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">{t('Loading...')}</h2>
           </div>
         </div>
       </section>
@@ -119,7 +119,7 @@ export default function PackageSelection() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
               {/* Logo in corner */}
-              <div className="absolute top-4 right-4 w-16 h-12  border-1  bg-gray/80 backdrop-blur-sm  rounded-lg flex items-center justify-center p-1">
+              <div className="absolute top-4 right-4 w-16 h-12  border-1  bg-gray/80 backdrop-blur-sm  rounded-full flex items-center justify-center p-1">
                  <div className="relative w-full h-full">
                     <Image src="/sabilalhajj-removebg.png" alt="Logo" fill className="object-contain" sizes="64px" />
                  </div>

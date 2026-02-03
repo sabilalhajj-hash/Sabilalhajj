@@ -1217,7 +1217,7 @@ export default function FlightSearch() {
                     <div className="flex items-center justify-between mb-4">
                       <button
                         onClick={() => handleMonthChange('prev')}
-                        className="p-1 hover:bg-gray-100 rounded-md transition-colors"
+                        className="p-1 hover:bg-gray-100 rounded-full transition-colors"
                       >
                         <ChevronLeft className="w-4 h-4" />
                       </button>
@@ -1264,7 +1264,7 @@ export default function FlightSearch() {
                             key={day}
                             onClick={() => handleDateSelect(day)}
                             disabled={isBeforeTomorrow}
-                            className={`h-8 w-8 text-sm rounded-lg transition-colors ${
+                            className={`h-8 w-8 text-sm rounded-full transition-colors ${
                               isSelected
                                 ? 'bg-emerald-600 text-white'
                                 : isToday
@@ -1318,7 +1318,7 @@ export default function FlightSearch() {
           {/* Search Button */}
           <button
             onClick={() => setShowResults(true)}
-            className="w-full py-4.5 bg-[#2D4A31] hover:bg-[#1f3322] text-white rounded-xl font-bold flex items-center justify-center space-x-3 transition-all transform hover:scale-[1.01] active:scale-[0.99] shadow-lg"
+            className="w-full py-4.5 bg-[#2D4A31] hover:bg-[#1f3322] text-white rounded-full font-bold flex items-center justify-center space-x-3 transition-all transform hover:scale-[1.01] active:scale-[0.99] shadow-lg"
           >
             <Search className="w-5 h-5" />
             <span className="text-lg">{t('flight.search_flights')}</span>
@@ -1342,7 +1342,7 @@ export default function FlightSearch() {
               <div className="border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow">
                 <div className="flex flex-col md:flex-row md:items-center justify-between">
                   <div className="flex items-center space-x-4 mb-4 md:mb-0">
-                    <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
+                    <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center">
                       <span className="text-emerald-600 font-bold text-sm">RAM</span>
                     </div>
                     <div>
@@ -1383,7 +1383,7 @@ export default function FlightSearch() {
               <div className="border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow">
                 <div className="flex flex-col md:flex-row md:items-center justify-between">
                   <div className="flex items-center space-x-4 mb-4 md:mb-0">
-                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                       <span className="text-blue-600 font-bold text-sm">SV</span>
                     </div>
                     <div>
@@ -1424,7 +1424,7 @@ export default function FlightSearch() {
               <div className="border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow">
                 <div className="flex flex-col md:flex-row md:items-center justify-between">
                   <div className="flex items-center space-x-4 mb-4 md:mb-0">
-                    <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
                       <span className="text-purple-600 font-bold text-sm">TK</span>
                     </div>
                     <div>

@@ -41,7 +41,7 @@ export default function NotFound() {
           
           <Link 
             href="/" 
-            className="inline-flex items-center px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors shadow-md hover:shadow-lg"
+            className="inline-flex items-center px-6 py-3 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition-colors shadow-md hover:shadow-lg"
           >
             Go back home
           </Link>

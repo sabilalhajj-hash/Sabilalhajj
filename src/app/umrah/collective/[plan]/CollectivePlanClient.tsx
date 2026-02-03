@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
+import { useRouter, useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
@@ -11,7 +12,8 @@ import {
   Users, Share2, Eye, Bus, Info, Calendar, Plus, Minus,
   ArrowLeft, ShieldCheck, LayoutGrid,
   CreditCard, Building, AlertCircle,
-  ShieldCheck as ShieldCheckIcon, PlaneTakeoff, UserPlus, Euro
+  ShieldCheck as ShieldCheckIcon, PlaneTakeoff, UserPlus, Euro,
+  Pencil, Trash2, X
 } from 'lucide-react';
 
 // Import Swiper styles
@@ -19,7 +21,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import StickyCTA from '@/components/Umrah/StickyCTA';
 import SectionIndicator from '@/components/SectionIndicator';
-import { exportBookingData } from '@/lib/excelExport';
+import { generateBookingReceiptPdf } from '@/lib/pdfReceipt';
 
 const toStringArray = (value: unknown): string[] => {
   if (Array.isArray(value)) {
@@ -54,14 +56,32 @@ const gallery = [
 export default function CollectivePlanClient() {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
+  const [passengerCount, setPassengerCount] = useState<number | null>(null);
   const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
   const [selectedVisa, setSelectedVisa] = useState<string | null>(null);
   const [toggle, setToggle] = useState(false);
+  const router = useRouter();
+  const params = useParams();
+  const planSlug = params.plan as string;
+  const [user, setUser] = useState<{ id: string; email: string; role?: string } | null>(null);
+  const [savingBooking, setSavingBooking] = useState(false);
+  const [itineraryView, setItineraryView] = useState<'madinah' | 'makkah' | null>(null);
 
   // Prevent SSR/client translation mismatch (hydration)
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  // Fetch current user on mount (to check if logged in)
+  useEffect(() => {
+    fetch('/api/auth/me', { credentials: 'include' })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.user) setUser(data.user);
+        else setUser(null);
+      })
+      .catch(() => setUser(null));
   }, []);
 
   // Auto-hide toggle overlay after 4 seconds
@@ -75,43 +95,92 @@ export default function CollectivePlanClient() {
     }
   }, [toggle]);
 
-  // User data state
-  const [userData, setUserData] = useState({
-    name: '',
-    lastName: '',
-    email: '',
-    phone: ''
-  });
+  // Passenger data - one object per passenger
+  interface PassengerData {
+    name: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    healthCondition: string;
+  }
 
-  // Validation state
-  const [validationErrors, setValidationErrors] = useState({
-    name: '',
-    lastName: '',
-    email: '',
-    phone: ''
-  });
+  const [passengersData, setPassengersData] = useState<PassengerData[]>([]);
+  const [editingPassengerIndex, setEditingPassengerIndex] = useState<number | null>(null);
+
+  // Validation state for each passenger
+  const [validationErrors, setValidationErrors] = useState<Record<number, Record<string, string>>>({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
 
   const isConfigured = selectedProgram && selectedRoom && selectedVisa;
 
-  // Handle user data input changes
-  const handleUserDataChange = (field: string, value: string) => {
-    setUserData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+  const [packageData, setPackageData] = useState<{
+    programs?: Array<Record<string, unknown>>;
+    rooms?: Array<Record<string, unknown>>;
+    visas?: Array<Record<string, unknown>>;
+  } | null>(null);
 
-    // Clear validation errors when user starts typing
+  useEffect(() => {
+    if (!planSlug) return;
+    fetch(`/api/packages/slug/${encodeURIComponent(planSlug)}`)
+      .then((res) => res.json())
+      .then((data) => (data.package ? setPackageData(data.package) : setPackageData(null)))
+      .catch(() => setPackageData(null));
+  }, [planSlug]);
+
+  // Initialize with exactly passengerCount passengers when configured (from step 1)
+  useEffect(() => {
+    if (!isConfigured || passengerCount == null || passengerCount < 1) return;
+    setPassengersData((prev) => {
+      if (prev.length === passengerCount) return prev;
+      return Array.from({ length: passengerCount }, () => ({
+        name: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        healthCondition: '',
+      }));
+    });
+  }, [isConfigured, passengerCount]);
+
+  // Handle passenger data change
+  const handlePassengerChange = (index: number, field: keyof PassengerData, value: string) => {
+    setPassengersData(prev => {
+      const next = [...prev];
+      if (!next[index]) return prev;
+      next[index] = { ...next[index], [field]: value };
+      return next;
+    });
     setValidationErrors(prev => ({
       ...prev,
-      [field]: ''
+      [index]: { ...(prev[index] || {}), [field]: '' }
     }));
   };
+
+  const addPassenger = () => {
+    setPassengersData(prev => [...prev, { name: '', lastName: '', email: '', phone: '', healthCondition: '' }]);
+  };
+
+  const deletePassenger = (index: number) => {
+    setPassengersData(prev => prev.filter((_, i) => i !== index));
+    setValidationErrors(prev => {
+      const next: Record<number, Record<string, string>> = {};
+      Object.entries(prev).forEach(([k, v]) => {
+        const i = Number(k);
+        if (i < index) next[i] = v;
+        if (i > index) next[i - 1] = v;
+      });
+      return next;
+    });
+    setEditingPassengerIndex(prev => (prev === index ? null : prev != null && prev > index ? prev - 1 : prev));
+  };
+
+  const isPassengerFilled = (p: PassengerData) =>
+    !!(p.name?.trim() && p.lastName?.trim() && p.phone?.trim());
 
   // Validation functions
   const validateName = (name: string): string => {
     const trimmed = name.trim();
-    if (!trimmed) return '';
+    if (!trimmed) return t('validation.first_name_required');
     if (trimmed.length < 2) return t('validation.first_name_min_length');
     if (!/^[\p{L}\s'-]+$/u.test(trimmed)) return t('validation.first_name_letters_only');
     return '';
@@ -119,61 +188,102 @@ export default function CollectivePlanClient() {
 
   const validateLastName = (lastName: string): string => {
     const trimmed = lastName.trim();
-    if (!trimmed) return '';
+    if (!trimmed) return t('validation.last_name_required');
     if (trimmed.length < 2) return t('validation.last_name_min_length');
     if (!/^[\p{L}\s'-]+$/u.test(trimmed)) return t('validation.last_name_letters_only');
     return '';
   };
 
   const validateEmail = (email: string): string => {
+    const trimmed = (email || '').trim();
+    if (!trimmed) return ''; // optional
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) return '';
-    if (!emailRegex.test(email)) return t('validation.email_invalid');
+    if (!emailRegex.test(trimmed)) return t('validation.email_invalid');
     return '';
   };
 
   const validatePhone = (phone: string): string => {
     const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-    const normalized = phone.replace(/\s+/g, '').trim();
-    if (!normalized) return '';
+    const normalized = (phone || '').replace(/\s+/g, '').trim();
+    if (!normalized) return t('validation.phone_required');
     if (normalized.length < 8) return t('validation.phone_min_digits');
     if (normalized.length > 15) return t('validation.phone_max_digits');
     if (!phoneRegex.test(normalized)) return t('validation.phone_invalid');
     return '';
   };
 
-  // Validate all fields
-  const validateForm = () => {
-    const errors = {
-      name: validateName(userData.name),
-      lastName: validateLastName(userData.lastName),
-      email: validateEmail(userData.email),
-      phone: validatePhone(userData.phone)
-    };
+  // Validate a single passenger (name, lastName, phone required; email optional)
+  const validatePassenger = (p: PassengerData): Record<string, string> => ({
+    name: validateName(p.name),
+    lastName: validateLastName(p.lastName),
+    email: validateEmail(p.email),
+    phone: validatePhone(p.phone)
+  });
 
-    setValidationErrors(errors);
-    return !Object.values(errors).some(error => error !== '');
+  // Validate all passengers (must have exactly passengerCount entries, all required fields filled)
+  const validateForm = () => {
+    const requiredCount = passengerCount ?? 0;
+    if (passengersData.length !== requiredCount) {
+      setValidationErrors({});
+      return false;
+    }
+    const allErrors: Record<number, Record<string, string>> = {};
+    let valid = true;
+    passengersData.forEach((p, i) => {
+      const err = validatePassenger(p);
+      allErrors[i] = err;
+      if (Object.values(err).some(e => e !== '')) valid = false;
+    });
+    setValidationErrors(allErrors);
+    return valid;
   };
 
   const [confirmed, setConfirmed] = useState(false);
+  const [savedBookingId, setSavedBookingId] = useState<string | null>(null);
 
-  // Run validation on mount and when hasAttemptedSubmit changes
+  // Run validation when hasAttemptedSubmit and passengersData change
   useEffect(() => {
     if (hasAttemptedSubmit) {
       validateForm();
     }
-  }, [userData.name, userData.lastName, userData.email, userData.phone, hasAttemptedSubmit]);
+  }, [hasAttemptedSubmit, passengersData]);
+
+  // Default visa types (useMemo must run on every render — before any early return)
+  const defaultVisaTypes = useMemo(() => [
+    {
+      id: 'umrah',
+      name: t('visa.overlay_umrah_name'),
+      detail: t('visa.overlay_umrah_detail'),
+      description: t('visa.overlay_umrah_description'),
+      validity: t('visa.overlay_umrah_validity'),
+      stay_duration: t('visa.overlay_umrah_stay_duration'),
+      processing_time: t('visa.overlay_umrah_processing'),
+      requirements: toStringArray(t('visa.overlay_umrah_requirements', { returnObjects: true })),
+      benefits: toStringArray(t('visa.overlay_umrah_benefits', { returnObjects: true })),
+    },
+    {
+      id: 'tourist',
+      name: t('visa.overlay_tourist_name'),
+      detail: t('visa.overlay_tourist_detail'),
+      description: t('visa.overlay_tourist_description'),
+      validity: t('visa.overlay_tourist_validity'),
+      stay_duration: t('visa.overlay_tourist_stay_duration'),
+      processing_time: t('visa.overlay_tourist_processing'),
+      requirements: toStringArray(t('visa.overlay_tourist_requirements', { returnObjects: true })),
+      benefits: toStringArray(t('visa.overlay_tourist_benefits', { returnObjects: true })),
+    }
+  ], [t]);
 
   if (!mounted) {
     return (
       <div className="min-h-screen bg-[#F8FAFC] font-sans flex items-center justify-center p-8">
-        <div className="animate-pulse text-emerald-700 font-semibold">Loading...</div>
+        <div className="animate-pulse text-emerald-700 font-semibold" suppressHydrationWarning>{t('common.loading')}</div>
       </div>
     );
   }
 
-  // --- Program Data ---
-  const programs = [
+  // --- Program Data (from package API or static defaults) ---
+  const defaultPrograms = [
     {
       id: 'ramadan-journey',
       name: t('programs.ramadan_journey.name'),
@@ -184,7 +294,6 @@ export default function CollectivePlanClient() {
       to: 'Mecca & Medina',
       description: t('programs.ramadan_journey.description'),
       highlights: toStringArray(t('programs.ramadan_journey.highlights', { returnObjects: true })),
-      price: '$2,500',
       includes: toStringArray(t('programs.ramadan_journey.includes', { returnObjects: true }))
     },
     {
@@ -197,7 +306,6 @@ export default function CollectivePlanClient() {
       to: 'Mecca & Medina',
       description: t('programs.ramadan_last_ten.description'),
       highlights: toStringArray(t('programs.ramadan_last_ten.highlights', { returnObjects: true })),
-      price: '$2,200',
       includes: toStringArray(t('programs.ramadan_last_ten.includes', { returnObjects: true }))
     },
     {
@@ -210,16 +318,27 @@ export default function CollectivePlanClient() {
       to: 'Mecca & Medina',
       description: t('programs.long_stay.description'),
       highlights: toStringArray(t('programs.long_stay.highlights', { returnObjects: true })),
-      price: '$4,500',
       includes: toStringArray(t('programs.long_stay.includes', { returnObjects: true }))
     }
   ];
-  const roomTypes = [
+  const programs = (packageData?.programs?.length) ? packageData.programs.map((p: Record<string, unknown>) => ({
+    id: String(p.id ?? ''),
+    name: String(p.name ?? ''),
+    ApproximateDuration: String(p.ApproximateDuration ?? p.approximateDuration ?? ''),
+    departure: String(p.departure ?? ''),
+    return: String(p.return ?? ''),
+    from: String(p.from ?? ''),
+    to: String(p.to ?? ''),
+    description: String(p.description ?? ''),
+    highlights: Array.isArray(p.highlights) ? p.highlights.map(String) : [],
+    includes: Array.isArray(p.includes) ? p.includes.map(String) : [],
+  })) : defaultPrograms;
+
+  const defaultRoomTypes = [
     {
       id: 'twin',
       name: t('rooms.twin.name'),
       size: t('rooms.twin.size'),
-      price: t('rooms.twin.price'),
       description: t('rooms.twin.description'),
       features: toStringArray(t('rooms.twin.features', { returnObjects: true })),
       capacity: t('rooms.twin.capacity'),
@@ -230,7 +349,6 @@ export default function CollectivePlanClient() {
       id: 'triple',
       name: t('rooms.triple.name'),
       size: t('rooms.triple.size'),
-      price: t('rooms.triple.price'),
       description: t('rooms.triple.description'),
       features: toStringArray(t('rooms.triple.features', { returnObjects: true })),
       capacity: t('rooms.triple.capacity'),
@@ -241,7 +359,6 @@ export default function CollectivePlanClient() {
       id: 'quad',
       name: t('rooms.quad.name'),
       size: t('rooms.quad.size'),
-      price: t('rooms.quad.price'),
       description: t('rooms.quad.description'),
       features: toStringArray(t('rooms.quad.features', { returnObjects: true })),
       capacity: t('rooms.quad.capacity'),
@@ -252,7 +369,6 @@ export default function CollectivePlanClient() {
       id: 'penta',
       name: t('rooms.penta.name'),
       size: t('rooms.penta.size'),
-      price: t('rooms.penta.price'),
       description: t('rooms.penta.description'),
       features: toStringArray(t('rooms.penta.features', { returnObjects: true })),
       capacity: t('rooms.penta.capacity'),
@@ -260,32 +376,28 @@ export default function CollectivePlanClient() {
       amenities: toStringArray(t('rooms.penta.amenities', { returnObjects: true }))
     }
   ];
-  const visaTypes = [
-    {
-      id: 'umrah',
-      name: 'Umrah Visa',
-      detail: 'Dedicated visa for religious pilgrimage',
-      description: 'Official Umrah visa for performing religious rituals in Mecca and Medina.',
-      validity: '90 Days',
-      stay_duration: '30 Days',
-      processing_time: '3-5 Business Days',
-      requirements: ['Valid Passport', 'Application Form', 'Medical Certificate', 'Hotel Booking', 'Flight Tickets'],
-      benefits: ['Religious Activities', 'Extended Stay', 'Group Activities', 'Guided Tours'],
-      price: '$150'
-    },
-    {
-      id: 'tourist',
-      name: 'Tourist Visa',
-      detail: 'General purpose tourist visa',
-      description: 'Standard tourist visa for visiting Saudi Arabia with flexible travel options.',
-      validity: '90 Days',
-      stay_duration: '15 Days',
-      processing_time: '2-3 Business Days',
-      requirements: ['Valid Passport', 'Application Form', 'Hotel Booking', 'Bank Statements', 'Employment Letter'],
-      benefits: ['Flexible Travel', 'Sightseeing', 'Cultural Experience', 'Modern Amenities'],
-      price: '$120'
-    }
-  ];
+  const roomTypes = (packageData?.rooms?.length) ? packageData.rooms.map((r: Record<string, unknown>) => ({
+    id: String(r.id ?? ''),
+    name: String(r.name ?? ''),
+    size: String(r.size ?? ''),
+    description: String(r.description ?? ''),
+    features: Array.isArray(r.features) ? r.features.map(String) : [],
+    capacity: String(r.capacity ?? ''),
+    view: String(r.view ?? ''),
+    amenities: Array.isArray(r.amenities) ? r.amenities.map(String) : [],
+  })) : defaultRoomTypes;
+
+  const visaTypes = (packageData?.visas?.length) ? packageData.visas.map((v: Record<string, unknown>) => ({
+    id: String(v.id ?? ''),
+    name: String(v.name ?? ''),
+    detail: String(v.detail ?? ''),
+    description: String(v.description ?? ''),
+    validity: String(v.validity ?? ''),
+    stay_duration: String(v.stay_duration ?? ''),
+    processing_time: String(v.processing_time ?? ''),
+    requirements: Array.isArray(v.requirements) ? v.requirements.map(String) : [],
+    benefits: Array.isArray(v.benefits) ? v.benefits.map(String) : [],
+  })) : defaultVisaTypes;
 
   // Helper Components
   const ItineraryItemComponent = ({ title, subtitle, description, imageSrc, badge }: any) => (
@@ -354,7 +466,7 @@ export default function CollectivePlanClient() {
 
             <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 bg-white p-4 sm:p-6 rounded-xl shadow-sm">
               <div className="w-full lg:w-1/3">
-                <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt="Hotel" className="rounded-lg object-cover w-full h-40 sm:h-48 lg:h-56" />
+                <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt="Hotel" className="rounded-full object-cover w-full h-40 sm:h-48 lg:h-56" />
               </div>
               <div className="w-full lg:w-2/3">
                 <div className="flex text-yellow-400 mb-2"><Star size={16} fill="currentColor"/><Star size={16} fill="currentColor"/><Star size={16} fill="currentColor"/></div>
@@ -441,7 +553,7 @@ export default function CollectivePlanClient() {
 
             <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 bg-white p-4 sm:p-6 rounded-xl shadow-sm">
               <div className="w-full lg:w-1/3">
-                <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt="Hotel" className="rounded-lg object-cover w-full h-40 sm:h-48 lg:h-56" />
+                <img src="https://via.placeholder.com/400x300/10b981/ffffff?text=Hotel" alt="Hotel" className="rounded-full object-cover w-full h-40 sm:h-48 lg:h-56" />
               </div>
               <div className="w-full lg:w-2/3">
                 <div className="flex text-yellow-400 mb-2">
@@ -502,23 +614,138 @@ export default function CollectivePlanClient() {
   return (
     <div className="min-h-screen bg-[#F8FAFC] font-sans selection:bg-emerald-100 pb-20">
 
-      {/* Program Selection Overlay - Shows First */}
-      {!selectedProgram && (
+
+      {/* Passenger Count Overlay - Shows First */}
+      {passengerCount === null && (
         <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 md:p-12 relative">
+            <button
+              type="button"
+              onClick={() => router.push('/umrah/collective')}
+              className="absolute top-4 right-4 p-2 rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+              aria-label={t('common.cancel')}
+            >
+              <X size={22} />
+            </button>
+            <div className="text-center">
+              <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 rounded-full px-4 py-2 mb-6">
+                <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium">{t('overlay.step_one')}</span>
+              </div>
+              
+              <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
+                {t('overlay.how_many_passengers')}
+              </h1>
+              <p className="text-gray-600 mb-8">
+                {t('overlay.passengers_description')}
+              </p>
+
+              {/* Custom Passenger Count Input */}
+              <div className="mb-8 space-y-4">
+                <label className="block text-left">
+                  <span className="text-sm font-semibold text-gray-700 mb-2 block">
+                    {t('overlay.enter_passenger_count')}
+                  </span>
+                  <input 
+                    type="number" 
+                    min="1" 
+                    id="customPassengers"
+                    placeholder={t('overlay.enter_number_placeholder')} 
+                    className="w-full px-6 py-4 border-2 border-gray-200 rounded-xl text-lg font-semibold text-gray-700 focus:border-emerald-500 focus:bg-white focus:outline-none transition-all duration-200" 
+                  />
+                </label>
+                <button
+                  onClick={() => {
+                    const input = document.getElementById('customPassengers') as HTMLInputElement;
+                    const value = parseInt(input?.value || '0');
+                    if (value > 0) {
+                      setPassengerCount(value);
+                    }
+                  }}
+                  className="w-full px-6 py-4 bg-emerald-600 text-white rounded-xl text-lg font-semibold hover:bg-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                >
+                  {t('common.confirm')}
+                </button>
+              </div>
+
+              {/* Passenger Count Selection */}
+              {/* <div className="space-y-3 mb-8">
+                {[1, 2, 3, 4, 5, 6].map((count) => (
+                  <button
+                    key={count}
+                    onClick={() => setPassengerCount(count)}
+                    className="w-full px-6 py-4 border-2 border-gray-200 rounded-xl text-lg font-semibold text-gray-700 hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-200 group"
+                  >
+                    <span className="inline-flex items-center gap-2">
+                      <Users className="w-5 h-5 text-emerald-600" />
+                      {count} {count === 1 ? t('overlay.passenger') || 'Passenger' : t('overlay.passengers') || 'Passengers'}
+                    </span>
+                  </button>
+                ))}
+              </div> */}
+
+              {/* More than 6 passengers option */}
+              {/* <button
+                onClick={() => {
+                  const input = prompt(t('overlay.enter_passenger_count') || 'Enter number of passengers:');
+                  if (input && /^\d+$/.test(input)) {
+                    setPassengerCount(parseInt(input));
+                  }
+                }}
+                className="w-full px-6 py-4 border-2 border-dashed border-gray-300 rounded-xl text-lg font-semibold text-gray-600 hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-200"
+              >
+                {t('overlay.more_passengers') || 'More than 6'}
+              </button> */}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Program Selection Overlay - Shows Second */}
+      {passengerCount !== null && !selectedProgram && (
+        <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white  rounded-3xl shadow-2xl max-w-4xl w-full h-[70%]  overflow-y-auto relative">
+            <button
+              type="button"
+              onClick={() => router.push('/umrah/collective')}
+              className="absolute top-4 right-4 z-10 p-2 rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+              aria-label={t('common.cancel')}
+            >
+              <X size={22} />
+            </button>
             <div className="p-8 md:p-12">
+
               {/* Header */}
-              <div className="text-center mb-8">
+             
+              <div className="text-center mb-8 ">
                 <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 rounded-full px-4 py-2 mb-4">
                   <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
                   <span className="text-sm font-medium">{t('overlay.choose_program')}</span>
                 </div>
+                  <button
+                  onClick={() => {
+                    setSelectedProgram(null);
+                    router.push('/umrah/collective');
+                  }}
+                  className="inline-flex bg-emerald-50 text-emerald-700 rounded-full px-4 py-2 mb-4 items-center gap-2  text-gray-500 hover:text-gray-700 transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  {t('overlay.back_to_programs')}
+                </button>
+
+
                 <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
                   {t('overlay.select_spiritual_journey')}
                 </h1>
                 <p className="text-gray-600 max-w-2xl mx-auto">
                   {t('overlay.choose_program_description')}
                 </p>
+
+                <div className="mt-8 text-center">
+               
+              </div>
               </div>
 
               {/* Program Selection Cards */}
@@ -527,7 +754,7 @@ export default function CollectivePlanClient() {
                   <div
                     key={program.id}
                     onClick={() => setSelectedProgram(program.name)}
-                    className="group relative bg-gradient-to-br from-white to-emerald-50/30 border-2 border-emerald-100 rounded-2xl p-6 cursor-pointer hover:border-emerald-400 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                    className="group  relative bg-gradient-to-br from-white to-emerald-50/30 border-2 border-emerald-100 rounded-2xl p-6 cursor-pointer hover:border-emerald-400 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                   >
                     {/* Badge */}
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full">
@@ -553,12 +780,15 @@ export default function CollectivePlanClient() {
                       </div>
 
                       {/* Price */}
-                      <div className="text-2xl font-black text-emerald-600">
+                      {/* <div className="text-2xl font-black text-emerald-600">
                         {program.price}
-                      </div>
+                      </div> */}
 
                       {/* Highlights */}
-                      <div className="space-y-2">
+                      <div className="text-sm text-gray-600">
+                        {t('overlay.whatsapp_details')}
+                      </div>
+                      {/* <div className="space-y-2">
                         <div className="text-sm font-semibold text-gray-700">Highlights:</div>
                         <ul className="text-sm text-gray-600 space-y-1">
                           {program.highlights.slice(0, 2).map((highlight: string, i: number) => (
@@ -573,12 +803,12 @@ export default function CollectivePlanClient() {
                             </li>
                           )}
                         </ul>
-                      </div>
+                      </div> */}
 
                       {/* CTA */}
                       <div className="pt-4">
                         <button className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 group-hover:shadow-lg">
-                          Select This Program
+                          {t('collective.select_this_program')}
                         </button>
                       </div>
                     </div>
@@ -600,21 +830,41 @@ export default function CollectivePlanClient() {
       {/* Room Selection Overlay */}
       {selectedProgram && !selectedRoom && (
         <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-5xl w-full max-h-[80%] overflow-y-auto relative">
+            <button
+              type="button"
+              onClick={() => router.push('/umrah/collective')}
+              className="absolute top-4 right-4 z-10 p-2 rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+              aria-label={t('common.cancel')}
+            >
+              <X size={22} />
+            </button>
             <div className="p-8 md:p-12">
+         
               {/* Header */}
               <div className="text-center mb-8">
                 <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 rounded-full px-4 py-2 mb-4">
                   <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
                   <span className="text-sm font-medium">{t('overlay.choose_accommodation')}</span>
                 </div>
+                <button
+                  onClick={() => setSelectedProgram(null)}
+                  className="inline-flex bg-emerald-50 text-emerald-700 rounded-full px-4 py-2 mb-4 items-center gap-2  text-gray-500 hover:text-gray-700 transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  {t('overlay.back_to_programs')}
+                </button>
                 <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
                   {t('overlay.select_room_type')}
                 </h1>
                 <p className="text-gray-600 max-w-2xl mx-auto">
                   {t('overlay.choose_accommodation_description')}
                 </p>
+
               </div>
+              
 
               {/* Room Selection Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -626,7 +876,7 @@ export default function CollectivePlanClient() {
                   >
                     {/* Badge */}
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                      Option {index + 1}
+                      {t('overlay.option_number', { n: index + 1 })}
                     </div>
 
                     {/* Content */}
@@ -647,38 +897,44 @@ export default function CollectivePlanClient() {
                         {room.capacity}
                       </div>
 
-                      {/* Price */}
-                      <div className="text-2xl font-black text-blue-600">
-                        {room.price}
+                      <div className="text-sm text-gray-600">
+                        {t('overlay.whatsapp_details')}
                       </div>
+
+                      {/* Price */}
+                      {/* <div className="text-2xl font-black text-blue-600">
+                        {room.price}
+                      </div> */}
 
                       {/* View */}
-                      <div className="text-sm text-gray-600">
+                      {/* <div className="text-sm text-gray-600">
                         <span className="font-semibold">View:</span> {room.view}
-                      </div>
+                      </div> */}
 
                       {/* Key Features */}
+
+                      
                       <div className="space-y-2">
-                        <div className="text-sm font-semibold text-gray-700">Key Features:</div>
+                        
                         <ul className="text-sm text-gray-600 space-y-1">
-                          {room.features.slice(0, 2).map((feature: string, i: number) => (
+                          {room.features.slice(0, 4).map((feature: string, i: number) => (
                             <li key={i} className="flex items-center gap-2">
                               <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
                               {feature}
                             </li>
                           ))}
-                          {room.features.length > 2 && (
+                          {/* {room.features.length > 2 && (
                             <li className="text-blue-600 font-medium">
                               +{room.features.length - 2} more...
                             </li>
-                          )}
+                          )} */}
                         </ul>
                       </div>
 
                       {/* CTA */}
                       <div className="pt-4">
                         <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 group-hover:shadow-lg">
-                          Select This Room
+                          {t('overlay.select_this_room')}
                         </button>
                       </div>
                     </div>
@@ -687,17 +943,7 @@ export default function CollectivePlanClient() {
               </div>
 
               {/* Back Button */}
-              <div className="mt-8 text-center">
-                <button
-                  onClick={() => setSelectedProgram(null)}
-                  className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  {t('overlay.back_to_programs')}
-                </button>
-              </div>
+            
             </div>
           </div>
         </div>
@@ -706,7 +952,15 @@ export default function CollectivePlanClient() {
       {/* Visa Selection Overlay */}
       {selectedProgram && selectedRoom && !selectedVisa && (
         <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[70vh] overflow-y-auto relative">
+            <button
+              type="button"
+              onClick={() => router.push('/umrah/collective')}
+              className="absolute top-4 right-4 z-10 p-2 rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+              aria-label={t('common.cancel')}
+            >
+              <X size={22} />
+            </button>
             <div className="p-8 md:p-12">
               {/* Header */}
               <div className="text-center mb-8">
@@ -714,6 +968,16 @@ export default function CollectivePlanClient() {
                   <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
                   <span className="text-sm font-medium">{t('overlay.choose_visa_type')}</span>
                 </div>
+
+                <button
+                  onClick={() => setSelectedProgram(null)}
+                  className="inline-flex bg-emerald-50 text-emerald-700 rounded-full px-4 py-2 mb-4 items-center gap-2  text-gray-500 hover:text-gray-700 transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  {t('overlay.back_to_programs')}
+                </button>
                 <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
                   {t('overlay.select_travel_visa')}
                 </h1>
@@ -732,7 +996,7 @@ export default function CollectivePlanClient() {
                   >
                     {/* Badge */}
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                      Visa {index + 1}
+                      {t('overlay.visa_number', { n: index + 1 })}
                     </div>
 
                     {/* Content */}
@@ -752,31 +1016,31 @@ export default function CollectivePlanClient() {
                         {visa.detail}
                       </div>
 
-                      {/* Price */}
-                      <div className="text-2xl font-black text-purple-600">
-                        {visa.price}
+
+                      <div className="text-sm text-gray-600">
+                        {t('overlay.whatsapp_details')}
                       </div>
+                      {/* Price */}
+                      {/* <div className="text-2xl font-black text-purple-600">
+                        {visa.price}
+                      </div> */}
 
                       {/* Validity */}
-                      <div className="text-sm text-gray-600">
-                        <span className="font-semibold">Validity:</span> {visa.validity}
-                      </div>
+                      {/* <div className="text-sm text-gray-600">
+                        <span className="font-semibold">{t('collective.validity')}:</span> {visa.validity}
+                      </div> */}
 
                       {/* Key Benefits */}
                       <div className="space-y-2">
-                        <div className="text-sm font-semibold text-gray-700">Key Benefits:</div>
+                        
                         <ul className="text-sm text-gray-600 space-y-1">
-                          {visa.benefits.slice(0, 2).map((benefit: string, i: number) => (
+                          {visa.benefits.slice(0, 5).map((benefit: string, i: number) => (
                             <li key={i} className="flex items-center gap-2">
                               <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
                               {benefit}
                             </li>
                           ))}
-                          {visa.benefits.length > 2 && (
-                            <li className="text-purple-600 font-medium">
-                              +{visa.benefits.length - 2} more...
-                            </li>
-                          )}
+                       
                         </ul>
                       </div>
 
@@ -792,7 +1056,7 @@ export default function CollectivePlanClient() {
               </div>
 
               {/* Back Button */}
-              <div className="mt-8 text-center">
+              {/* <div className="mt-8 text-center">
                 <button
                   onClick={() => setSelectedRoom(null)}
                   className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors"
@@ -802,7 +1066,7 @@ export default function CollectivePlanClient() {
                   </svg>
                   {t('overlay.back_to_rooms')}
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -837,9 +1101,9 @@ export default function CollectivePlanClient() {
               {/* Text overlay */}
               <div className="absolute inset-0 flex flex-col justify-end md:p-8 text-white">
                 <div className="space-y-2">
-                  <h3 className="text-xl md:text-7xl font-bold">Ramadan Umrah 2026</h3>
-                  <p className="text-sm md:text-lg opacity-90">Full Month of Ramadan - Medina & Makkah</p>
-                  <p className="text-xs md:text-lg opacity-90">18 February 2026 - 4 March 2026</p>
+                  <h3 className="text-xl md:text-7xl font-bold">{t('package.hero_title')}</h3>
+                  <p className="text-sm md:text-lg opacity-90">{t('package.hero_subtitle')}</p>
+                  <p className="text-xs md:text-lg opacity-90">{t('package.hero_dates')}</p>
                 </div>
               </div>
             </SwiperSlide>
@@ -855,7 +1119,8 @@ export default function CollectivePlanClient() {
     
 
       {/* 4. PACKAGE CONFIGURATION */}
-      <section id="config" className=" w-full my-5  mx-auto px-6 relative z-20">
+      <section id="config" className="w-full my-5  mx-auto px-6 relative z-20">
+        
         <div className="bg-white rounded-[3rem] shadow-2xl w-full  p-8 md:p-12 space-y-12 ">
           <div className="text-center border-b border-slate-50 pb-8">
              <div className="inline-block px-4 py-1 bg-emerald-50 text-emerald-700 rounded-full text-[10px] font-black uppercase tracking-widest mb-4">{t('package.package_details')}</div>
@@ -864,10 +1129,10 @@ export default function CollectivePlanClient() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Program Selector */}
-            <div className={`p-8 rounded-[2rem] border-2 transition-all ${selectedProgram ? 'border-emerald-500 bg-emerald-50' : 'border-slate-100 bg-slate-50'}`}>
+            <div className={`p-8  rounded-[2rem] border-2 transition-all ${selectedProgram ? 'border-emerald-500 bg-emerald-50' : 'border-slate-100 bg-slate-50'}`}>
               <div className="flex justify-between items-center mb-6">
                 <span className="flex items-center gap-2 text-emerald-700 font-bold text-sm"><Clock size={18}/> {t('selection.selected_program')}</span>
-                {selectedProgram && <button onClick={() => setSelectedProgram(null)} className="text-[10px] uppercase font-black bg-emerald-600 text-white px-3 py-1 rounded-lg">{t('selection.change')}</button>}
+                {selectedProgram && <button onClick={() => setSelectedProgram(null)} className="text-[10px] uppercase font-black bg-emerald-600 text-white px-3 py-1 rounded-full">{t('selection.change')}</button>}
               </div>
               {!selectedProgram ? (
                 <div className="space-y-3">
@@ -889,15 +1154,15 @@ export default function CollectivePlanClient() {
                           <div className="space-y-2">
                             <div className="flex items-center gap-2 text-slate-600">
                               <Clock size={16} />
-                              <span className="font-semibold">Duration:</span> {program.ApproximateDuration}
+                              <span className="font-semibold">{t('collective.duration')}:</span> {program.ApproximateDuration}
                             </div>
                             <div className="flex items-center gap-2 text-slate-600">
                               <Plane size={16} />
-                              <span className="font-semibold">Departure:</span> {program.departure}
+                              <span className="font-semibold">{t('collective.departure')}:</span> {program.departure}
                             </div>
                             <div className="flex items-center gap-2 text-slate-600">
                               <Plane size={16} />
-                              <span className="font-semibold">Return:</span> {program.return}
+                              <span className="font-semibold">{t('collective.return')}:</span> {program.return}
                             </div>
                           </div>
                           <div className="space-y-2">
@@ -907,18 +1172,18 @@ export default function CollectivePlanClient() {
                             </div>
                             <div className="flex items-center gap-2 text-slate-600">
                               <MapPin size={16} />
-                              <span className="font-semibold">To:</span> {program.to}
+                              <span className="font-semibold">{t('collective.to')}:</span> {program.to}
                             </div>
-                            <div className="flex items-center gap-2 text-emerald-600 font-bold">
+                            {/* <div className="flex items-center gap-2 text-emerald-600 font-bold">
                               <Euro size={16} />
                               <span>{program.price}</span>
-                            </div>
+                            </div> */}
                           </div>
                         </div>
                         <div className="pt-4 border-t border-slate-200">
                           <p className="text-slate-700 font-medium mb-3">{program.description}</p>
                           <div className="space-y-2">
-                            <div className="font-semibold text-slate-900 text-sm">Highlights</div>
+                            <div className="font-semibold text-slate-900 text-sm">{t('collective.highlights')}</div>
                             <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
                               {program.highlights.map((highlight: string, i: number) => (
                                 <li key={i} className="flex items-center gap-2 text-slate-600 text-sm">
@@ -929,7 +1194,7 @@ export default function CollectivePlanClient() {
                             </ul>
                           </div>
                           <div className="space-y-2 mt-4">
-                            <div className="font-semibold text-slate-900 text-sm">Includes</div>
+                            <div className="font-semibold text-slate-900 text-sm">{t('collective.includes')}</div>
                             <div className="flex flex-wrap gap-2">
                               {program.includes.map((item: string, i: number) => (
                                 <span key={i} className="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-medium">
@@ -952,7 +1217,7 @@ export default function CollectivePlanClient() {
             <div className={`p-8 rounded-[2rem]  border-2 transition-all ${selectedRoom ? 'border-emerald-500 bg-emerald-50' : 'border-slate-100 bg-slate-50'}`}>
               <div className="flex justify-between items-center mb-6">
                 <span className="flex items-center gap-2 text-emerald-700 font-bold text-sm"><Hotel size={18}/> {t('selection.selected_room')}</span>
-                {selectedRoom && <button onClick={() => setSelectedRoom(null)} className="text-[10px] uppercase font-black bg-emerald-600 text-white px-3 py-1 rounded-lg">{t('selection.change')}</button>}
+                {selectedRoom && <button onClick={() => setSelectedRoom(null)} className="text-[10px] uppercase font-black bg-emerald-600 text-white px-3 py-1 rounded-full">{t('selection.change')}</button>}
               </div>
               {!selectedRoom ? (
                 <div className="space-y-3">
@@ -974,23 +1239,23 @@ export default function CollectivePlanClient() {
                           <div className="space-y-2">
                             <div className="flex items-center gap-2 text-slate-600">
                               <Users size={16} />
-                              <span className="font-semibold">Capacity:</span> {room.capacity}
+                              <span className="font-semibold">{t('collective.capacity')}:</span> {room.capacity}
                             </div>
-                            <div className="flex items-center gap-2 text-slate-600">
+                            {/* <div className="flex items-center gap-2 text-slate-600">
                               <Eye size={16} />
                               <span className="font-semibold">View:</span> {room.view}
-                            </div>
-                            <div className="flex items-center gap-2 text-slate-600">
+                            </div> */}
+                            {/* <div className="flex items-center gap-2 text-slate-600">
                               <LayoutGrid size={16} />
                               <span className="font-semibold">Size:</span> {room.size}
-                            </div>
+                            </div> */}
                           </div>
-                          <div className="space-y-2">
+                          {/* <div className="space-y-2">
                             <div className="flex items-center gap-2 text-emerald-600 font-bold">
                               <Euro size={16} />
                               <span>{room.price}</span>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                         <div className="pt-4 border-t border-slate-200">
                           <p className="text-slate-700 font-medium mb-3">{room.description}</p>
@@ -1006,7 +1271,7 @@ export default function CollectivePlanClient() {
                             </ul>
                           </div>
                           <div className="space-y-2 mt-4">
-                            <div className="font-semibold text-slate-900 text-sm">Amenities</div>
+                            <div className="font-semibold text-slate-900 text-sm">{t('collective.amenities')}</div>
                             <div className="flex flex-wrap gap-2">
                               {room.amenities.map((amenity: string, i: number) => (
                                 <span key={i} className="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-medium">
@@ -1029,7 +1294,7 @@ export default function CollectivePlanClient() {
             <div className={`p-8 rounded-[2rem] border-2 transition-all ${selectedVisa ? 'border-emerald-500 bg-emerald-50' : 'border-slate-100 bg-slate-50'}`}>
               <div className="flex justify-between items-center mb-6">
                 <span className="flex items-center gap-2 text-emerald-700 font-bold text-sm"><FileText size={18}/> {t('selection.selected_visa')}</span>
-                {selectedVisa && <button onClick={() => setSelectedVisa(null)} className="text-[10px] uppercase font-black bg-emerald-600 text-white px-3 py-1 rounded-lg">{t('selection.change')}</button>}
+                {selectedVisa && <button onClick={() => setSelectedVisa(null)} className="text-[10px] uppercase font-black bg-emerald-600 text-white px-3 py-1 rounded-full">{t('selection.change')}</button>}
               </div>
               {!selectedVisa ? (
                 <div className="space-y-3">
@@ -1051,28 +1316,22 @@ export default function CollectivePlanClient() {
                           <div className="space-y-2">
                             <div className="flex items-center gap-2 text-slate-600">
                               <Calendar size={16} />
-                              <span className="font-semibold">Validity:</span> {visa.validity}
+                              <span className="font-semibold">{t('collective.validity')}:</span> {visa.validity}
                             </div>
                             <div className="flex items-center gap-2 text-slate-600">
                               <Clock size={16} />
-                              <span className="font-semibold">Stay Duration:</span> {visa.stay_duration}
+                              <span className="font-semibold">{t('collective.stay_duration')}:</span> {visa.stay_duration}
                             </div>
                             <div className="flex items-center gap-2 text-slate-600">
                               <Clock size={16} />
-                              <span className="font-semibold">Processing:</span> {visa.processing_time}
-                            </div>
-                          </div>
-                          <div className="space-y-2">
-                            <div className="flex items-center gap-2 text-emerald-600 font-bold">
-                              <Euro size={16} />
-                              <span>{visa.price}</span>
+                              <span className="font-semibold">{t('collective.processing')}:</span> {visa.processing_time}
                             </div>
                           </div>
                         </div>
                         <div className="pt-4 border-t border-slate-200">
                           <p className="text-slate-700 font-medium mb-3">{visa.description}</p>
                           <div className="space-y-2">
-                            <div className="font-semibold text-slate-900 text-sm">Requirements</div>
+                            <div className="font-semibold text-slate-900 text-sm">{t('collective.requirements')}</div>
                             <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
                               {visa.requirements.map((requirement: string, i: number) => (
                                 <li key={i} className="flex items-center gap-2 text-slate-600 text-sm">
@@ -1083,7 +1342,7 @@ export default function CollectivePlanClient() {
                             </ul>
                           </div>
                           <div className="space-y-2 mt-4">
-                            <div className="font-semibold text-slate-900 text-sm">Benefits</div>
+                            <div className="font-semibold text-slate-900 text-sm">{t('collective.benefits')}</div>
                             <div className="flex flex-wrap gap-2">
                               {visa.benefits.map((benefit: string, i: number) => (
                                 <span key={i} className="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-medium">
@@ -1103,100 +1362,186 @@ export default function CollectivePlanClient() {
             </div>
 
           </div>
-             {/* User Data Form */}
-             <div className="p-8 rounded-[2rem]  border-2 border-emerald-500 transition-all">
-               <div className="mb-6">
-                 <span className="flex items-center gap-2 text-emerald-700 font-bold text-sm mb-4"><User size={18}/> {t('form.user_data')}</span>
+             {/* User Data Form - Inline passenger inputs */}
+             {isConfigured && (
+               <div className="p-8 rounded-[2rem] border-2 border-emerald-500 transition-all">
+                 <div className="mb-6">
+                   <span className="flex items-center gap-2 text-emerald-700 font-bold text-sm mb-4">
+                     <User size={18} /> {t('form.user_data')}
+                   </span>
+                   {passengerCount != null && passengerCount > 0 && (
+                     <p className="text-slate-600 text-sm mb-4">
+                       {t('form.passenger_count_required', { count: passengerCount })}
+                     </p>
+                   )}
+                   <div className="space-y-4">
+                     {passengersData.map((passenger, index) => {
+                       const filled = isPassengerFilled(passenger);
+                       const isEditing = editingPassengerIndex === index;
+                       const showCollapsed = filled && !isEditing;
+                       const displayName = filled ? [passenger.name, passenger.lastName].filter(Boolean).join(' ') : '';
 
-                 {/* User Data Form - Horizontal Layout */}
-                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-black placeholder-gray-400 w-full">
-                   <div className="space-y-2">
-                     <label className="block text-sm font-medium text-emerald-800">
-                      {t('form.first_name')}
-                     </label>
-                     <input
-                       type="text"
-                       placeholder={t('form.first_name_placeholder')}
-                       value={userData.name}
-                       onChange={(e) => handleUserDataChange('name', e.target.value)}
-                       onBlur={() => {
-                         const error = validateName(userData.name);
-                         setValidationErrors(prev => ({ ...prev, name: error }));
-                       }}
-                       className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-black placeholder-gray-400 ${
-                         validationErrors.name ? 'border-red-500 focus:ring-red-500' : 'border-slate-200'
-                       }`}
-                     />
-                     {validationErrors.name && (
-                       <p className="text-red-500 text-xs mt-1">{validationErrors.name}</p>
-                     )}
+                       return (
+                       <div
+                         key={index}
+                         className={`rounded-xl border-2 transition-all duration-300 overflow-hidden ${
+                           showCollapsed
+                             ? 'p-4 bg-emerald-50 border-emerald-200'
+                             : 'p-6 bg-slate-50 border-slate-200'
+                         }`}
+                       >
+                         {showCollapsed ? (
+                           <div className="flex items-center justify-between gap-4">
+                             <div className="flex items-center gap-3 min-w-0">
+                               <UserCircle size={24} className="text-emerald-600 shrink-0" />
+                               <span className="font-bold text-emerald-900 truncate">{displayName}</span>
+                             </div>
+                             <div className="flex items-center gap-2 shrink-0">
+                               <button
+                                 type="button"
+                                 onClick={() => setEditingPassengerIndex(index)}
+                                 className="p-2 rounded-full text-emerald-700 hover:bg-emerald-100 transition-colors"
+                                 title={t('form.modify')}
+                               >
+                                 <Pencil size={18} />
+                               </button>
+                               {(passengerCount == null || passengersData.length > passengerCount) && (
+                                 <button
+                                   type="button"
+                                   onClick={() => deletePassenger(index)}
+                                   className="p-2 rounded-full text-red-600 hover:bg-red-100 transition-colors"
+                                   title={t('form.delete')}
+                                 >
+                                   <Trash2 size={18} />
+                                 </button>
+                               )}
+                             </div>
+                           </div>
+                         ) : (
+                           <>
+                         <div className="flex items-center justify-between mb-4">
+                           <h4 className="text-emerald-800 font-bold flex items-center gap-2">
+                             <UserCircle size={18} />
+                             {t('form.passenger')} {index + 1}
+                             {passengerCount != null && (
+                               <span className="text-slate-500 font-normal text-sm">
+                                 ({index + 1} / {passengerCount})
+                               </span>
+                             )}
+                           </h4>
+                           {isEditing && (
+                             <button
+                               type="button"
+                               onClick={() => setEditingPassengerIndex(null)}
+                               className="text-sm px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-700 font-semibold hover:bg-emerald-200"
+                             >
+                               {t('form.done')}
+                             </button>
+                           )}
+                         </div>
+                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-black placeholder-gray-400">
+                           <div className="space-y-2">
+                             <label className="block text-sm font-medium text-emerald-800">{t('form.first_name')}</label>
+                             <input
+                               type="text"
+                               placeholder={t('form.first_name_placeholder')}
+                               value={passenger.name}
+                               onChange={(e) => handlePassengerChange(index, 'name', e.target.value)}
+                               onBlur={() => {
+                                 const err = validateName(passenger.name);
+                                 setValidationErrors(prev => ({ ...prev, [index]: { ...(prev[index] || {}), name: err } }));
+                               }}
+                               className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 ${
+                                 validationErrors[index]?.name ? 'border-red-500' : 'border-slate-200'
+                               }`}
+                             />
+                             {validationErrors[index]?.name && <p className="text-red-500 text-xs">{validationErrors[index].name}</p>}
+                           </div>
+                           <div className="space-y-2">
+                             <label className="block text-sm font-medium text-emerald-800">{t('form.last_name')}</label>
+                             <input
+                               type="text"
+                               placeholder={t('form.last_name_placeholder')}
+                               value={passenger.lastName}
+                               onChange={(e) => handlePassengerChange(index, 'lastName', e.target.value)}
+                               onBlur={() => {
+                                 const err = validateLastName(passenger.lastName);
+                                 setValidationErrors(prev => ({ ...prev, [index]: { ...(prev[index] || {}), lastName: err } }));
+                               }}
+                               className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 ${
+                                 validationErrors[index]?.lastName ? 'border-red-500' : 'border-slate-200'
+                               }`}
+                             />
+                             {validationErrors[index]?.lastName && <p className="text-red-500 text-xs">{validationErrors[index].lastName}</p>}
+                           </div>
+                           <div className="space-y-2">
+                             <label className="block text-sm font-medium text-emerald-800">{t('form.email')}</label>
+                             <input
+                               type="email"
+                               placeholder={t('form.email_placeholder')}
+                               value={passenger.email}
+                               onChange={(e) => handlePassengerChange(index, 'email', e.target.value)}
+                               onBlur={() => {
+                                 const err = validateEmail(passenger.email);
+                                 setValidationErrors(prev => ({ ...prev, [index]: { ...(prev[index] || {}), email: err } }));
+                               }}
+                               className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 ${
+                                 validationErrors[index]?.email ? 'border-red-500' : 'border-slate-200'
+                               }`}
+                             />
+                             {validationErrors[index]?.email && <p className="text-red-500 text-xs">{validationErrors[index].email}</p>}
+                           </div>
+                           <div className="space-y-2">
+                             <label className="block text-sm font-medium text-emerald-800">{t('form.phone')}</label>
+                             <input
+                               type="tel"
+                               placeholder={t('form.phone_placeholder')}
+                               value={passenger.phone}
+                               onChange={(e) => handlePassengerChange(index, 'phone', e.target.value)}
+                               onBlur={() => {
+                                 const err = validatePhone(passenger.phone);
+                                 setValidationErrors(prev => ({ ...prev, [index]: { ...(prev[index] || {}), phone: err } }));
+                               }}
+                               className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 ${
+                                 validationErrors[index]?.phone ? 'border-red-500' : 'border-slate-200'
+                               }`}
+                               required={true}
+                             />
+                             {validationErrors[index]?.phone && <p className="text-red-500 text-xs">{validationErrors[index].phone}</p>}
+                           </div>
+                           <div className="space-y-2 md:col-span-2">
+                             <label className="block text-sm font-medium text-emerald-800">{t('form.health_condition')}</label>
+                             <input
+                               type="text"
+                               placeholder={t('form.health_condition_placeholder')}
+                               value={passenger.healthCondition}
+                               onChange={(e) => handlePassengerChange(index, 'healthCondition', e.target.value)}
+                               className="w-full p-4 bg-[#F8FAFB] border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500"
+                             />
+                           </div>
+                         </div>
+                           </>
+                         )}
+                       </div>
+                     );
+                     })}
                    </div>
-                   <div className="space-y-2">
-                     <label className="block text-sm font-medium text-emerald-800">
-                      {t('form.last_name')}
-                     </label>
-                     <input
-                       type="text"
-                       placeholder={t('form.last_name_placeholder')}
-                       value={userData.lastName}
-                       onChange={(e) => handleUserDataChange('lastName', e.target.value)}
-                       onBlur={() => {
-                         const error = validateLastName(userData.lastName);
-                         setValidationErrors(prev => ({ ...prev, lastName: error }));
-                       }}
-                       className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-black placeholder-gray-400 ${
-                         validationErrors.lastName ? 'border-red-500 focus:ring-red-500' : 'border-slate-200'
-                       }`}
-                     />
-                     {validationErrors.lastName && (
-                       <p className="text-red-500 text-xs mt-1">{validationErrors.lastName}</p>
-                     )}
-                   </div>
-                   <div className="space-y-2">
-                     <label className="block text-sm font-medium text-emerald-800">
-                      {t('form.email')}
-                     </label>
-                     <input
-                       type="email"
-                       placeholder={t('form.email_placeholder')}
-                       value={userData.email}
-                       onChange={(e) => handleUserDataChange('email', e.target.value)}
-                       onBlur={() => {
-                         const error = validateEmail(userData.email);
-                         setValidationErrors(prev => ({ ...prev, email: error }));
-                       }}
-                       className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-black placeholder-gray-400 ${
-                         validationErrors.email ? 'border-red-500 focus:ring-red-500' : 'border-slate-200'
-                       }`}
-                     />
-                     {validationErrors.email && (
-                       <p className="text-red-500 text-xs mt-1">{validationErrors.email}</p>
-                     )}
-                   </div>
-                   <div className="space-y-2">
-                     <label className="block text-sm font-medium text-emerald-800">
-                      {t('form.phone')}
-                     </label>
-                     <input
-                       type="tel"
-                       placeholder={t('form.phone_placeholder')}
-                       value={userData.phone}
-                       onChange={(e) => handleUserDataChange('phone', e.target.value)}
-                       onBlur={() => {
-                         const error = validatePhone(userData.phone);
-                         setValidationErrors(prev => ({ ...prev, phone: error }));
-                       }}
-                       className={`w-full p-4 bg-[#F8FAFB] border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-black placeholder-gray-400 ${
-                         validationErrors.phone ? 'border-red-500 focus:ring-red-500' : 'border-slate-200'
-                       }`}
-                     />
-                     {validationErrors.phone && (
-                       <p className="text-red-500 text-xs mt-1">{validationErrors.phone}</p>
-                     )}
-                   </div>
+
+                   {(passengerCount == null || passengersData.length < passengerCount) && (
+                     <button
+                       type="button"
+                       onClick={addPassenger}
+                       className="mt-4 flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-dashed border-emerald-400 text-emerald-700 font-semibold hover:bg-emerald-50 transition-colors"
+                     >
+                       <UserPlus size={18} />
+                       {t('form.add_passenger')}
+                     </button>
+                   )}
                  </div>
                </div>
-             </div>
+             )}
+
+             
 
           {/* Hidden Content: Revealed After Selection */}
           {isConfigured ? (
@@ -1207,11 +1552,11 @@ export default function CollectivePlanClient() {
                   if (!selectedProgramData) return [];
 
                   return [
-                    { icon: <Clock />, label: `Duration: ${selectedProgramData.ApproximateDuration}` },
-                    { icon: <Plane />, label: `Departure: ${selectedProgramData.departure}` },
-                    { icon: <Plane />, label: `Return: ${selectedProgramData.return}` },
-                    { icon: <MapPin />, label: `From: ${selectedProgramData.from}` },
-                    { icon: <MapPin />, label: `To: ${selectedProgramData.to}` }
+                    { icon: <Clock />, label: `${t('collective.duration')}: ${selectedProgramData.ApproximateDuration}` },
+                    { icon: <Plane />, label: `${t('collective.departure')}: ${selectedProgramData.departure}` },
+                    { icon: <Plane />, label: `${t('collective.return')}: ${selectedProgramData.return}` },
+                    { icon: <MapPin />, label: `${t('collective.from')}: ${selectedProgramData.from}` },
+                    { icon: <MapPin />, label: `${t('collective.to')}: ${selectedProgramData.to}` }
                   ];
                 })().map((item, i) => (
                   <div key={i} className="flex items-center gap-3 text-slate-500 font-bold text-xs">
@@ -1235,39 +1580,152 @@ export default function CollectivePlanClient() {
                 </div>
               </div>
 
+              <div className="flex flex-wrap justify-center gap-3 w-full mt-6 p-4">
+            <button
+              type="button"
+              onClick={() => setItineraryView(prev => prev === 'madinah' ? null : 'madinah')}
+              className={`inline-flex items-center justify-center gap-2 min-w-[140px] px-6 py-3 rounded-xl font-semibold text-sm shadow-md active:scale-[0.98] transition-all duration-200 ${
+                itineraryView === 'madinah'
+                  ? 'bg-emerald-600 text-white shadow-emerald-900/20 ring-2 ring-emerald-400 ring-offset-2'
+                  : 'bg-emerald-500 text-white shadow-emerald-900/10 hover:bg-emerald-600 hover:shadow-lg hover:shadow-emerald-900/15'
+              }`}
+            >
+              <Info size={18} aria-hidden />
+              {t('itinerary.madinah_header')}
+            </button>
+            <button
+              type="button"
+              onClick={() => setItineraryView(prev => prev === 'makkah' ? null : 'makkah')}
+              className={`inline-flex items-center justify-center gap-2 min-w-[140px] px-6 py-3 rounded-xl font-semibold text-sm active:scale-[0.98] transition-all duration-200 ${
+                itineraryView === 'makkah'
+                  ? 'bg-white text-emerald-700 border-2 border-emerald-500 shadow-lg ring-2 ring-emerald-400 ring-offset-2'
+                  : 'bg-white text-emerald-700 border-2 border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50'
+              }`}
+            >
+              <FileText size={18} aria-hidden />
+              {t('itinerary.makkah_header')}
+            </button>
+          </div>
+
+          {/* Itinerary big section: Madinah or Makkah program */}
+          {itineraryView && (
+            <section id="itinerary" className="w-full mt-8 mx-auto relative z-20">
+              <div className="bg-white rounded-[3rem] shadow-2xl w-full overflow-hidden border border-slate-100">
+                <div className="flex items-center justify-between px-6 py-4 bg-slate-50 border-b border-slate-200">
+                  <span className="text-emerald-800 font-bold flex items-center gap-2">
+                    <Calendar size={20} />
+                    {itineraryView === 'madinah' ? t('itinerary.madinah_header') : t('itinerary.makkah_header')}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setItineraryView(null)}
+                    className="p-2 rounded-full text-slate-500 hover:bg-slate-200 hover:text-slate-700 transition-colors"
+                    aria-label={t('common.cancel')}
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+                <div className="p-4 sm:p-6 lg:p-8">
+                  {itineraryView === 'madinah' && <MadinahItinerary />}
+                  {itineraryView === 'makkah' && <MakkahItinerary />}
+                </div>
+              </div>
+            </section>
+          )}
+
               <div className="space-y-4  items-center   md:w-[40%]">
                 <button
-                  onClick={() => {
+                  onClick={async () => {
+                    if (confirmed) return;
                     setHasAttemptedSubmit(true);
-                    // Validate form fields
-                    if (!validateForm()) {
-                      return;
+                    if (!validateForm()) return;
+
+                    setSavingBooking(true);
+                    try {
+                      const selectedProgramData = programs.find((p: { name: string }) => p.name === selectedProgram);
+                      const selectedRoomData = roomTypes.find((r: { name: string }) => r.name === selectedRoom);
+                      const selectedVisaData = visaTypes.find((v: { name: string }) => v.name === selectedVisa);
+
+                      const res = await fetch('/api/bookings', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
+                        body: JSON.stringify({
+                          packageSlug: planSlug,
+                          packageType: 'umrah',
+                          umrahType: 'collective',
+                          userData: passengersData,
+                          program: selectedProgramData ? { id: selectedProgramData.id, name: selectedProgram } : undefined,
+                          room: selectedRoomData ? { id: selectedRoomData.id, name: selectedRoom } : undefined,
+                          visa: selectedVisaData ? { id: selectedVisaData.id, name: selectedVisa } : undefined,
+                        }),
+                      });
+
+                      if (!res.ok) {
+                        const err = await res.json();
+                        throw new Error(err.error || 'Failed to save booking');
+                      }
+
+                      const data = await res.json();
+                      const bookingId = data?.booking?.id ?? null;
+                      setSavedBookingId(bookingId);
+                      setConfirmed(true);
+
+                      // PDF receipt (reçu de réservation): logo + website name at top, user-entered info in body
+                      await generateBookingReceiptPdf({
+                        title: 'Sabil Al-Hajj',
+                        subtitle: t('booking.receipt_title'),
+                        logoUrl: '/sabilalhajj-removebg.png',
+                        packageSlug: planSlug,
+                        packageName: (packageData as { name?: string } | null)?.name,
+                        programName: selectedProgram || '',
+                        roomName: selectedRoom || '',
+                        visaName: selectedVisa || '',
+                        passengers: passengersData,
+                        bookingId: bookingId ?? undefined,
+                        bookingDate: new Date().toLocaleDateString(undefined, { dateStyle: 'long' }),
+                        labels: {
+                          receipt: t('booking.receipt_title'),
+                          package: t('booking.receipt_package'),
+                          program: t('booking.receipt_program'),
+                          room: t('booking.receipt_room'),
+                          visa: t('booking.receipt_visa'),
+                          passengers: t('booking.receipt_passengers'),
+                          passenger: t('booking.receipt_passenger'),
+                          name: t('form.first_name'),
+                          email: t('user.email'),
+                          phone: t('user.phone'),
+                          health: t('form.health_condition'),
+                          date: t('user.booking_date'),
+                          bookingId: t('booking.receipt_booking_id'),
+                          thankYou: t('booking.receipt_thank_you'),
+                          bookingDetails: t('booking.receipt_booking_details'),
+                          infoEnteredByUser: t('booking.receipt_info_entered_by_user'),
+                        },
+                      });
+
+                      // Booking is saved to DB and appended to Google Sheet (online spreadsheet) by the API
+                      setToggle(true);
+                    } catch (e) {
+                      alert(e instanceof Error ? e.message : 'Failed to save booking');
+                    } finally {
+                      setSavingBooking(false);
                     }
-                    setConfirmed(true);
-
-                    // Export booking data to Excel automatically
-                    const selectedPrograms = selectedProgram ? [programs.find((p: any) => p.name === selectedProgram)].filter(Boolean) : [];
-                    const selectedRoomTypes = selectedRoom ? [roomTypes.find((r: any) => r.name === selectedRoom)].filter(Boolean) : [];
-                    const selectedVisaTypes = selectedVisa ? [visaTypes.find((v: any) => v.name === selectedVisa)].filter(Boolean) : [];
-
-                    exportBookingData(selectedPrograms, selectedRoomTypes, selectedVisaTypes, {
-                      program: selectedProgram || undefined,
-                      room: selectedRoom || undefined,
-                      visa: selectedVisa || undefined
-                    }, userData);
-
-                    const params = new URLSearchParams({
-                      program: selectedProgram || '',
-                      room: selectedRoom || '',
-                      visa: selectedVisa || ''
-                    });
-                    setToggle(true)
                   }}
-                  className="w-full bg-[#1B3C33] text-white py-6 rounded-[2rem] font-black text-xl hover:bg-emerald-800 transition-all shadow-2xl shadow-emerald-900/20 flex items-center justify-center gap-3"
+                  disabled={savingBooking || confirmed}
+                  className={`w-full py-6 rounded-[2rem] font-black text-xl transition-all shadow-2xl flex items-center justify-center gap-3 disabled:cursor-not-allowed ${
+                    confirmed
+                      ? 'bg-slate-400 text-white shadow-slate-400/20 cursor-default'
+                      : 'bg-[#1B3C33] text-white hover:bg-emerald-800 shadow-emerald-900/20 disabled:opacity-70'
+                  }`}
                 >
-                  {confirmed ? (
+                  {savingBooking ? (
                     <>
-                      <CheckCircle size={24} /> {t('booking.confirmed')}
+                      <Clock size={24} className="animate-pulse" /> {t('common.loading')}
+                    </>
+                  ) : confirmed ? (
+                    <>
+                      <CheckCircle size={24} /> {t('booking.confirmed_we_will_reach')}
                     </>
                   ) : (
                     <>
@@ -1275,14 +1733,18 @@ export default function CollectivePlanClient() {
                     </>
                   )}
                 </button>
+
+
               </div>
             </div>
           ) : (
             <div className="text-center py-20 bg-slate-50 rounded-[2.5rem] border-2 border-dashed border-slate-200">
                <Info className="mx-auto text-slate-300 mb-4" size={40} />
-               <p className="text-slate-400 font-bold max-w-xs mx-auto mb-6">Please complete your selection above to proceed with booking</p>
+               <p className="text-slate-400 font-bold max-w-xs mx-auto mb-6">{t('collective.complete_selection_message')}</p>
             </div>
           )}
+
+         
         </div>
       </section>
 
@@ -1327,7 +1789,7 @@ export default function CollectivePlanClient() {
               إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا
             </p>
             <p className='text-slate-500 text-xs mt-1'>
-              "Indeed, prayer has been decreed upon the believers a decree of specified times."
+              {t('collective.prayer_verse_en')}
             </p>
           </div>
         </div>
@@ -1335,22 +1797,22 @@ export default function CollectivePlanClient() {
 
 
       {/* 6. Medina Details */}
-      <div id="madinah">
+      {/* <div id="madinah">
         <MadinahItinerary />
       </div>
 
       {/* 7. Makkah Details */}
-      <div id="makkah">
+      {/* <div id="makkah">
         <MakkahItinerary />
-      </div>
+      </div>  */}
 
       {/* 8. Terms & Policies - Simplified inline version */}
-      <div id="policies" className="w-full bg-white font-sans text-slate-800 border-t border-gray-100 py-10">
+      {/* <div id="policies" className="w-full bg-white font-sans text-slate-800 border-t border-gray-100 py-10">
         <div className="max-w-7xl mx-auto px-4 md:px-12">
           <h2 className="text-2xl font-bold text-emerald-900 text-center mb-8">{t('policies.title')}</h2>
           <p className="text-slate-600 text-center mb-8">{t('policies.description')}</p>
         </div>
-      </div>
+      </div> */}
 
       {/* Component Call - Only show when whole package is selected */}
       {isConfigured && (
@@ -1359,8 +1821,10 @@ export default function CollectivePlanClient() {
         />
       )}
 
+   
+
       {/* Section Indicator */}
-      <SectionIndicator />
+      {/* <SectionIndicator /> */}
 
       <style jsx global>{`
         /* Custom Scrollbar Styles */

@@ -114,3 +114,13 @@ body {
 .duration-200 {
   animation-duration: 200ms;
 }
+
+/* Guide gallery swiper */
+.guide-swiper .swiper-pagination-bullet {
+  background: #10b981;
+  opacity: 0.5;
+}
+.guide-swiper .swiper-pagination-bullet-active {
+  opacity: 1;
+  transform: scale(1.2);
+}

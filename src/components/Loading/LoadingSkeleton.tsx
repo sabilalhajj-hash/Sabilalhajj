@@ -27,8 +27,8 @@ export function LoadingSkeleton({
 
 export function CardSkeleton() {
   return (
-    <div className="animate-pulse bg-white rounded-lg shadow-md p-6">
-      <div className="h-48 bg-gray-200 rounded-lg mb-4" />
+    <div className="animate-pulse bg-white rounded-full shadow-md p-6">
+      <div className="h-48 bg-gray-200 rounded-full mb-4" />
       <div className="h-6 bg-gray-200 rounded w-3/4 mb-2" />
       <div className="h-4 bg-gray-200 rounded w-1/2 mb-4" />
       <div className="space-y-2">

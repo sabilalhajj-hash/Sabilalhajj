@@ -18,7 +18,6 @@ export default function Hajj() {
 
   const hajjProgram = {
     name: t('pages.hajj.title'),
-    price: t('cta.contactUs') || 'Contact us',
   };
 
   useEffect(() => {
@@ -32,7 +31,7 @@ export default function Hajj() {
           <div className="flex flex-col items-center justify-center text-center space-y-6">
             <div className="w-32 h-32 rounded-2xl bg-emerald-100 animate-pulse" />
             <div className="space-y-2">
-              <div className="h-8 w-48 bg-gray-200 rounded-lg animate-pulse mx-auto" />
+              <div className="h-8 w-48 bg-gray-200 rounded-full animate-pulse mx-auto" />
               <div className="h-4 w-72 bg-gray-100 rounded animate-pulse mx-auto" />
             </div>
           </div>
@@ -82,6 +81,21 @@ export default function Hajj() {
       <section className="px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24">
         <div className="max-w-4xl mx-auto space-y-8">
           {/* Intro card */}
+          <article className="bg-white/50  rounded-2xl shadow-xl shadow-gray-200/50 border-3 border-green-600 overflow-hidden">
+            <div className="p-6 sm:p-8 lg:p-10">
+              <div className="flex items-center gap-3 mb-6">
+                <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600">
+                  <Star className="w-5 h-5" strokeWidth={2} />
+                </span>
+                <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
+                  {t('pages.hajj.title0')}
+                </h2>
+              </div>
+              <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
+                {t('pages.hajj.description0')}
+              </p>
+            </div>
+          </article>
           <article className="bg-white rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
             <div className="p-6 sm:p-8 lg:p-10">
               <div className="flex items-center gap-3 mb-6">
@@ -132,9 +146,18 @@ export default function Hajj() {
               href={WHATSAPP_HAJJ_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 shadow-lg shadow-emerald-600/25 hover:shadow-emerald-600/30 transition-all duration-300 hover:-translate-y-0.5"
+              className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 rounded-full font-semibold text-white bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 shadow-lg shadow-emerald-600/25 hover:shadow-emerald-600/30 transition-all duration-300 hover:-translate-y-0.5"
             >
-              {t('common.book_now')}
+              {t('common.book_now_via_whatsapp')}
+              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            </Link>
+            <Link
+              href={"https://hajj.nusuk.sa/"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 rounded-full font-semibold text-white bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 shadow-lg shadow-emerald-600/25 hover:shadow-emerald-600/30 transition-all duration-300 hover:-translate-y-0.5"
+            >
+              {t('common.book_now_via_nusuk')}
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
@@ -146,6 +169,7 @@ export default function Hajj() {
         whatsappUrl={WHATSAPP_HAJJ_URL}
         whatsappMessage={WHATSAPP_HAJJ_MESSAGE}
         alwaysVisible
+        showNusukButton
       />
     </div>
   );
