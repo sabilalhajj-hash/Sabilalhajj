@@ -29,6 +29,8 @@ import {
   Compass,
   User,
   Lock,
+  Globe,
+  Upload,
 } from 'lucide-react';
 import {
   BarChart,
@@ -141,7 +143,7 @@ export default function AdminPage() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'bookings' | 'hajj' | 'users' | 'packages' | 'reports' | 'settings'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'bookings' | 'hajj' | 'users' | 'packages' | 'reports' | 'globalInfos' | 'settings'>('dashboard');
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [recentBookings, setRecentBookings] = useState<RecentBooking[]>([]);
   const [recentUsers, setRecentUsers] = useState<RecentUser[]>([]);
@@ -331,6 +333,41 @@ export default function AdminPage() {
   const [passwordSaving, setPasswordSaving] = useState(false);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [passwordSuccess, setPasswordSuccess] = useState(false);
+
+  const defaultGuideForm = () => ({
+    guideName: '',
+    guideBadge: '',
+    guideSectionGuidanceTitle: '',
+    guideSectionGuidancePara: '',
+    guideSectionGuidancePara2: '',
+    guideSectionRoleTitle: '',
+    guideSectionRolePara: '',
+    guideRoleItem1: '',
+    guideRoleItem2: '',
+    guideRoleItem3: '',
+    guideRoleItem4: '',
+    guideSectionWhyTitle: '',
+    guideWhyItem1: '',
+    guideWhyItem2: '',
+    guideWhyItem3: '',
+    guideWhyItem4: '',
+    guideWhyItem5: '',
+    guideSectionPlatformTitle: '',
+    guideSectionPlatformPara: '',
+    guideGalleryTitle: '',
+    guideGalleryAlt1: '',
+    guideGalleryAlt2: '',
+    guideGalleryAlt3: '',
+    profileImageUrl: '/guides/guide-1.jpg',
+    galleryImageUrls: ['/guides/guide-1.jpg', '/guides/guide-2.jpg', '/guides/guide-3.jpg'],
+  });
+  const [guideForm, setGuideForm] = useState(defaultGuideForm);
+  const [guideContentLoading, setGuideContentLoading] = useState(false);
+  const [guideContentSaving, setGuideContentSaving] = useState(false);
+  const [guideContentError, setGuideContentError] = useState<string | null>(null);
+  const [guideContentSuccess, setGuideContentSuccess] = useState(false);
+  const guideProfileInputRef = useRef<HTMLInputElement>(null);
+  const guideGalleryInputRefs = useRef<(HTMLInputElement | null)[]>([null, null, null]);
 
   const fetchUsers = useCallback(async () => {
     setUsersLoading(true);
@@ -1044,12 +1081,92 @@ export default function AdminPage() {
     }
   }, []);
 
+  const fetchGuideContent = useCallback(async () => {
+    setGuideContentLoading(true);
+    setGuideContentError(null);
+    try {
+      const res = await fetch('/api/admin/guide-content', { credentials: 'include', cache: 'no-store' });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to fetch guide content');
+      if (data && typeof data === 'object' && (data.guideName != null || data.profileImageUrl != null)) {
+        setGuideForm({
+          guideName: data.guideName ?? '',
+          guideBadge: data.guideBadge ?? '',
+          guideSectionGuidanceTitle: data.guideSectionGuidanceTitle ?? '',
+          guideSectionGuidancePara: data.guideSectionGuidancePara ?? '',
+          guideSectionGuidancePara2: data.guideSectionGuidancePara2 ?? '',
+          guideSectionRoleTitle: data.guideSectionRoleTitle ?? '',
+          guideSectionRolePara: data.guideSectionRolePara ?? '',
+          guideRoleItem1: data.guideRoleItem1 ?? '',
+          guideRoleItem2: data.guideRoleItem2 ?? '',
+          guideRoleItem3: data.guideRoleItem3 ?? '',
+          guideRoleItem4: data.guideRoleItem4 ?? '',
+          guideSectionWhyTitle: data.guideSectionWhyTitle ?? '',
+          guideWhyItem1: data.guideWhyItem1 ?? '',
+          guideWhyItem2: data.guideWhyItem2 ?? '',
+          guideWhyItem3: data.guideWhyItem3 ?? '',
+          guideWhyItem4: data.guideWhyItem4 ?? '',
+          guideWhyItem5: data.guideWhyItem5 ?? '',
+          guideSectionPlatformTitle: data.guideSectionPlatformTitle ?? '',
+          guideSectionPlatformPara: data.guideSectionPlatformPara ?? '',
+          guideGalleryTitle: data.guideGalleryTitle ?? '',
+          guideGalleryAlt1: data.guideGalleryAlt1 ?? '',
+          guideGalleryAlt2: data.guideGalleryAlt2 ?? '',
+          guideGalleryAlt3: data.guideGalleryAlt3 ?? '',
+          profileImageUrl: data.profileImageUrl ?? '/guides/guide-1.jpg',
+          galleryImageUrls: Array.isArray(data.galleryImageUrls) && data.galleryImageUrls.length >= 3
+            ? data.galleryImageUrls.slice(0, 3)
+            : ['/guides/guide-1.jpg', '/guides/guide-2.jpg', '/guides/guide-3.jpg'],
+        });
+      } else {
+        setGuideForm(defaultGuideForm());
+      }
+    } catch (e) {
+      setGuideContentError(e instanceof Error ? e.message : 'Failed to load');
+      setGuideForm(defaultGuideForm());
+    } finally {
+      setGuideContentLoading(false);
+    }
+  }, []);
+
+  const saveGuideContent = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setGuideContentSaving(true);
+    setGuideContentError(null);
+    setGuideContentSuccess(false);
+    try {
+      const res = await fetch('/api/admin/guide-content', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          ...guideForm,
+          galleryImageUrls: guideForm.galleryImageUrls.slice(0, 3),
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to update');
+      setGuideContentSuccess(true);
+      setTimeout(() => setGuideContentSuccess(false), 3000);
+    } catch (e) {
+      setGuideContentError(e instanceof Error ? e.message : 'Failed to update guide content');
+    } finally {
+      setGuideContentSaving(false);
+    }
+  };
+
   useEffect(() => {
     if (mounted && activeTab === 'settings') {
       fetchSettings();
       fetchCurrentUser();
     }
   }, [mounted, activeTab, fetchSettings, fetchCurrentUser]);
+
+  useEffect(() => {
+    if (mounted && activeTab === 'globalInfos') {
+      fetchGuideContent();
+    }
+  }, [mounted, activeTab, fetchGuideContent]);
 
   const saveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1249,6 +1366,7 @@ export default function AdminPage() {
               { id: 'users', label: t('admin.users'), icon: Users },
               { id: 'packages', label: t('admin.packages'), icon: Package },
               { id: 'reports', label: t('admin.reports'), icon: FileText },
+              { id: 'globalInfos', label: t('admin.global_infos') || 'Global Infos', icon: Globe },
               { id: 'settings', label: t('admin.settings'), icon: Settings },
             ].map((item) => {
               const Icon = item.icon;
@@ -2751,6 +2869,232 @@ export default function AdminPage() {
               </div>
             </div>
           )} */}
+
+          {/* Global Infos (Tourist Guide) Tab */}
+          {activeTab === 'globalInfos' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-slate-900">{t('admin.global_infos') || 'Global Infos'}</h2>
+                <Link
+                  href="/global-infos"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-200 text-emerald-700 font-semibold hover:bg-emerald-50 transition-colors text-sm"
+                >
+                  <Eye className="h-4 w-4" />
+                  {t('admin.view_page') || 'View page'}
+                </Link>
+              </div>
+              <p className="text-slate-600 text-sm">{t('admin.global_infos_help') || 'Edit the tourist guide section and images shown on the Global Infos page.'}</p>
+              {guideContentError && (
+                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-50 text-red-700 text-sm">
+                  <AlertCircle className="h-4 w-4 shrink-0" />
+                  {guideContentError}
+                </div>
+              )}
+              {guideContentSuccess && (
+                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-50 text-emerald-700 text-sm">
+                  <CheckCircle className="h-4 w-4 shrink-0" />
+                  {t('admin.saved') || 'Saved successfully.'}
+                </div>
+              )}
+              {guideContentLoading ? (
+                <p className="text-slate-500 py-8">{t('common.loading')}</p>
+              ) : (
+                <form onSubmit={saveGuideContent} className="bg-white rounded-xl shadow border border-slate-100 p-6 space-y-6">
+                  <input
+                    ref={guideProfileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/gif"
+                    className="hidden"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      try {
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        const res = await fetch('/api/upload', { method: 'POST', credentials: 'include', body: formData });
+                        const data = await res.json();
+                        if (!res.ok) throw new Error(data.error || 'Upload failed');
+                        setGuideForm((p) => ({ ...p, profileImageUrl: data.url }));
+                      } catch (err) {
+                        setGuideContentError(err instanceof Error ? err.message : 'Upload failed');
+                      }
+                      e.target.value = '';
+                    }}
+                  />
+                  <div className="grid sm:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">{t('admin.guide_profile_image') || 'Profile image'}</label>
+                      <div className="flex items-center gap-4">
+                        <div className="w-24 h-24 rounded-xl overflow-hidden border-2 border-slate-200 bg-slate-100 flex items-center justify-center shrink-0">
+                          {guideForm.profileImageUrl ? (
+                            <img src={guideForm.profileImageUrl} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <User className="h-10 w-10 text-slate-400" />
+                          )}
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <button
+                            type="button"
+                            onClick={() => guideProfileInputRef.current?.click()}
+                            className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-100 text-emerald-700 font-semibold hover:bg-emerald-200 text-sm"
+                          >
+                            <Upload className="h-4 w-4" />
+                            {t('admin.upload') || 'Upload'}
+                          </button>
+                          <input
+                            type="text"
+                            value={guideForm.profileImageUrl}
+                            onChange={(e) => setGuideForm((p) => ({ ...p, profileImageUrl: e.target.value }))}
+                            placeholder="/guides/guide-1.jpg"
+                            className="mt-1 px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800 w-full max-w-xs"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">{t('pages.global_infos.guide_name') || 'Guide name'}</label>
+                      <input type="text" value={guideForm.guideName} onChange={(e) => setGuideForm((p) => ({ ...p, guideName: e.target.value }))} className="w-full px-4 py-2 border border-slate-200 rounded-xl text-slate-800" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">{t('pages.global_infos.guide_badge') || 'Badge'}</label>
+                      <input type="text" value={guideForm.guideBadge} onChange={(e) => setGuideForm((p) => ({ ...p, guideBadge: e.target.value }))} className="w-full px-4 py-2 border border-slate-200 rounded-xl text-slate-800" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">{t('pages.global_infos.guide_section_guidance_title') || 'Guidance section title'}</label>
+                    <input type="text" value={guideForm.guideSectionGuidanceTitle} onChange={(e) => setGuideForm((p) => ({ ...p, guideSectionGuidanceTitle: e.target.value }))} className="w-full px-4 py-2 border border-slate-200 rounded-xl text-slate-800" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">{t('pages.global_infos.guide_section_guidance_para') || 'Guidance paragraph 1'}</label>
+                    <textarea value={guideForm.guideSectionGuidancePara} onChange={(e) => setGuideForm((p) => ({ ...p, guideSectionGuidancePara: e.target.value }))} rows={3} className="w-full px-4 py-2 border border-slate-200 rounded-xl text-slate-800" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">{t('pages.global_infos.guide_section_guidance_para2') || 'Guidance paragraph 2'}</label>
+                    <textarea value={guideForm.guideSectionGuidancePara2} onChange={(e) => setGuideForm((p) => ({ ...p, guideSectionGuidancePara2: e.target.value }))} rows={3} className="w-full px-4 py-2 border border-slate-200 rounded-xl text-slate-800" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">{t('pages.global_infos.guide_section_role_title') || 'Role section title'}</label>
+                    <input type="text" value={guideForm.guideSectionRoleTitle} onChange={(e) => setGuideForm((p) => ({ ...p, guideSectionRoleTitle: e.target.value }))} className="w-full px-4 py-2 border border-slate-200 rounded-xl text-slate-800" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">{t('pages.global_infos.guide_section_role_para') || 'Role paragraph'}</label>
+                    <textarea value={guideForm.guideSectionRolePara} onChange={(e) => setGuideForm((p) => ({ ...p, guideSectionRolePara: e.target.value }))} rows={2} className="w-full px-4 py-2 border border-slate-200 rounded-xl text-slate-800" />
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {[1, 2, 3, 4].map((i) => (
+                      <div key={i}>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">{t(`pages.global_infos.guide_role_item_${i}`) || `Role item ${i}`}</label>
+                        <input
+                          type="text"
+                          value={guideForm[`guideRoleItem${i}` as keyof typeof guideForm] as string}
+                          onChange={(e) => setGuideForm((p) => ({ ...p, [`guideRoleItem${i}`]: e.target.value }))}
+                          className="w-full px-4 py-2 border border-slate-200 rounded-xl text-slate-800"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">{t('pages.global_infos.guide_section_why_title') || 'Why section title'}</label>
+                    <input type="text" value={guideForm.guideSectionWhyTitle} onChange={(e) => setGuideForm((p) => ({ ...p, guideSectionWhyTitle: e.target.value }))} className="w-full px-4 py-2 border border-slate-200 rounded-xl text-slate-800" />
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <div key={i}>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">{t(`pages.global_infos.guide_why_item_${i}`) || `Why item ${i}`}</label>
+                        <input
+                          type="text"
+                          value={guideForm[`guideWhyItem${i}` as keyof typeof guideForm] as string}
+                          onChange={(e) => setGuideForm((p) => ({ ...p, [`guideWhyItem${i}`]: e.target.value }))}
+                          className="w-full px-4 py-2 border border-slate-200 rounded-xl text-slate-800"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">{t('pages.global_infos.guide_section_platform_title') || 'Platform section title'}</label>
+                    <input type="text" value={guideForm.guideSectionPlatformTitle} onChange={(e) => setGuideForm((p) => ({ ...p, guideSectionPlatformTitle: e.target.value }))} className="w-full px-4 py-2 border border-slate-200 rounded-xl text-slate-800" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">{t('pages.global_infos.guide_section_platform_para') || 'Platform paragraph'}</label>
+                    <textarea value={guideForm.guideSectionPlatformPara} onChange={(e) => setGuideForm((p) => ({ ...p, guideSectionPlatformPara: e.target.value }))} rows={2} className="w-full px-4 py-2 border border-slate-200 rounded-xl text-slate-800" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">{t('pages.global_infos.guide_gallery_title') || 'Gallery title'}</label>
+                    <input type="text" value={guideForm.guideGalleryTitle} onChange={(e) => setGuideForm((p) => ({ ...p, guideGalleryTitle: e.target.value }))} className="w-full px-4 py-2 border border-slate-200 rounded-xl text-slate-800" />
+                  </div>
+                  <div className="space-y-4">
+                    <label className="block text-sm font-medium text-slate-700">{t('admin.gallery_images') || 'Gallery images (3)'}</label>
+                    {[0, 1, 2].map((idx) => (
+                      <div key={idx} className="flex items-center gap-4 flex-wrap">
+                        <div className="w-20 h-20 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shrink-0">
+                          {guideForm.galleryImageUrls[idx] ? (
+                            <img src={guideForm.galleryImageUrls[idx]} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center"><User className="h-8 w-8 text-slate-400" /></div>
+                          )}
+                        </div>
+                        <input
+                          ref={(el) => { guideGalleryInputRefs.current[idx] = el; }}
+                          type="file"
+                          accept="image/jpeg,image/png,image/webp,image/gif"
+                          className="hidden"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            try {
+                              const formData = new FormData();
+                              formData.append('file', file);
+                              const res = await fetch('/api/upload', { method: 'POST', credentials: 'include', body: formData });
+                              const data = await res.json();
+                              if (!res.ok) throw new Error(data.error || 'Upload failed');
+                              setGuideForm((p) => ({
+                                ...p,
+                                galleryImageUrls: p.galleryImageUrls.map((url, i) => (i === idx ? data.url : url)),
+                              }));
+                            } catch (err) {
+                              setGuideContentError(err instanceof Error ? err.message : 'Upload failed');
+                            }
+                            e.target.value = '';
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => guideGalleryInputRefs.current[idx]?.click()}
+                          className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200 text-sm"
+                        >
+                          <Upload className="h-4 w-4" />
+                          {t('admin.upload') || 'Upload'}
+                        </button>
+                        <input
+                          type="text"
+                          value={guideForm.galleryImageUrls[idx] ?? ''}
+                          onChange={(e) => setGuideForm((p) => ({
+                            ...p,
+                            galleryImageUrls: p.galleryImageUrls.map((url, i) => (i === idx ? e.target.value : url)),
+                          }))}
+                          placeholder={idx === 0 ? '/guides/guide-1.jpg' : ''}
+                          className="flex-1 min-w-[200px] px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex justify-end pt-4">
+                    <button
+                      type="submit"
+                      disabled={guideContentSaving}
+                      className="px-6 py-3 rounded-full bg-emerald-600 text-white font-semibold hover:bg-emerald-700 disabled:opacity-50 transition-colors"
+                    >
+                      {guideContentSaving ? t('common.loading') : (t('admin.save_guide_content') || 'Save guide content')}
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          )}
 
           {/* Settings Tab */}
           {activeTab === 'settings' && (

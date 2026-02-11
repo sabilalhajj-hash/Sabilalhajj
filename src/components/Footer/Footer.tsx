@@ -3,13 +3,16 @@ import Link from 'next/link';
 import Image from "next/image";
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
-import { useWhatsappUrl } from '@/context/SettingsContext';
+import { useSettings, useWhatsappUrl } from '@/context/SettingsContext';  
+import { Clock, Phone, Mail } from 'lucide-react';
 
 export default function Footer() {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
   const currentYear = new Date().getFullYear();
   const contactWhatsappUrl = useWhatsappUrl('Hello! I would like to inquire about Hajj/Umrah services.');
+  const { whatsappNumber } = useSettings();
+  const displayPhone = whatsappNumber ? `+${whatsappNumber}` : '';
 
   useEffect(() => {
     setMounted(true);
@@ -41,9 +44,7 @@ export default function Footer() {
       { name: t('footer.company.portfolio'), href: '/portfolio' },
       { name: t('footer.company.contact'), href: contactWhatsappUrl },
       { name: t('footer.company.blog'), href: '/blog' },
-      { name: t('footer.company.policies'), href: '/policies' },
-      { name: t('footer.company.blog'), href: '/blog' },
-      { name: t('footer.company.policies'), href: '/policies' },
+      { name: t('footer.company.policies'), href: '/global-infos' },
     ],
     legal: [
       { name: t('footer.legal.privacy'), href: '#' },
@@ -51,9 +52,9 @@ export default function Footer() {
       { name: t('footer.legal.cookies'), href: '#' },
     ],
     contact: [
-      { text: t('footer.contact.support_24_7'), icon: '🕒' },
-      { text: '+000000000', icon: '📞' },
-      { text: 'sabilalhajj@gmail.com', icon: '✉️' },
+      { text: t('footer.contact.support_24_7'), icon: Clock },
+      { text: displayPhone || t('footer.contact.phone_loading') || '—', icon: Phone},
+      { text: 'sabilalhajj@gmail.com', icon: Mail },
     ]
   };
 
@@ -158,12 +159,17 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">{t('footer.sections.contact')}</h4>
             <ul className="space-y-3">
-              {footerLinks.contact.map((item, index) => (
-                <li key={index} className="flex items-start space-x-3">
-                  <span className="text-lg">{item.icon}</span>
-                  <span className="text-gray-300 text-sm">{item.text}</span>
-                </li>
-              ))}
+              {footerLinks.contact.map((item, index) => {
+                const Icon = item.icon;
+                return (
+                  <li key={index} className="flex items-start space-x-3">
+                    <span className="text-lg shrink-0 mt-0.5">
+                      <Icon className="w-5 h-5 text-gray-400" />
+                    </span>
+                    <span className="text-gray-300 text-sm">{item.text}</span>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>

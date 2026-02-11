@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShieldCheck, Zap, HeartHandshake, Headset, Star, UserCheck } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function WhyChooseUs() {
   const { t } = useTranslation();
@@ -118,10 +119,21 @@ export default function WhyChooseUs() {
           </div>
         </div>
 
-        <div className="mt-16 text-center">
-          <button className="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-3 rounded-full font-semibold transition-all">
-            {t('whyChooseUs.reserve_button')}
-          </button>
+        <div className="mt-16 px-4 sm:px-0">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-2 items-stretch sm:items-center justify-center max-w-sm sm:max-w-none mx-auto">
+            <Link
+              href="/umrah"
+              className="bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white px-6 py-3.5 sm:px-8 sm:py-3 rounded-full font-semibold transition-colors text-center text-base touch-manipulation min-h-[48px] flex items-center justify-center"
+            >
+              {t('whyChooseUs.reserve_button_umrah')}
+            </Link>
+            <Link
+              href="/hajj"
+              className="bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white px-6 py-3.5 sm:px-8 sm:py-3 rounded-full font-semibold transition-colors text-center text-base touch-manipulation min-h-[48px] flex items-center justify-center"
+            >
+              {t('whyChooseUs.reserve_button_hajj')}
+            </Link>
+          </div>
         </div>
       </div>
     </section>

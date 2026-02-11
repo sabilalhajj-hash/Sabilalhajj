@@ -95,7 +95,7 @@ export default function BentoGallery() {
           //   clickable: true,
           //   dynamicBullets: true,
           // }}
-          navigation={true}
+          // navigation={true}
           className="pb-12"
         >
           {galleryImages.map((image) => (

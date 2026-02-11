@@ -18,11 +18,11 @@ export default function CurrencySelector() {
   const currencies = mounted ? [
     { code: 'USD', name: t('currencies.usd.name'), symbol: '$', flag: '🇺🇸' },
     { code: 'EUR', name: t('currencies.eur.name'), symbol: '€', flag: '🇪🇺' },
-    { code: 'MAD', name: t('currencies.mad.name'), symbol: 'MAD', sub: t('currencies.mad.native'), flag: '🇲🇦' },
+    { code: 'MAD', name: t('currencies.mad.name'), symbol: 'DH', sub: t('currencies.mad.native'), flag: '🇲🇦' },
   ] : [
     { code: 'USD', name: 'US Dollar', symbol: '$', flag: '🇺🇸' },
     { code: 'EUR', name: 'Euro', symbol: '€', flag: '🇪🇺' },
-    { code: 'MAD', name: 'Moroccan Dirham', symbol: 'MAD', sub: 'درهم', flag: '🇲🇦' },
+    { code: 'MAD', name: 'Moroccan Dirham', symbol: 'DH', sub: 'درهم', flag: '🇲🇦' },
   ];
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export default function CurrencySelector() {
         className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium uppercase"
       >
         <span className="text-lg">
-          {currencies.find(c => c.code === currency.code)?.symbol || '💰'}
+          {currencies.find(c => c.code === currency.code)?.flag}
         </span>
         <span>{currency.code}</span>
         <svg

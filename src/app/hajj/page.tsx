@@ -142,7 +142,7 @@ export default function Hajj() {
           </div>
 
           {/* Book Now CTA */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <div id="hajj-book-cta" className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 scroll-mt-24">
             <Link
               href={whatsappHajjUrl}
               target="_blank"
@@ -171,6 +171,8 @@ export default function Hajj() {
         whatsappMessage={WHATSAPP_HAJJ_MESSAGE}
         alwaysVisible
         showNusukButton
+        scrollToId="hajj-book-cta"
+        scrollToButtonLabelKey="common.book_now_via_whatsapp"
       />
     </div>
   );

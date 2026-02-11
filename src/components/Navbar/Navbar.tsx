@@ -532,6 +532,12 @@ export default function Navbar() {
               );
             })}
 
+            {/* Language & Currency for mobile */}
+            <div className="flex flex-wrap items-center gap-2 pt-3 mt-3 border-t border-gray-200">
+              <LanguageSwitcher />
+              <CurrencySwitcher />
+            </div>
+
             {/* Auth buttons or User info for mobile */}
             {!isLoadingUser && (
               

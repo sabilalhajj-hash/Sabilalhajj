@@ -73,6 +73,7 @@
     "learnMore": "En Savoir Plus"
   },
   "footer": {
+    "terms_policies": "Conditions & Politiques",
     "companyName": "Sabil Al-Hajj",
     "description": "Votre partenaire de confiance pour les services de pèlerinage Hajj et Omra. Vivez un voyage spirituel rempli de paix, de dévotion et de souvenirs inoubliables.",
     "sections": {
@@ -88,6 +89,7 @@
       "accommodation": "Hébergement"
     },
     "company": {
+      "policies": "Conditions & Politiques",
       "about": "À propos de nous",
       "portfolio": "Notre Portefeuille",
       "contact": "Contact",
@@ -837,6 +839,8 @@
   },
   "common": {
     "book_now": "Réserver Maintenant",
+    "book_now_via_whatsapp": "Réserver via WhatsApp",
+    "book_now_via_nusuk": "Réserver via Nusuk",
     "view_details": "Voir les Détails",
     "contact_us": "Contactez-nous",
     "export_to_excel": "Exporter vers Excel",
@@ -973,6 +977,14 @@
     "user_management": "Gestion des Utilisateurs",
     "package_management": "Gestion des Forfaits",
     "content_management": "Gestion du Contenu",
+    "global_infos": "Infos Globales",
+    "global_infos_help": "Modifier la section du guide touristique et les images affichées sur la page Infos Globales.",
+    "guide_profile_image": "Image de profil",
+    "upload": "Téléverser",
+    "gallery_images": "Images de la galerie (3)",
+    "save_guide_content": "Enregistrer le contenu du guide",
+    "view_page": "Voir la page",
+    "saved": "Enregistré avec succès.",
     "booking_status": "Statut de Réservation",
     "approved": "Approuvé",
     "rejected": "Rejeté",

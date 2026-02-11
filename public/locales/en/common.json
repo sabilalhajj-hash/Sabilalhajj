@@ -73,6 +73,7 @@
     "learnMore": "Learn More"
   },
   "footer": {
+    "terms_policies": "Terms & Policies",
     "companyName": "Sabil Al-Hajj",
     "description": "Your trusted partner for Hajj and Umrah pilgrimage services. Experience a spiritual journey filled with peace, devotion, and unforgettable memories.",
     "sections": {
@@ -88,6 +89,7 @@
       "accommodation": "Accommodation"
     },
     "company": {
+      "policies": "Terms & Policies",
       "about": "About us",
       "portfolio": "Our Portfolio",
       "contact": "Contact",
@@ -904,6 +906,8 @@
   },
   "common": {
     "book_now": "Book Now",
+    "book_now_via_whatsapp": "Book Now via WhatsApp",
+    "book_now_via_nusuk": "Book Now via Nusuk",
     "view_details": "View Details",
     "contact_us": "Contact Us",
     "export_to_excel": "Export to Excel",
@@ -1047,6 +1051,14 @@
     "user_management": "User Management",
     "package_management": "Package Management",
     "content_management": "Content Management",
+    "global_infos": "Global Infos",
+    "global_infos_help": "Edit the tourist guide section and images shown on the Global Infos page.",
+    "guide_profile_image": "Profile image",
+    "upload": "Upload",
+    "gallery_images": "Gallery images (3)",
+    "save_guide_content": "Save guide content",
+    "view_page": "View page",
+    "saved": "Saved successfully.",
     "booking_status": "Booking Status",
     "approved": "Approved",
     "rejected": "Rejected",

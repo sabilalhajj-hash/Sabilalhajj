@@ -5,17 +5,17 @@ import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Image from 'next/image';
-
+import Link from 'next/link';
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
 const FALLBACK_SLIDES = [
-  { title: 'Welcome to Sabil Al-Hajj', subtitle: 'Your trusted partner for Hajj and Umrah pilgrimage services. Experience a spiritual journey filled with peace, devotion, and unforgettable memories.', image: '/hajj1.jpg', ctaPrimary: 'Book Your Pilgrimage', ctaSecondary: 'Learn More' },
-  { title: 'Experience Sacred Hajj', subtitle: 'Embark on the most sacred pilgrimage with our expert guidance. Every step of your journey is carefully planned for spiritual fulfillment.', image: '/hajj2.jpg', ctaPrimary: 'Plan Hajj Journey', ctaSecondary: 'View Packages' },
-  { title: 'Discover Umrah Blessings', subtitle: 'Find inner peace through Umrah pilgrimage. Our comprehensive services ensure a meaningful and comfortable spiritual experience.', image: '/hajj3.jpg', ctaPrimary: 'Book Umrah Now', ctaSecondary: 'Explore Options' },
-  { title: 'Premium Accommodations', subtitle: 'Stay in the most convenient and comfortable accommodations near the Holy Sites. Luxury meets spirituality in our premium hotels.', image: '/hajj4.jpg', ctaPrimary: 'View Hotels', ctaSecondary: 'Check Availability' },
+  { title: 'Welcome to Sabil Al-Hajj', subtitle: 'Your trusted partner for Hajj and Umrah pilgrimage services. Experience a spiritual journey filled with peace, devotion, and unforgettable memories.', image: '/hajj1.jpg', ctaPrimary: 'Book Your Pilgrimage', ctaSecondary: 'Learn More', links: '/umrah' },
+  { title: 'Experience Sacred Hajj', subtitle: 'Embark on the most sacred pilgrimage with our expert guidance. Every step of your journey is carefully planned for spiritual fulfillment.', image: '/hajj2.jpg', ctaPrimary: 'Plan Hajj Journey', ctaSecondary: 'View Packages', links: '/hajj' },
+  { title: 'Discover Umrah Blessings', subtitle: 'Find inner peace through Umrah pilgrimage. Our comprehensive services ensure a meaningful and comfortable spiritual experience.', image: '/hajj3.jpg', ctaPrimary: 'Book Umrah Now', ctaSecondary: 'Explore Options', links: '/umrah' },
+  { title: 'Premium Accommodations', subtitle: 'Stay in the most convenient and comfortable accommodations near the Holy Sites. Luxury meets spirituality in our premium hotels.', image: '/hajj4.jpg', ctaPrimary: 'View Hotels', ctaSecondary: 'Check Availability', links: '/hotels' },
 ];
 
 export default function Hero() {
@@ -35,7 +35,8 @@ export default function Hero() {
       subtitle: slide.subtitle,
       image: `/hajj${index + 1}.jpg`,
       ctaPrimary: slide.ctaPrimary,
-      ctaSecondary: slide.ctaSecondary
+      ctaSecondary: slide.ctaSecondary,
+      links: slide.links ?? slide.link ?? FALLBACK_SLIDES[index]?.links ?? '/umrah',
     }));
   }, [mounted, t]);
 
@@ -47,7 +48,7 @@ export default function Hero() {
         slidesPerView={1}
         speed={2000}
         autoplay={{
-          delay: 4000,
+          delay: 5000,
           disableOnInteraction: false,
         }}
         // pagination={{
@@ -61,6 +62,7 @@ export default function Hero() {
         {heroSlides.map((slide, index) => (
           <SwiperSlide key={index}>
             <div className={` z-100 text-white min-h-[70vh] flex items-center relative overflow-hidden`}>
+              
               {slide.image && (
                 <Image
                   src={slide.image}
@@ -81,12 +83,12 @@ export default function Hero() {
                     {slide.subtitle}
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-delay-2">
-                    <button className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors transform hover:scale-105">
+                    <Link href={slide.links} className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors transform hover:scale-105">
                       {slide.ctaPrimary}
-                    </button>
-                    <button className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-blue-600 transition-colors transform hover:scale-105">
+                    </Link>
+                    {/* <button className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-blue-600 transition-colors transform hover:scale-105">
                       {slide.ctaSecondary}
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               </div>

@@ -4,6 +4,7 @@ import React, { useMemo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
+import { Building2, Calendar, Plane, Hotel, FileText, UserCircle } from 'lucide-react';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -20,37 +21,37 @@ export default function Services() {
   // All hooks must be called before any conditional returns
   const services = useMemo(() => [
     {
-      icon: '🕋',
+      icon: Building2,
       title: t('services.hajj.title'),
       description: t('services.hajj.description')
     },
     {
-      icon: '🌙',
+      icon: Calendar,
       title: t('services.umrah.title'),
       description: t('services.umrah.description')
     },
     {
-      icon: '🌙',
+      icon: Plane,
       title: t('services.umrah.title'),
       description: t('services.umrah.description')
     },
     {
-      icon: '🌙',
+      icon: Hotel,
       title: t('services.umrah.title'),
       description: t('services.umrah.description')
     },
     {
-      icon: '🌙',
+      icon: FileText,
       title: t('services.umrah.title'),
       description: t('services.umrah.description')
     },
     {
-      icon: '🌙',
+      icon: UserCircle,
       title: t('services.umrah.title'),
       description: t('services.umrah.description')
     },
     {
-      icon: '✈️',
+      icon: Plane,
       title: t('services.transportation.title'),
       description: t('services.transportation.description')
     }
@@ -97,15 +98,20 @@ export default function Services() {
         
           className="pb-12"
         >
-          {services.map((service, index) => (
-            <SwiperSlide key={index}>
-              <div className=" text-center p-6 border-2 border-green-600  bg-white neon-glow rounded-lg md:rounded-4xl shadow-lg h-full">
-                <div className="text-4xl mb-4">{service.icon}</div>
-                <h3 className="text-xl font-semibold text-green-600 mb-2">{service.title}</h3>
-                <p className="text-gray-600">{service.description}</p>
-              </div>
-            </SwiperSlide>
-          ))}
+          {services.map((service, index) => {
+            const Icon = service.icon;
+            return (
+              <SwiperSlide key={index}>
+                <div className=" text-center p-6 border-2 border-green-600  bg-white neon-glow rounded-lg md:rounded-4xl shadow-lg h-full">
+                  <div className="text-4xl mb-4 flex justify-center">
+                    {typeof Icon === 'string' ? Icon : <Icon className="w-10 h-10 mx-auto text-green-600" />}
+                  </div>
+                  <h3 className="text-xl font-semibold text-green-600 mb-2">{service.title}</h3>
+                  <p className="text-gray-600">{service.description}</p>
+                </div>
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
       </div>
     </div>

@@ -41,3 +41,47 @@ export async function setWhatsappNumber(input: string): Promise<void> {
   const digits = input.replace(/\D/g, '');
   await setSetting(WHATSAPP_NUMBER_KEY, digits || DEFAULT_WHATSAPP_NUMBER);
 }
+
+const GUIDE_CONTENT_KEY = 'guide_content';
+
+export interface GuideContent {
+  guideName: string;
+  guideBadge: string;
+  guideSectionGuidanceTitle: string;
+  guideSectionGuidancePara: string;
+  guideSectionGuidancePara2: string;
+  guideSectionRoleTitle: string;
+  guideSectionRolePara: string;
+  guideRoleItem1: string;
+  guideRoleItem2: string;
+  guideRoleItem3: string;
+  guideRoleItem4: string;
+  guideSectionWhyTitle: string;
+  guideWhyItem1: string;
+  guideWhyItem2: string;
+  guideWhyItem3: string;
+  guideWhyItem4: string;
+  guideWhyItem5: string;
+  guideSectionPlatformTitle: string;
+  guideSectionPlatformPara: string;
+  guideGalleryTitle: string;
+  guideGalleryAlt1: string;
+  guideGalleryAlt2: string;
+  guideGalleryAlt3: string;
+  profileImageUrl: string;
+  galleryImageUrls: string[];
+}
+
+export async function getGuideContent(): Promise<GuideContent | null> {
+  const raw = await getSetting(GUIDE_CONTENT_KEY);
+  if (!raw || !raw.trim()) return null;
+  try {
+    return JSON.parse(raw) as GuideContent;
+  } catch {
+    return null;
+  }
+}
+
+export async function setGuideContent(content: GuideContent): Promise<void> {
+  await setSetting(GUIDE_CONTENT_KEY, JSON.stringify(content));
+}

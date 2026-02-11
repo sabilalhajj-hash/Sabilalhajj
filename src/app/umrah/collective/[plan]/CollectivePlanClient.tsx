@@ -1655,7 +1655,7 @@ export default function CollectivePlanClient() {
             </section>
           )}
 
-              <div className="space-y-4  items-center   md:w-[40%]">
+              <div id="confirm-booking" className="space-y-4  items-center   md:w-[40%] scroll-mt-24">
                 <button
                   onClick={async () => {
                     if (confirmed) return;
@@ -1841,6 +1841,7 @@ export default function CollectivePlanClient() {
       {isConfigured && (
         <StickyCTA
           selectedProgram={programs.find(p => p.name === selectedProgram) || null}
+          scrollToId="confirm-booking"
         />
       )}
 

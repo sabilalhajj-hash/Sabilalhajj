@@ -73,6 +73,7 @@
     "learnMore": "اعرف المزيد"
   },
   "footer": {
+    "terms_policies": "شروط وسياسات",
     "companyName": "سبيل الحج",
     "description": "شريككم الموثوق لخدمات الحج والعمرة. اختبروا رحلة روحية مليئة بالسلام والتقوى والذكريات الخالدة.",
     "sections": {
@@ -88,6 +89,7 @@
       "accommodation": "الإقامة"
     },
     "company": {
+      "policies": "شروط وسياسات",
       "about": "من نحن",
       "portfolio": "محفظتنا",
       "contact": "اتصال",
@@ -100,13 +102,15 @@
     },
     "contact": {
       "location": "خوريبغة",
-      "support_24_7": "دعم على مدار الساعة"
+      "support_24_7": "دعم على مدار الساعة (24/7)"
     },
     "copyright": "© {{year}} سبيل الحج. جميع الحقوق محفوظة.",
     "quickLinks": "روابط سريعة",
     "followUs": "تابعونا"
   },
   "whyChooseUs": {
+    "reserve_button_umrah": "احجز العمرة الآن",
+    "reserve_button_hajj": "احجز الحج الآن",
     "title": "لماذا تختاروننا",
     "subtitle": "اختبروا خدمة لا مثيل لها وإرشاداً روحياً لرحلتكم الحجية",
     "trusted_partner_title": "شريككم الموثوق",
@@ -839,6 +843,8 @@
   },
   "common": {
     "book_now": "احجز الآن",
+    "book_now_via_whatsapp": "احجز الآن عبر واتساب",
+    "book_now_via_nusuk": "احجز الآن عبر نسك",
     "view_details": "عرض التفاصيل",
     "contact_us": "اتصل بنا",
     "export_to_excel": "تصدير إلى Excel",
@@ -978,6 +984,14 @@
     "user_management": "إدارة المستخدمين",
     "package_management": "إدارة الباقات",
     "content_management": "إدارة المحتوى",
+    "global_infos": "المعلومات العامة",
+    "global_infos_help": "تحرير قسم الدليل السياحي والصور المعروضة في صفحة المعلومات العامة.",
+    "guide_profile_image": "صورة الملف الشخصي",
+    "upload": "رفع",
+    "gallery_images": "صور المعرض (3)",
+    "save_guide_content": "حفظ محتوى الدليل",
+    "view_page": "عرض الصفحة",
+    "saved": "تم الحفظ بنجاح.",
     "booking_status": "حالة الحجز",
     "approved": "موافق عليه",
     "rejected": "مرفوض",

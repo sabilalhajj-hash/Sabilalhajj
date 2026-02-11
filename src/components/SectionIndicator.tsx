@@ -13,6 +13,7 @@ interface SectionIndicatorProps {
   sections?: Section[];
   className?: string;
   pageType?: 'umrah' | 'hajj' | 'home' | 'generic';
+  vertical?: boolean;
 }
 
 const umrahSections: Section[] = [
@@ -41,7 +42,7 @@ const homeSections: Section[] = [
   { id: 'gallery', labelKey: 'gallery.title', icon: '🖼️', fallback: 'Gallery' },
 ];
 
-export default function SectionIndicator({ sections: propSections, className, pageType = 'umrah' }: SectionIndicatorProps = {}) {
+export default function SectionIndicator({ sections: propSections, className, pageType = 'umrah', vertical = false }: SectionIndicatorProps = {}) {
   const { t } = useTranslation();
 
   // Use predefined sections based on page type, or custom sections if provided
@@ -101,10 +102,10 @@ export default function SectionIndicator({ sections: propSections, className, pa
   if (!mounted || sections.length === 0) return null;
 
   return (
-    <div className={`fixed top-28 left-0 right-0 cursor-pointer z-[90] bg-white/95 backdrop-blur-md border-b border-emerald-100 shadow-lg ${className || ''}`}>
-      <div className="px-4 py-3">
-        <div className="flex items-center justify-between">
-          <div className="flex gap-2 w-full items-center justify-center overflow-x-auto scrollbar-hide">
+    <div className={`fixed top-28 left-0 right-0 cursor-pointer z-[90] bg-white/95 backdrop-blur-md border-b border-emerald-100 shadow-lg ${vertical ? 'md:top-1/2 md:-translate-y-1/2 md:left-auto md:right-6 lg:right-8 md:w-auto md:h-auto md:border-b-0 md:border-r md:border-l-0 md:rounded-r-lg md:rounded-l-none' : ''} ${className || ''}`}>
+      <div className={`px-4 py-3 ${vertical ? 'md:px-3 md:py-4' : ''}`}>
+        <div className={`flex items-center justify-between ${vertical ? 'md:flex-col md:items-stretch md:justify-center' : ''}`}>
+          <div className={`flex gap-2 w-full items-center justify-center overflow-x-auto scrollbar-hide ${vertical ? 'md:flex-col md:gap-3 md:overflow-y-auto md:overflow-x-hidden' : ''}`}>
             {sections.map((section) => {
               const translatedLabel = section.labelKey ? t(section.labelKey) : section.fallback;
               const isActive = activeSectionId === section.id;
@@ -112,13 +113,13 @@ export default function SectionIndicator({ sections: propSections, className, pa
                 <button
                   key={section.id}
                   onClick={() => scrollToSection(section.id)}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-full whitespace-nowrap transition-all duration-300 text-xs font-medium ${
+                  className={`flex items-center gap-2 px-3 py-2 rounded-full whitespace-nowrap transition-all duration-300 text-xs font-medium ${vertical ? 'md:w-full md:justify-start' : ''} ${
                     isActive
                       ? 'bg-emerald-100 text-emerald-800 shadow-sm'
                       : 'hover:bg-emerald-50 text-slate-700 hover:text-emerald-700'
                   }`}
                 >
-                  <div className={`w-1 h-4 rounded-full transition-all duration-300 shrink-0 ${
+                  <div className={`w-1 h-4 rounded-full transition-all duration-300 shrink-0 ${vertical ? 'md:h-1 md:w-4' : ''} ${
                     isActive ? 'bg-emerald-600' : 'bg-transparent'
                   }`} />
                   <span className="text-sm">{section.icon}</span>
@@ -126,7 +127,7 @@ export default function SectionIndicator({ sections: propSections, className, pa
                     {translatedLabel}
                   </span>
                   {isActive && (
-                    <div className="w-1.5 h-1.5 bg-emerald-600 rounded-full animate-pulse shrink-0" />
+                    <div className={`w-1.5 h-1.5 bg-emerald-600 rounded-full animate-pulse shrink-0 ${vertical ? 'ml-auto md:ml-0' : ''}`} />
                   )}
                 </button>
               );
