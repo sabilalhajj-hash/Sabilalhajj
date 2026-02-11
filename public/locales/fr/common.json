@@ -270,6 +270,11 @@
       },
       "contact_message": "Prêt à vous lancer dans votre voyage spirituel ? Contactez-nous aujourd'hui pour en savoir plus sur nos services et commencer à planifier votre pèlerinage Hajj ou Omra."
     },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Conseils et guides pour votre pèlerinage",
+      "read_more": "Lire la suite"
+    },
     "global_infos": {
       "title": "Infos globales",
       "guides_title": "Nos guides touristiques",

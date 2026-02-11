@@ -270,6 +270,11 @@
       },
       "contact_message": "Ready to embark on your spiritual journey? Contact us today to learn more about our services and begin planning your Hajj or Umrah pilgrimage."
     },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Insights and guides for your pilgrimage journey",
+      "read_more": "Read more"
+    },
     "global_infos": {
       "title": "Global Infos",
       "guides_title": "Our tourist guides",
@@ -1057,6 +1062,19 @@
     "upload": "Upload",
     "gallery_images": "Gallery images (3)",
     "save_guide_content": "Save guide content",
+    "blog": "Blog",
+    "blog_help": "Manage blog posts shown on the blog page. Each post appears as a card; clicking it opens the full article.",
+    "add_blog_post": "Add post",
+    "save_blog": "Save blog posts",
+    "blog_slug": "Slug (URL)",
+    "blog_title": "Title",
+    "blog_excerpt": "Excerpt",
+    "blog_content": "Content",
+    "blog_date": "Date",
+    "blog_image": "Image URL (optional)",
+    "untitled_post": "Untitled post",
+    "no_blog_posts": "No blog posts yet. Click \"Add post\" to create one.",
+    "delete": "Delete",
     "view_page": "View page",
     "saved": "Saved successfully.",
     "booking_status": "Booking Status",

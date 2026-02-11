@@ -31,6 +31,7 @@ import {
   Lock,
   Globe,
   Upload,
+  ChevronDown,
 } from 'lucide-react';
 import {
   BarChart,
@@ -143,7 +144,7 @@ export default function AdminPage() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'bookings' | 'hajj' | 'users' | 'packages' | 'reports' | 'globalInfos' | 'settings'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'bookings' | 'hajj' | 'users' | 'packages' | 'reports' | 'globalInfos' | 'blog' | 'settings'>('dashboard');
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [recentBookings, setRecentBookings] = useState<RecentBooking[]>([]);
   const [recentUsers, setRecentUsers] = useState<RecentUser[]>([]);
@@ -366,6 +367,23 @@ export default function AdminPage() {
   const [guideContentSaving, setGuideContentSaving] = useState(false);
   const [guideContentError, setGuideContentError] = useState<string | null>(null);
   const [guideContentSuccess, setGuideContentSuccess] = useState(false);
+
+  // Blog posts (admin)
+  interface BlogPostItem {
+    slug: string;
+    title: string;
+    excerpt: string;
+    content: string;
+    date: string;
+    image?: string;
+  }
+  const [blogPosts, setBlogPosts] = useState<BlogPostItem[]>([]);
+  const [blogLoading, setBlogLoading] = useState(false);
+  const [blogSaving, setBlogSaving] = useState(false);
+  const [blogError, setBlogError] = useState<string | null>(null);
+  const [blogSuccess, setBlogSuccess] = useState(false);
+  const [blogExpandedIndex, setBlogExpandedIndex] = useState<number | null>(null);
+  const blogImageInputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const guideProfileInputRef = useRef<HTMLInputElement>(null);
   const guideGalleryInputRefs = useRef<(HTMLInputElement | null)[]>([null, null, null]);
 
@@ -1168,6 +1186,53 @@ export default function AdminPage() {
     }
   }, [mounted, activeTab, fetchGuideContent]);
 
+  const fetchBlogPosts = useCallback(async () => {
+    setBlogLoading(true);
+    setBlogError(null);
+    try {
+      const res = await fetch('/api/admin/blog', { credentials: 'include', cache: 'no-store' });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to fetch blog posts');
+      setBlogPosts(Array.isArray(data.posts) ? data.posts : []);
+    } catch (e) {
+      setBlogError(e instanceof Error ? e.message : 'Failed to load');
+      setBlogPosts([]);
+    } finally {
+      setBlogLoading(false);
+    }
+  }, []);
+
+  const saveBlogPosts = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setBlogSaving(true);
+    setBlogError(null);
+    setBlogSuccess(false);
+    try {
+      const res = await fetch('/api/admin/blog', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ posts: blogPosts }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to update');
+      setBlogPosts(data.posts ?? blogPosts);
+      setBlogSuccess(true);
+      setBlogExpandedIndex(null);
+      setTimeout(() => setBlogSuccess(false), 3000);
+    } catch (e) {
+      setBlogError(e instanceof Error ? e.message : 'Failed to update blog posts');
+    } finally {
+      setBlogSaving(false);
+    }
+  };
+
+  useEffect(() => {
+    if (mounted && activeTab === 'blog') {
+      fetchBlogPosts();
+    }
+  }, [mounted, activeTab, fetchBlogPosts]);
+
   const saveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     setProfileSaving(true);
@@ -1367,6 +1432,7 @@ export default function AdminPage() {
               { id: 'packages', label: t('admin.packages'), icon: Package },
               { id: 'reports', label: t('admin.reports'), icon: FileText },
               { id: 'globalInfos', label: t('admin.global_infos') || 'Global Infos', icon: Globe },
+              { id: 'blog', label: t('admin.blog') || 'Blog', icon: FileText },
               { id: 'settings', label: t('admin.settings'), icon: Settings },
             ].map((item) => {
               const Icon = item.icon;
@@ -3089,6 +3155,222 @@ export default function AdminPage() {
                       className="px-6 py-3 rounded-full bg-emerald-600 text-white font-semibold hover:bg-emerald-700 disabled:opacity-50 transition-colors"
                     >
                       {guideContentSaving ? t('common.loading') : (t('admin.save_guide_content') || 'Save guide content')}
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          )}
+
+          {/* Blog Tab */}
+          {activeTab === 'blog' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-slate-900">{t('admin.blog') || 'Blog'}</h2>
+                <div className="flex items-center gap-2">
+                  <Link
+                    href="/blog"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-200 text-emerald-700 font-semibold hover:bg-emerald-50 transition-colors text-sm"
+                  >
+                    <Eye className="h-4 w-4" />
+                    {t('admin.view_page') || 'View page'}
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBlogPosts((p) => [
+                        ...p,
+                        {
+                          slug: `new-post-${Date.now()}`,
+                          title: '',
+                          excerpt: '',
+                          content: '',
+                          date: new Date().toISOString().slice(0, 10),
+                          image: '',
+                        },
+                      ]);
+                      setBlogExpandedIndex(blogPosts.length);
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition-colors text-sm"
+                  >
+                    <Plus className="h-4 w-4" />
+                    {t('admin.add_blog_post') || 'Add post'}
+                  </button>
+                </div>
+              </div>
+              <p className="text-slate-600 text-sm">{t('admin.blog_help') || 'Manage blog posts shown on the blog page. Each post appears as a card; clicking it opens the full article.'}</p>
+              {blogError && (
+                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-50 text-red-700 text-sm">
+                  <AlertCircle className="h-4 w-4 shrink-0" />
+                  {blogError}
+                </div>
+              )}
+              {blogSuccess && (
+                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-50 text-emerald-700 text-sm">
+                  <CheckCircle className="h-4 w-4 shrink-0" />
+                  {t('admin.saved') || 'Saved successfully.'}
+                </div>
+              )}
+              {blogLoading ? (
+                <p className="text-slate-500 py-8">{t('common.loading')}</p>
+              ) : blogPosts.length === 0 ? (
+                <p className="text-slate-500 py-8">{t('admin.no_blog_posts') || 'No blog posts yet. Click "Add post" to create one.'}</p>
+              ) : (
+                <form onSubmit={saveBlogPosts} className="space-y-4">
+                  <div className="space-y-4">
+                    {blogPosts.map((post, idx) => (
+                      <div key={post.slug} className="bg-white rounded-xl shadow border border-slate-100 overflow-hidden">
+                        <div className="flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition-colors">
+                          <button
+                            type="button"
+                            onClick={() => setBlogExpandedIndex(blogExpandedIndex === idx ? null : idx)}
+                            className="flex-1 flex items-center gap-3 text-left"
+                          >
+                            <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-sm">{idx + 1}</div>
+                            <div>
+                              <p className="font-semibold text-slate-900">{post.title || t('admin.untitled_post') || 'Untitled post'}</p>
+                              <p className="text-sm text-slate-500">/blog/{post.slug}</p>
+                            </div>
+                          </button>
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setBlogPosts((p) => p.filter((_, i) => i !== idx));
+                                setBlogExpandedIndex(blogExpandedIndex === idx ? null : (blogExpandedIndex !== null && blogExpandedIndex > idx ? blogExpandedIndex - 1 : blogExpandedIndex));
+                              }}
+                              className="p-2 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
+                              title={t('admin.delete') || 'Delete'}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setBlogExpandedIndex(blogExpandedIndex === idx ? null : idx)}
+                              className="p-1"
+                              title={blogExpandedIndex === idx ? 'Collapse' : 'Expand'}
+                            >
+                              <span className={`transform transition-transform inline-block ${blogExpandedIndex === idx ? 'rotate-180' : ''}`}>
+                                <ChevronDown className="h-5 w-5 text-slate-400" />
+                              </span>
+                            </button>
+                          </div>
+                        </div>
+                        {blogExpandedIndex === idx && (
+                          <div className="px-6 pb-6 pt-0 border-t border-slate-100 space-y-4">
+                            <div className="grid sm:grid-cols-2 gap-4 pt-4">
+                              <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">{t('admin.blog_slug') || 'Slug (URL)'}</label>
+                                <input
+                                  type="text"
+                                  value={post.slug}
+                                  onChange={(e) => setBlogPosts((p) => p.map((item, i) => (i === idx ? { ...item, slug: e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') } : item)))}
+                                  placeholder="my-post-slug"
+                                  className="w-full px-4 py-2 border border-slate-200 rounded-xl text-slate-800"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">{t('admin.blog_date') || 'Date'}</label>
+                                <input
+                                  type="date"
+                                  value={post.date}
+                                  onChange={(e) => setBlogPosts((p) => p.map((item, i) => (i === idx ? { ...item, date: e.target.value } : item)))}
+                                  className="w-full px-4 py-2 border border-slate-200 rounded-xl text-slate-800"
+                                />
+                              </div>
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-slate-700 mb-1">{t('admin.blog_title') || 'Title'}</label>
+                              <input
+                                type="text"
+                                value={post.title}
+                                onChange={(e) => setBlogPosts((p) => p.map((item, i) => (i === idx ? { ...item, title: e.target.value } : item)))}
+                                placeholder="Post title"
+                                className="w-full px-4 py-2 border border-slate-200 rounded-xl text-slate-800"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-slate-700 mb-1">{t('admin.blog_excerpt') || 'Excerpt'}</label>
+                              <textarea
+                                value={post.excerpt}
+                                onChange={(e) => setBlogPosts((p) => p.map((item, i) => (i === idx ? { ...item, excerpt: e.target.value } : item)))}
+                                placeholder="Short description for the card"
+                                rows={2}
+                                className="w-full px-4 py-2 border border-slate-200 rounded-xl text-slate-800"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-slate-700 mb-1">{t('admin.blog_content') || 'Content'}</label>
+                              <textarea
+                                value={post.content}
+                                onChange={(e) => setBlogPosts((p) => p.map((item, i) => (i === idx ? { ...item, content: e.target.value } : item)))}
+                                placeholder="Full article content"
+                                rows={5}
+                                className="w-full px-4 py-2 border border-slate-200 rounded-xl text-slate-800"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-slate-700 mb-1">{t('admin.blog_image') || 'Image URL (optional)'}</label>
+                              <div className="flex items-center gap-4">
+                                <div className="w-20 h-20 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shrink-0">
+                                  {post.image ? (
+                                    <img src={post.image} alt="" className="w-full h-full object-cover" />
+                                  ) : (
+                                    <div className="w-full h-full flex items-center justify-center"><User className="h-8 w-8 text-slate-400" /></div>
+                                  )}
+                                </div>
+                                <input
+                                  ref={(el) => { blogImageInputRefs.current[idx] = el; }}
+                                  type="file"
+                                  accept="image/jpeg,image/png,image/webp,image/gif"
+                                  className="hidden"
+                                  onChange={async (e) => {
+                                    const file = e.target.files?.[0];
+                                    if (!file) return;
+                                    try {
+                                      const formData = new FormData();
+                                      formData.append('file', file);
+                                      const res = await fetch('/api/upload', { method: 'POST', credentials: 'include', body: formData });
+                                      const data = await res.json();
+                                      if (!res.ok) throw new Error(data.error || 'Upload failed');
+                                      setBlogPosts((p) => p.map((item, i) => (i === idx ? { ...item, image: data.url } : item)));
+                                    } catch (err) {
+                                      setBlogError(err instanceof Error ? err.message : 'Upload failed');
+                                    }
+                                    e.target.value = '';
+                                  }}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => blogImageInputRefs.current[idx]?.click()}
+                                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200 text-sm"
+                                >
+                                  <Upload className="h-4 w-4" />
+                                  {t('admin.upload') || 'Upload'}
+                                </button>
+                                <input
+                                  type="text"
+                                  value={post.image ?? ''}
+                                  onChange={(e) => setBlogPosts((p) => p.map((item, i) => (i === idx ? { ...item, image: e.target.value || undefined } : item)))}
+                                  placeholder="/uploads/..."
+                                  className="flex-1 min-w-[200px] px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex justify-end pt-4">
+                    <button
+                      type="submit"
+                      disabled={blogSaving}
+                      className="px-6 py-3 rounded-full bg-emerald-600 text-white font-semibold hover:bg-emerald-700 disabled:opacity-50 transition-colors"
+                    >
+                      {blogSaving ? t('common.loading') : (t('admin.save_blog') || 'Save blog posts')}
                     </button>
                   </div>
                 </form>
